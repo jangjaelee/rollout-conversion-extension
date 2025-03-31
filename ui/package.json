@@ -48,6 +48,7 @@
     "react-dev-utils": "^12.0.1",
     "react-dom": "^19.1.0",
     "react-refresh": "^0.11.0",
+    "react-scripts": "^5.0.1",
     "resolve": "^1.20.0",
     "resolve-url-loader": "^4.0.0",
     "sass-loader": "^12.3.0",
@@ -57,14 +58,18 @@
     "tailwindcss": "^3.0.2",
     "terser-webpack-plugin": "^5.2.5",
     "web-vitals": "^2.1.4",
-    "webpack": "^5.64.4",
+    "webpack": "^5.98.0",
     "webpack-dev-server": "^4.6.0",
     "webpack-manifest-plugin": "^4.0.2",
     "workbox-webpack-plugin": "^6.4.1"
   },
   "scripts": {
-    "start": "NODE_OPTIONS=--openssl-legacy-provider webpack --config ./webpack.config.js --watch",
-    "build": "NODE_OPTIONS=--openssl-legacy-provider webpack --config ./webpack.config.js && tar -C dist -cvf dist/extension.tar resources"
+    "st": "NODE_OPTIONS=--openssl-legacy-provider webpack --config ./webpack.config.js --watch",
+    "bu": "NODE_OPTIONS=--openssl-legacy-provider webpack --config ./webpack.config.js && tar -C dist -cvf dist/extension.tar resources",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
