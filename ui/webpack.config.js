@@ -16,7 +16,7 @@ const config = {
     library: ["tmp", "extensions"],
   },
   resolve: {
-    extensions: [".ts", ".tsx", ".js", ".json", ".ttf"],
+    extensions: [".ts", ".tsx", ".js", "jsx", ".json", ".ttf"],
   },
   externals: {
     react: "React",
