@@ -5,7 +5,7 @@ import jsyaml from 'js-yaml';
 ((window) => {
   const { createElement } = React;
 
-  const DeploymentYamlViewer = ({ resource, desiredResource }) => {
+  const DeploymentYamlViewer = ({ resource }) => {
     const liveYaml = useMemo(() => {
       if (!resource) return "# No live resource available";
       try {
@@ -14,15 +14,6 @@ import jsyaml from 'js-yaml';
         return "# Error converting live resource to YAML";
       }
     }, [resource]);
-
-    const desiredYaml = useMemo(() => {
-      if (!desiredResource) return "# No desired resource available";
-      try {
-        return jsyaml.dump(desiredResource);
-      } catch {
-        return "# Error converting desired resource to YAML";
-      }
-    }, [desiredResource]);
 
     const containerStyle = {
       display: 'grid',
@@ -43,11 +34,7 @@ import jsyaml from 'js-yaml';
       createElement('div', {}, [
         createElement('h3', {}, 'Live Resource'),
         createElement('pre', { style: yamlBoxStyle }, liveYaml),
-      ]),
-      createElement('div', {}, [
-        createElement('h3', {}, 'Desired Resource'),
-        createElement('pre', { style: yamlBoxStyle }, desiredYaml),
-      ]),
+      ])
     ]);
   };
 
@@ -55,9 +42,6 @@ import jsyaml from 'js-yaml';
     DeploymentYamlViewer,
     'apps',
     'Deployment',
-    'YAML Viewer',
-    {
-      desired: true,
-    }
+    'YAML Viewer'
   );
 })(window);
