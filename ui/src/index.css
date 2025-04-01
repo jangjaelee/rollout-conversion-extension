@@ -1,28 +1,27 @@
-
 .container {
-    padding: 12px;
-    font-family: monospace;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    max-height: 500px;
-    overflow-y: auto;
-  }
-  
-  h3 {
-    font-size: 13px;
-    margin-bottom: 8px;
-    color: #333;
-  }
-  
-  .yaml-box {
-    background-color: #272822;
-    color: #f8f8f2;
-    padding: 12px;
-    border-radius: 4px;
-    font-size: 12px; /* 작게 조정됨 */
-    line-height: 1.4;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    overflow-x: auto;
-  }
+  padding: 12px;
+  font-family: monospace;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  max-height: 800px;
+  overflow-y: auto;
+}
+
+.title h3 {
+  font-size: 16px;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.yaml-box {
+  background-color: #272822;
+  color: #f8f8f2;
+  padding: 12px;
+  border-radius: 4px;
+  font-size: 13px; /* 작게 조정됨 */
+  line-height: 1.4;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-x: auto;
+}
