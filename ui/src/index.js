@@ -18,7 +18,7 @@ import './index.css';
     
     return createElement('div', { className: 'container' }, [
       createElement('div', {}, [
-        createElement('h3', { className: 'title' }, 'Live Resource'),
+        createElement('h3', {}, 'Live Resource'),
         createElement('pre', { className: 'yaml-box' }, liveYaml),
       ])
     ]);    
