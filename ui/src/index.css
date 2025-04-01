@@ -1,0 +1,14 @@
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  font-family: monospace;
+}
+
+.yaml-box {
+  white-space: pre-wrap;
+  background-color: #f0f0f0;
+  padding: 1rem;
+  border-radius: 2px;
+  overflow-x: auto;
+}
