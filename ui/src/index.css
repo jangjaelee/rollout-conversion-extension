@@ -11,5 +11,8 @@
   padding: 1rem;
   border-radius: 6px;
   overflow-x: auto;
-  font-size: 6px;  
+}
+
+.yaml-box pre {
+  font-size: 12px;  
 }
