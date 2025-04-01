@@ -54,11 +54,11 @@ const config = {
       },
       {
         test: /\.scss$/,
-        use: ["style-loader", "raw-loader", "sass-loader"],
+        use: ["style-loader", "css-loader", "sass-loader"],
       },
       {
         test: /\.css$/,
-        use: ["style-loader", "raw-loader"],
+        use: ["style-loader", "css-loader"],
       },
       {
         test: /\.svg$/,
