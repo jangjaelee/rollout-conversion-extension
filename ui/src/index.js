@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useEffect, useStatem, useMemo } from 'react';
 import ReactDOM from 'react-dom/client';
+import jsyaml from 'js-yaml';
 
 ((window) => {
   const { createElement, useMemo } = React;
