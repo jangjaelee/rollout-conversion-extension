@@ -1,39 +1,56 @@
 import * as React from 'react';
-import { useEffect, useState, useMemo } from 'react';
-import ReactDOM from 'react-dom/client';
+import { useMemo } from 'react';
 import jsyaml from 'js-yaml';
 
 ((window) => {
   const { createElement } = React;
 
-  const DeploymentYamlViewer = ({ resource }) => {
-    const yamlText = useMemo(() => {
-      if (!resource) {
-        return "# No resource data available"; // null 또는 undefined 체크
-      }
+  const DeploymentYamlViewer = ({ resource, desiredResource }) => {
+    const liveYaml = useMemo(() => {
+      if (!resource) return "# No live resource available";
       try {
         return jsyaml.dump(resource);
-      } catch (e) {
-        return "# Error converting resource to YAML";
+      } catch {
+        return "# Error converting live resource to YAML";
       }
     }, [resource]);
 
-    return createElement(
-      'pre',
-      {
-        style: {
-          whiteSpace: 'pre-wrap',
-          fontFamily: 'monospace',
-          backgroundColor: '#f0f0f0',
-          padding: '1rem',
-          borderRadius: '6px'
-        }
-      },
-      yamlText
-    );
+    const desiredYaml = useMemo(() => {
+      if (!desiredResource) return "# No desired resource available";
+      try {
+        return jsyaml.dump(desiredResource);
+      } catch {
+        return "# Error converting desired resource to YAML";
+      }
+    }, [desiredResource]);
+
+    const containerStyle = {
+      display: 'grid',
+      gridTemplateColumns: '1fr 1fr',
+      gap: '1rem',
+      fontFamily: 'monospace',
+    };
+
+    const yamlBoxStyle = {
+      whiteSpace: 'pre-wrap',
+      backgroundColor: '#f0f0f0',
+      padding: '1rem',
+      borderRadius: '6px',
+      overflowX: 'auto'
+    };
+
+    return createElement('div', { style: containerStyle }, [
+      createElement('div', {}, [
+        createElement('h3', {}, 'Live Resource'),
+        createElement('pre', { style: yamlBoxStyle }, liveYaml),
+      ]),
+      createElement('div', {}, [
+        createElement('h3', {}, 'Desired Resource'),
+        createElement('pre', { style: yamlBoxStyle }, desiredYaml),
+      ]),
+    ]);
   };
 
-  // "apps/Deployment" 리소스에 대해 탭 추가
   window.extensionsAPI?.registerResourceExtension?.(
     DeploymentYamlViewer,
     'apps',
