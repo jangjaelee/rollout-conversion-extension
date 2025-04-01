@@ -1,12 +1,38 @@
 import * as React from 'react';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import yaml from 'js-yaml';
 import './index.css';
 
 ((window) => {
-  const { createElement } = React;
+  const { createElement, useEffect } = React;
 
-  const convertDeploymentToRollout = (deployment) => {
+  const PRESETS = {
+    'Quick (20%, 50%)': [
+      { setWeight: 20 },
+      { pause: { duration: '30s' } },
+      { setWeight: 50 },
+      { pause: { duration: '1m' } },
+    ],
+    'Slow (10%, 30%, 50%)': [
+      { setWeight: 10 },
+      { pause: { duration: '1m' } },
+      { setWeight: 30 },
+      { pause: { duration: '2m' } },
+      { setWeight: 50 },
+      { pause: { duration: '3m' } },
+    ],
+    'Full (10% → 100%)': [
+      { setWeight: 10 },
+      { pause: { duration: '1m' } },
+      { setWeight: 30 },
+      { pause: { duration: '2m' } },
+      { setWeight: 50 },
+      { pause: { duration: '2m' } },
+      { setWeight: 100 },
+    ],
+  };
+
+  const convertDeploymentToRollout = (deployment, steps) => {
     if (!deployment || deployment.kind !== 'Deployment') return null;
 
     const {
@@ -15,7 +41,6 @@ import './index.css';
         replicas,
         selector,
         template,
-        strategy,
         revisionHistoryLimit,
         progressDeadlineSeconds,
         minReadySeconds,
@@ -31,14 +56,7 @@ import './index.css';
         selector,
         template,
         strategy: {
-          canary: {
-            steps: [
-              { setWeight: 20 },
-              { pause: { duration: '30s' } },
-              { setWeight: 50 },
-              { pause: { duration: '1m' } },
-            ],
-          },
+          canary: { steps },
         },
         revisionHistoryLimit,
         progressDeadlineSeconds,
@@ -47,34 +65,69 @@ import './index.css';
     };
   };
 
+  const CopyButton = ({ text }) =>
+    createElement(
+      'button',
+      {
+        className: 'copy-btn',
+        onClick: async () => {
+          try {
+            await navigator.clipboard.writeText(text);
+            alert('YAML copied to clipboard!');
+          } catch (err) {
+            alert('Failed to copy YAML.');
+          }
+        },
+      },
+      'Copy YAML'
+    );
+
   const DeploymentYamlViewer = ({ resource }) => {
+    const [presetName, setPresetName] = useState('Quick (20%, 50%)');
+
     const liveYaml = useMemo(() => {
-      if (!resource) return "# No live resource available";
+      if (!resource) return '# No live resource available';
       try {
         return yaml.dump(resource);
       } catch {
-        return "# Error converting live resource to YAML";
+        return '# Error converting live resource to YAML';
       }
     }, [resource]);
 
     const rolloutYaml = useMemo(() => {
       try {
-        const rollout = convertDeploymentToRollout(resource);
-        return rollout ? yaml.dump(rollout) : "# Could not convert Deployment to Rollout";
+        const rollout = convertDeploymentToRollout(resource, PRESETS[presetName]);
+        return rollout ? yaml.dump(rollout) : '# Could not convert Deployment to Rollout';
       } catch {
-        return "# Error converting Deployment to Rollout";
+        return '# Error converting Deployment to Rollout';
       }
-    }, [resource]);
+    }, [resource, presetName]);
 
     return createElement('div', { className: 'container' }, [
-      createElement('div', {}, [
+      createElement('div', { className: 'block' }, [
         createElement('h3', {}, 'Live Deployment YAML'),
+        createElement(CopyButton, { text: liveYaml }),
         createElement('pre', { className: 'yaml-box' }, liveYaml),
       ]),
-      createElement('div', { style: { marginTop: '2rem' } }, [
+      createElement('div', { className: 'block' }, [
         createElement('h3', {}, 'Converted Rollout YAML'),
+        createElement(
+          'div',
+          { className: 'preset-select' },
+          createElement(
+            'select',
+            {
+              value: presetName,
+              onChange: (e) => setPresetName(e.target.value),
+            },
+            Object.keys(PRESETS).map((key) =>
+              createElement('option', { key, value: key }, key)
+            )
+          )
+        ),
+        createElement(CopyButton, { text: rolloutYaml }),
         createElement('pre', { className: 'yaml-box' }, rolloutYaml),
-      ])
+      ]),
     ]);
   };
 
@@ -82,6 +135,6 @@ import './index.css';
     DeploymentYamlViewer,
     'apps',
     'Deployment',
-    'YAML Viewer'
+    'Rollout Convert'
   );
 })(window);
