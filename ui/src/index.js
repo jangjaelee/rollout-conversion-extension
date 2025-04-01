@@ -4,7 +4,7 @@ import yaml from 'js-yaml';
 import './index.css';
 
 ((window) => {
-  const { createElement, useEffect } = React;
+  const { createElement } = React;
 
   const PRESETS = {
     'Quick (20%, 50%)': [
@@ -103,13 +103,16 @@ import './index.css';
       }
     }, [resource, presetName]);
 
-    return createElement('div', { className: 'container' }, [
-      createElement('div', { className: 'block' }, [
+    return createElement('div', { className: 'diff-container' }, [
+      // Left: Deployment
+      createElement('div', { className: 'diff-column' }, [
         createElement('h3', {}, 'Live Deployment YAML'),
         createElement(CopyButton, { text: liveYaml }),
         createElement('pre', { className: 'yaml-box' }, liveYaml),
       ]),
-      createElement('div', { className: 'block' }, [
+
+      // Right: Rollout
+      createElement('div', { className: 'diff-column' }, [
         createElement('h3', {}, 'Converted Rollout YAML'),
         createElement(
           'div',
@@ -135,6 +138,6 @@ import './index.css';
     DeploymentYamlViewer,
     'apps',
     'Deployment',
-    'Rollout Convert'
+    'YAML Viewer'
   );
 })(window);

@@ -14,6 +14,19 @@ h3 {
   overflow-y: auto;  
 }
 
+.diff-container {
+  display: flex;
+  gap: 24px;
+  padding: 16px;
+  flex-wrap: wrap;
+}
+
+.diff-column {
+  flex: 1 1 48%;
+  display: flex;
+  flex-direction: column;
+}
+
 .yaml-box {
   background: #272822;
   color: #f8f8f2;
