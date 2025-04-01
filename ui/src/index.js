@@ -5,38 +5,13 @@ import ReactDOM from 'react-dom/client';
 ((window) => {
   const { createElement, useMemo } = React;
 
-  const convertDeploymentToRollout = (deployment) => {
-    if (deployment.kind !== "Deployment") return null;
-
-    const rollout = JSON.parse(JSON.stringify(deployment));
-    rollout.apiVersion = "argoproj.io/v1alpha1";
-    rollout.kind = "Rollout";
-
-    rollout.spec.strategy = {
-      canary: {
-        steps: [
-          { setWeight: 20 },
-          { pause: { duration: '30s' } },
-          { setWeight: 50 },
-          { pause: { duration: '1m' } },
-        ]
+  const DeploymentYamlViewer = ({ resource }) => {
+    const yamlText = useMemo(() => {
+      try {
+        return window.jsyaml.dump(resource);
+      } catch (e) {
+        return "# Error converting resource to YAML";
       }
-    };
-
-    // 불필요한 필드 제거
-    delete rollout.spec.revisionHistoryLimit;
-    delete rollout.spec.progressDeadlineSeconds;
-
-    return rollout;
-  };
-
-  const RolloutConverter = ({ resource }) => {
-    const rolloutYaml = useMemo(() => {
-      const rollout = convertDeploymentToRollout(resource);
-      if (!rollout) {
-        return "# Not a Deployment resource";
-      }
-      return window.jsyaml.dump(rollout);
     }, [resource]);
 
     return createElement(
@@ -45,19 +20,20 @@ import ReactDOM from 'react-dom/client';
         style: {
           whiteSpace: 'pre-wrap',
           fontFamily: 'monospace',
-          backgroundColor: '#f5f5f5',
-          padding: '1em',
-          borderRadius: '8px'
+          backgroundColor: '#f0f0f0',
+          padding: '1rem',
+          borderRadius: '6px'
         }
       },
-      rolloutYaml
+      yamlText
     );
   };
 
+  // "apps/Deployment" 리소스에 대해 탭 추가
   window.extensionsAPI?.registerResourceExtension?.(
-    RolloutConverter,
-    'Deployment',
+    DeploymentYamlViewer,
     'apps',
-    'Convert to Rollout'
+    'Deployment',
+    'YAML Viewer'
   );
 })(window);
