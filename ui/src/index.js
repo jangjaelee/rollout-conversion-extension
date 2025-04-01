@@ -1,15 +1,18 @@
 import * as React from 'react';
-import { useEffect, useStatem, useMemo } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import ReactDOM from 'react-dom/client';
 import jsyaml from 'js-yaml';
 
 ((window) => {
-  const { createElement, useMemo } = React;
+  const { createElement } = React;
 
   const DeploymentYamlViewer = ({ resource }) => {
     const yamlText = useMemo(() => {
+      if (!resource) {
+        return "# No resource data available"; // null 또는 undefined 체크
+      }
       try {
-        return window.jsyaml.dump(resource);
+        return jsyaml.dump(resource);
       } catch (e) {
         return "# Error converting resource to YAML";
       }
