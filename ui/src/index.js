@@ -55,6 +55,9 @@ import jsyaml from 'js-yaml';
     DeploymentYamlViewer,
     'apps',
     'Deployment',
-    'YAML Viewer'
+    'YAML Viewer',
+    {
+      desired: true,
+    }
   );
 })(window);
