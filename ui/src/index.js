@@ -8,11 +8,11 @@ import jsyaml from 'js-yaml';
 
   const DeploymentYamlViewer = ({ resource }) => {
     const yamlText = useMemo(() => {
-      if (!resource.manifest) {
+      if (!resource) {
         return "# No resource data available"; // null 또는 undefined 체크
       }
       try {
-        return jsyaml.dump(resource.manifest);
+        return jsyaml.dump(resource);
       } catch (e) {
         return "# Error converting resource to YAML";
       }
