@@ -145,55 +145,29 @@ import yaml from 'js-yaml';
 */
 
 ((window) => {
+  const { useState, useEffect } = React;
+
   const DeploymentDesiredManifestTab = ({ resource }) => {
     const [manifest, setManifest] = useState(null);
+    const [appName, setAppName] = useState(null); 
 
     useEffect(() => {
-      const annotations = resource.metadata?.annotations || {};
-      const appName =
-        annotations["argocd.argoproj.io/instance"] ||
-        annotations["app.kubernetes.io/instance"];
+      const annotations = resource.metadata?.annotations;
+      const extappName = annotations["app.kubernetes.io/instance"];
 
-      if (!appName) {
+      if (!extappName) {
         console.warn("Application name not found in annotations");
         return;
       }
 
-      const fetchDesiredManifest = async () => {
-        try {
-          const response = await fetch(`/api/v1/applications/${appName}/manifests`, {
-            credentials: "include",
-          });
-
-          if (!response.ok) throw new Error("Failed to fetch manifests");
-
-          const data = await response.json();
-          const manifests = data?.manifests ?? [];
-
-          const matched = manifests.find((m) => {
-            return (
-              m.kind === "Deployment" &&
-              m.apiVersion === resource.apiVersion &&
-              m.metadata?.name === resource.metadata?.name &&
-              m.metadata?.namespace === resource.metadata?.namespace
-            );
-          });
-
-          setManifest(matched || null);
-        } catch (err) {
-          console.error("Error fetching desired manifest:", err);
-          setManifest(null);
-        }
-      };
-
-      fetchDesiredManifest();
+      setAppName(extappName);
     }, [resource]);
 
     return React.createElement(
       "div",
       {},
       React.createElement("h3", {}, "Desired Deployment Manifest"),
-      appName
+      resource
         ? React.createElement(
             "pre",
             {
@@ -205,7 +179,7 @@ import yaml from 'js-yaml';
                 fontSize: "12px",
               },
             },
-            yaml.dump(appName)
+            yaml.dump(resource)
           )
         : React.createElement("p", {}, "Manifest not found.")
     );
