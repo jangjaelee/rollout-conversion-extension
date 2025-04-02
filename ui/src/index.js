@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useMemo, useState, useEffect } from 'react';
 import yaml from 'js-yaml';
+import { Card, CardContent } from '@/components/ui/card';
 //import './index.css';
 
 /*
@@ -144,51 +145,39 @@ import yaml from 'js-yaml';
 })(window);
 */
 
-((window) => {
-  const { useState, useEffect } = React;
 
-  const DeploymentDesiredManifestTab = ({ resource }) => {
-    const [manifest, setManifest] = useState(null);
-    const [appName, setAppName] = useState(null); 
-
-    useEffect(() => {
-      const annotations = resource.metadata?.annotations;
-      const extappName = annotations["app.kubernetes.io/instance"];
-
-      if (!extappName) {
-        console.warn("Application name not found in annotations");
-        return;
-      }
-
-      setAppName(extappName);
-    }, [resource]);
-
-    return React.createElement(
-      "div",
-      {},
-      React.createElement("h3", {}, "Desired Deployment Manifest"),
-      annotations
-        ? React.createElement(
-            "pre",
-            {
-              style: {
-                background: "#f4f4f4",
-                padding: "1rem",
-                borderRadius: "8px",
-                overflowX: "auto",
-                fontSize: "12px",
-              },
-            },
-            yaml.dump(annotations)
-          )
-        : React.createElement("p", {}, "Manifest not found.")
+  const DeploymentAnnotationsYamlTab = ({ resource }: { resource: any }) => {
+    const annotations = resource?.object?.metadata?.annotations || {};
+    const yamlString = yaml.dump(annotations);
+  
+    return (
+      <div style={{
+        margin: '1rem',
+        padding: '1rem',
+        border: '1px solid #ccc',
+        borderRadius: '8px',
+        backgroundColor: '#f9f9f9'
+      }}>
+        <pre style={{
+          whiteSpace: 'pre-wrap',
+          fontSize: '14px',
+          lineHeight: '1.5',
+          color: '#333'
+        }}>
+          {yamlString}
+        </pre>
+      </div>
     );
   };
+  
+  export default DeploymentAnnotationsYamlTab;
 
+
+((window) => {
   window?.extensionsAPI?.registerResourceExtension(
-    DeploymentDesiredManifestTab,
+    DeploymentAnnotationsYamlTab,
     'apps',
     'Deployment',
-    'YAML Viewer'
+    'Annotations YAML'
   );
 })(window);
