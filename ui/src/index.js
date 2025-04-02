@@ -146,7 +146,7 @@ import { Card, CardContent } from '@/components/ui/card';
 */
 
 
-  const DeploymentAnnotationsYamlTab = ({ resource }: { resource: any }) => {
+ /* const DeploymentAnnotationsYamlTab = ({ resource }: { resource: any }) => {
     const labels = resource?.metadata?.labels || {};
     const exlabels = labels["app.kubernetes.io/instance"] || labels["argocd.argoproj.io/instance"];
 
@@ -155,7 +155,7 @@ import { Card, CardContent } from '@/components/ui/card';
       return;
     }
 
-    const yamlString = yaml.dump(exlabels);
+    const yamlString = toString(exlabels);
   
     return (
       <div style={{
@@ -175,14 +175,84 @@ import { Card, CardContent } from '@/components/ui/card';
         </pre>
       </div>
     );
+  };*/
+
+
+
+  const DeploymentDesiredManifestTab = ({ resource }: { resource: any }) => {
+    const [manifest, setManifest] = React.useState(null);
+
+    React.useEffect(() => {
+      const labels = resource.metadata?.labels || {};
+      const appName =
+        labels["argocd.argoproj.io/instance"] ||
+        labels["app.kubernetes.io/instance"];
+
+      if (!appName) {
+        console.warn("Application name not found in annotations");
+        return;
+      }
+
+      const fetchDesiredManifest = async () => {
+        try {
+          const response = await fetch(`/api/v1/applications/${appName}/manifests`, {
+            credentials: "include",
+          });
+
+          if (!response.ok) throw new Error("Failed to fetch manifests");
+
+          const data = await response.json();
+          const manifests = data?.manifests ?? [];
+
+          const matched = manifests.find((m) => {
+            return (
+              m.kind === "Deployment" &&
+              m.apiVersion === resource.apiVersion &&
+              m.metadata?.name === resource.metadata?.name &&
+              m.metadata?.namespace === resource.metadata?.namespace
+            );
+          });
+
+          setManifest(matched || null);
+        } catch (err) {
+          console.error("Error fetching desired manifest:", err);
+          setManifest(null);
+        }
+      };
+
+      fetchDesiredManifest();
+    }, [resource]);
+
+    return React.createElement(
+      "div",
+      {},
+      React.createElement("h3", {}, "Desired Deployment Manifest"),
+      manifest
+        ? React.createElement(
+            "pre",
+            {
+              style: {
+                background: "#f4f4f4",
+                padding: "1rem",
+                borderRadius: "8px",
+                overflowX: "auto",
+                fontSize: "12px",
+              },
+            },
+            yaml.dump(manifest)
+          )
+        : React.createElement("p", {}, "Manifest not found.")
+    );
   };
+
+
   
-  export default DeploymentAnnotationsYamlTab;
+export default DeploymentAnnotationsYamlTab;
 
 
 ((window) => {
   window?.extensionsAPI?.registerResourceExtension(
-    DeploymentAnnotationsYamlTab,
+    DeploymentDesiredManifestTab,
     'apps',
     'Deployment',
     'Annotations YAML'
