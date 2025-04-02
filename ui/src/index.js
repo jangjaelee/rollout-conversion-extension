@@ -167,7 +167,7 @@ import yaml from 'js-yaml';
       "div",
       {},
       React.createElement("h3", {}, "Desired Deployment Manifest"),
-      resource
+      annotations
         ? React.createElement(
             "pre",
             {
@@ -179,7 +179,7 @@ import yaml from 'js-yaml';
                 fontSize: "12px",
               },
             },
-            yaml.dump(resource)
+            yaml.dump(annotations)
           )
         : React.createElement("p", {}, "Manifest not found.")
     );
