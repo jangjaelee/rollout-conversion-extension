@@ -203,21 +203,21 @@ import yaml from 'js-yaml';
           const data = await response.json();
           const manifests = data?.manifests ?? [];
 
-          const matched = manifests.find((m) => {
+          /*const matched = manifests.find((m) => {
             return (
               m.kind === "Deployment" &&
               m.apiVersion === resource.apiVersion &&
               m.metadata?.name === resource.metadata?.name &&
               m.metadata?.namespace === resource.metadata?.namespace
             );
-          });
+          });*/
 
           setManifest(matched || null);
         } catch (err) {
           console.error("Error fetching desired manifest:", err);
           setManifest(null);
         }
-      };
+      }
 
       fetchDesiredManifest();
     }, [resource]);
@@ -226,7 +226,7 @@ import yaml from 'js-yaml';
       "div",
       {},
       React.createElement("h3", {}, "Desired Deployment Manifest"),
-      manifest
+      manifests
         ? React.createElement(
             "pre",
             {
@@ -238,7 +238,7 @@ import yaml from 'js-yaml';
                 fontSize: "12px",
               },
             },
-            yaml.dump(manifest)
+            yaml.dump(manifests)
           )
         : React.createElement("p", {}, "Manifest not found.")
     );
