@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import yaml from 'js-yaml';
-import './index.css';
-
+//import './index.css';
 
 /*
 ((window) => {
@@ -143,8 +142,8 @@ import './index.css';
     'YAML Viewer'
   );
 })(window);
-
 */
+
 
 
 ((window) => {
@@ -214,7 +213,7 @@ import './index.css';
     );
   };
 
-  window.extensionsAPI.registerResourceExtension(
+  window?.extensionsAPI?.registerResourceExtension(
     DeploymentDesiredManifestTab,
     'apps',
     'Deployment',
