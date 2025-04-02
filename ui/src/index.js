@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useMemo, useState, useEffect } from 'react';
 import yaml from 'js-yaml';
-import { Card, CardContent } from '@/components/ui/card';
 //import './index.css';
 
 /*
@@ -179,7 +178,7 @@ import { Card, CardContent } from '@/components/ui/card';
 
 
 
-  const DeploymentDesiredManifestTab = ({ resource }: { resource: any }) => {
+  const DeploymentDesiredManifestTab = ({ resource }) => {
     const [manifest, setManifest] = React.useState(null);
 
     React.useEffect(() => {
@@ -247,7 +246,7 @@ import { Card, CardContent } from '@/components/ui/card';
 
 
   
-export default DeploymentAnnotationsYamlTab;
+export default DeploymentDesiredManifestTab;
 
 
 ((window) => {
