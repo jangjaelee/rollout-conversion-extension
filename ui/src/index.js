@@ -193,7 +193,7 @@ import yaml from 'js-yaml';
       "div",
       {},
       React.createElement("h3", {}, "Desired Deployment Manifest"),
-      manifest
+      appName
         ? React.createElement(
             "pre",
             {
@@ -205,7 +205,7 @@ import yaml from 'js-yaml';
                 fontSize: "12px",
               },
             },
-            yaml.dump(manifest)
+            yaml.dump(appName)
           )
         : React.createElement("p", {}, "Manifest not found.")
     );
