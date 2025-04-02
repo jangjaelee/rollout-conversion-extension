@@ -154,8 +154,8 @@ import { Card, CardContent } from '@/components/ui/card';
       console.warn("Application name not found in labels");
       return;
     }
-    
-    const yamlString = yaml.dump(labels);
+
+    const yamlString = yaml.dump(exlabels);
   
     return (
       <div style={{
