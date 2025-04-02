@@ -216,8 +216,8 @@ import './index.css';
 
   window.extensionsAPI.registerResourceExtension(
     DeploymentDesiredManifestTab,
-    "Deployment",
-    "apps",
-    "Desired Manifest"
+    'apps',
+    'Deployment',
+    'YAML Viewer'
   );
 })(window);
