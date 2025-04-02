@@ -147,7 +147,7 @@ import { Card, CardContent } from '@/components/ui/card';
 
 
   const DeploymentAnnotationsYamlTab = ({ resource }: { resource: any }) => {
-    const annotations = resource?.object?.metadata?.annotations || {};
+    const annotations = resource?.metadata?.annotations || {};
     const yamlString = yaml.dump(annotations);
   
     return (
