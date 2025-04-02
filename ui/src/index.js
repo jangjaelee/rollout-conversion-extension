@@ -147,8 +147,15 @@ import { Card, CardContent } from '@/components/ui/card';
 
 
   const DeploymentAnnotationsYamlTab = ({ resource }: { resource: any }) => {
-    const annotations = resource?.metadata?.labels || {};
-    const yamlString = yaml.dump(annotations);
+    const labels = resource?.metadata?.labels || {};
+    const exlabels = labels.["app.kubernetes.io/instance"] || ["argocd.argoproj.io/instance"];
+
+    if (!exlabels) {
+      console.warn("Application name not found in labels");
+      return;
+    }
+    
+    const yamlString = yaml.dump(labels);
   
     return (
       <div style={{
