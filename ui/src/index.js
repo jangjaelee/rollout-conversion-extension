@@ -144,13 +144,11 @@ import yaml from 'js-yaml';
 })(window);
 */
 
-
-
 ((window) => {
   const DeploymentDesiredManifestTab = ({ resource }) => {
-    const [manifest, setManifest] = React.useState(null);
+    const [manifest, setManifest] = useState(null);
 
-    React.useEffect(() => {
+    useEffect(() => {
       const annotations = resource.metadata?.annotations || {};
       const appName =
         annotations["argocd.argoproj.io/instance"] ||
@@ -176,8 +174,8 @@ import yaml from 'js-yaml';
             return (
               m.kind === "Deployment" &&
               m.apiVersion === resource.apiVersion &&
-              m.metadata?.name === resource.name &&
-              m.metadata?.namespace === resource.namespace
+              m.metadata?.name === resource.metadata?.name &&
+              m.metadata?.namespace === resource.metadata?.namespace
             );
           });
 
@@ -207,7 +205,7 @@ import yaml from 'js-yaml';
                 fontSize: "12px",
               },
             },
-            JSON.stringify(manifest, null, 2)
+            yaml.dump(manifest)
           )
         : React.createElement("p", {}, "Manifest not found.")
     );
