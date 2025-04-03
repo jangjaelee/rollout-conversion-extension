@@ -219,7 +219,7 @@ import yaml from 'js-yaml';
             );
           });*/
   
-          setMatchedManifest(manifests || null);
+          setMatchedManifest(rawManifests || null);
         } catch (err) {
           console.error("Error fetching desired manifest:", err);
           setMatchedManifest(null);
