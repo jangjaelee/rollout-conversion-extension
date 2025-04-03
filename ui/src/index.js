@@ -177,9 +177,8 @@ import yaml from 'js-yaml';
   };*/
 
 
-
   const DeploymentDesiredManifestTab = ({ resource }) => {
-    const [manifests, setManifests] = React.useState(null);
+    const [matchedManifest, setMatchedManifest] = React.useState(null);
   
     React.useEffect(() => {
       const labels = resource.metadata?.labels || {};
@@ -203,10 +202,19 @@ import yaml from 'js-yaml';
           const data = await response.json();
           const manifests = data?.manifests ?? [];
   
-          setManifests(manifests);
+          const matched = manifests.find((m) => {
+            return (
+              m.kind === "Deployment" &&
+              m.apiVersion === resource.apiVersion &&
+              m.metadata?.name === resource.metadata?.name &&
+              m.metadata?.namespace === resource.metadata?.namespace
+            );
+          });
+  
+          setMatchedManifest(matched || null);
         } catch (err) {
           console.error("Error fetching desired manifest:", err);
-          setManifests(null);
+          setMatchedManifest(null);
         }
       };
   
@@ -216,7 +224,7 @@ import yaml from 'js-yaml';
     return (
       <div>
         <h3>Desired Deployment Manifest</h3>
-        {manifests ? (
+        {matchedManifest ? (
           <pre
             style={{
               background: "#f4f4f4",
@@ -226,10 +234,10 @@ import yaml from 'js-yaml';
               fontSize: "12px",
             }}
           >
-            {yaml.dump(manifests)}
+            {yaml.dump(matchedManifest)}
           </pre>
         ) : (
-          <p>Manifest not found.</p>
+          <p>Matching manifest not found.</p>
         )}
       </div>
     );
