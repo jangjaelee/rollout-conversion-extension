@@ -45,10 +45,10 @@ import yaml from 'js-yaml';
             );
           });*/
   
-          setMatchedManifest(manifests);
+          setMatchedManifest(manifests || null);
         } catch (err) {
           console.error("Error fetching desired manifest:", err);
-          setMatchedManifest([]);
+          setMatchedManifest(null);
         }
       };
   
