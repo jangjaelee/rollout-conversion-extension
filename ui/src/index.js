@@ -179,81 +179,69 @@ import yaml from 'js-yaml';
 
 
   const DeploymentDesiredManifestTab = ({ resource }) => {
-    const [manifest, setManifest] = React.useState(null);
-
+    const [manifests, setManifests] = React.useState(null);
+  
     React.useEffect(() => {
       const labels = resource.metadata?.labels || {};
       const appName =
         labels["argocd.argoproj.io/instance"] ||
         labels["app.kubernetes.io/instance"];
-
+  
       if (!appName) {
-        console.warn("Application name not found in annotations");
+        console.warn("Application name not found in labels");
         return;
       }
-
+  
       const fetchDesiredManifest = async () => {
         try {
           const response = await fetch(`/api/v1/applications/${appName}/manifests`, {
             credentials: "include",
           });
-
+  
           if (!response.ok) throw new Error("Failed to fetch manifests");
-
+  
           const data = await response.json();
           const manifests = data?.manifests ?? [];
-
-          /*const matched = manifests.find((m) => {
-            return (
-              m.kind === "Deployment" &&
-              m.apiVersion === resource.apiVersion &&
-              m.metadata?.name === resource.metadata?.name &&
-              m.metadata?.namespace === resource.metadata?.namespace
-            );
-          });*/
-
-          setManifest(matched || null);
+  
+          setManifests(manifests);
         } catch (err) {
           console.error("Error fetching desired manifest:", err);
-          setManifest(null);
+          setManifests(null);
         }
-      }
-
+      };
+  
       fetchDesiredManifest();
     }, [resource]);
-
-    return React.createElement(
-      "div",
-      {},
-      React.createElement("h3", {}, "Desired Deployment Manifest"),
-      manifests
-        ? React.createElement(
-            "pre",
-            {
-              style: {
-                background: "#f4f4f4",
-                padding: "1rem",
-                borderRadius: "8px",
-                overflowX: "auto",
-                fontSize: "12px",
-              },
-            },
-            yaml.dump(manifests)
-          )
-        : React.createElement("p", {}, "Manifest not found.")
+  
+    return (
+      <div>
+        <h3>Desired Deployment Manifest</h3>
+        {manifests ? (
+          <pre
+            style={{
+              background: "#f4f4f4",
+              padding: "1rem",
+              borderRadius: "8px",
+              overflowX: "auto",
+              fontSize: "12px",
+            }}
+          >
+            {yaml.dump(manifests)}
+          </pre>
+        ) : (
+          <p>Manifest not found.</p>
+        )}
+      </div>
     );
   };
-
-
   
-export default DeploymentDesiredManifestTab;
-
-
-((window) => {
-  window?.extensionsAPI?.registerResourceExtension(
-    DeploymentDesiredManifestTab,
-    'apps',
-    'Deployment',
-    'Annotations YAML'
-  );
-})(window);
+  export default DeploymentDesiredManifestTab;
+  
+  ((window) => {
+    window?.extensionsAPI?.registerResourceExtension(
+      DeploymentDesiredManifestTab,
+      'apps',
+      'Deployment',
+      'Annotations YAML'
+    );
+  })(window);
