@@ -49,7 +49,6 @@ const DeploymentDesiredManifestTab = ({ resource }) => {
     <div>
       <h3>Desired Deployment Manifest</h3>
       {matchedManifests.length > 0 ? (
-        matchedManifests.map((manifest, idx) => (
           <pre
             key={idx}
             style={{
@@ -63,7 +62,6 @@ const DeploymentDesiredManifestTab = ({ resource }) => {
           >
             {yaml.dump(manifest)}
           </pre>
-        ))
       ) : (
         <p>Matching manifest not found.</p>
       )}
