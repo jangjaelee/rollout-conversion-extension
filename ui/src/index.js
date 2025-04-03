@@ -209,8 +209,6 @@ import yaml from 'js-yaml';
           const manifests = rawManifests.map((m) =>
             typeof m === "string" ? JSON.parse(m) : m
           );
-
-          const mani = yaml.dump(manifests)
   
           /*const matched = manifests.find((m) => {
             return (
@@ -221,7 +219,7 @@ import yaml from 'js-yaml';
             );
           });*/
   
-          setMatchedManifest(mani || null);
+          setMatchedManifest(manifests || null);
         } catch (err) {
           console.error("Error fetching desired manifest:", err);
           setMatchedManifest(null);
