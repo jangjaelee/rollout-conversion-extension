@@ -206,9 +206,9 @@ import yaml from 'js-yaml';
           const rawManifests = data?.manifests ?? [];
   
           // Parse if manifests are strings
-          const manifests = rawManifests.map((m) =>
-            typeof m === "string" ? JSON.parse(m) : m
-          );
+          //const manifests = rawManifests.map((m) =>
+          //  typeof m === "string" ? JSON.parse(m) : m
+          //);
   
           /*const matched = manifests.find((m) => {
             return (
@@ -242,7 +242,7 @@ import yaml from 'js-yaml';
               fontSize: "12px",
             }}
           >
-            machedManifest
+            {machedManifest}
           </pre>
         ) : (
           <p>Matching manifest not found.</p>
