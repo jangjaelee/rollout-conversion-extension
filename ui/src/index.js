@@ -210,16 +210,16 @@ import yaml from 'js-yaml';
             typeof m === "string" ? JSON.parse(m) : m
           );
   
-          const matched = manifests.find((m) => {
+          /*const matched = manifests.find((m) => {
             return (
               m.kind === "Deployment" &&
               m.apiVersion === resource.apiVersion &&
               m.metadata?.name === resource.metadata?.name &&
               m.metadata?.namespace === resource.metadata?.namespace
             );
-          });
+          });*/
   
-          setMatchedManifest(matched || null);
+          setMatchedManifest(manifests || null);
         } catch (err) {
           console.error("Error fetching desired manifest:", err);
           setMatchedManifest(null);
