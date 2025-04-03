@@ -193,18 +193,26 @@ import yaml from 'js-yaml';
   
       const fetchDesiredManifest = async () => {
         try {
-          const response = await fetch(`/api/v1/applications/${appName}/manifests`, {
-            credentials: "include",
-          });
+          const response = await fetch(
+            `/api/v1/applications/${appName}/manifests`,
+            {
+              credentials: "include",
+            }
+          );
   
           if (!response.ok) throw new Error("Failed to fetch manifests");
   
           const data = await response.json();
-          const manifests = data?.manifests ?? [];
+          const rawManifests = data?.manifests ?? [];
+  
+          // Parse if manifests are strings
+          const manifests = rawManifests.map((m) =>
+            typeof m === "string" ? JSON.parse(m) : m
+          );
   
           const matched = manifests.find((m) => {
             return (
-              m.kind === resource.kind &&
+              m.kind === "Deployment" &&
               m.apiVersion === resource.apiVersion &&
               m.metadata?.name === resource.metadata?.name &&
               m.metadata?.namespace === resource.metadata?.namespace
@@ -248,8 +256,8 @@ import yaml from 'js-yaml';
   ((window) => {
     window?.extensionsAPI?.registerResourceExtension(
       DeploymentDesiredManifestTab,
-      'apps',
-      'Deployment',
-      'Annotations YAML'
+      "apps",
+      "Deployment",
+      "Annotations YAML"
     );
   })(window);
