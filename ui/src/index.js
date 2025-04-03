@@ -242,7 +242,6 @@ import yaml from 'js-yaml';
               fontSize: "12px",
             }}
           >
-            //{yaml.dump(matchedManifest)}
             machedManifest
           </pre>
         ) : (
