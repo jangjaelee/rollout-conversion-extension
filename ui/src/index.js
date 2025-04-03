@@ -242,7 +242,7 @@ import yaml from 'js-yaml';
               fontSize: "12px",
             }}
           >
-            {machedManifest}
+            {yaml.dump(matchedManifest)}
           </pre>
         ) : (
           <p>Matching manifest not found.</p>
