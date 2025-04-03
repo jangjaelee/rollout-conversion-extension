@@ -204,7 +204,7 @@ import yaml from 'js-yaml';
   
           const matched = manifests.find((m) => {
             return (
-              m.kind === "Deployment" &&
+              m.kind === resource.kind &&
               m.apiVersion === resource.apiVersion &&
               m.metadata?.name === resource.metadata?.name &&
               m.metadata?.namespace === resource.metadata?.namespace
