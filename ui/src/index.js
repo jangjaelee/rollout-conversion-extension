@@ -242,7 +242,7 @@ import yaml from 'js-yaml';
               fontSize: "12px",
             }}
           >
-            {yaml.dump(matchedManifest)}
+            {JSON.stringify(matchedManifest, null, 2)}
 
           </pre>
         ) : (
