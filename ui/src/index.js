@@ -219,7 +219,7 @@ import yaml from 'js-yaml';
             );
           });*/
   
-          setMatchedManifest(rawManifests || null);
+          setMatchedManifest(manifests || null);
         } catch (err) {
           console.error("Error fetching desired manifest:", err);
           setMatchedManifest(null);
@@ -242,7 +242,7 @@ import yaml from 'js-yaml';
               fontSize: "12px",
             }}
           >
-            {matchedManifest}
+            {yaml.dump(matchedManifest)}
           </pre>
         ) : (
           <p>Matching manifest not found.</p>
