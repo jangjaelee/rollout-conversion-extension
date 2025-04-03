@@ -60,7 +60,7 @@ const DeploymentDesiredManifestTab = ({ resource }) => {
               marginBottom: "1rem",
             }}
           >
-            {yaml.dump(manifest)}
+            {yaml.dump(matchedManifests)}
           </pre>
       ) : (
         <p>Matching manifest not found.</p>
