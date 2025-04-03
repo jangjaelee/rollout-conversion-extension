@@ -244,7 +244,7 @@ import yaml from 'js-yaml';
               fontSize: "12px",
             }}
           >
-            {JSON.stringify(matchedManifest, null ,2)}
+            {yaml.dump(matchedManifest)}
           </pre>
         ) : (
           <p>Matching manifest not found.</p>
