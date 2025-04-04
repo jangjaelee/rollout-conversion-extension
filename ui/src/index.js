@@ -132,7 +132,7 @@ const DeploymentDesiredManifestTab = ({ resource }) => {
 
   return (
     <div style={{ width: '100%' }}>
-      <h3>🎯 Deployment → Argo Rollout 변환 비교</h3>
+      <h3>Deployment → Argo Rollout 변환 비교</h3>
       <div style={{ display: 'flex', gap: '1rem', width: '100%' }}>
         <div style={{ flex: 1 }}>
           <h4>Desired Deployment</h4>
