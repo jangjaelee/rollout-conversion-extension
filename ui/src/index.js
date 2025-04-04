@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useMemo, useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import yaml from 'js-yaml';
 
 const convertDeploymentToRollout = (deployment) => {
@@ -99,9 +99,9 @@ const DeploymentDesiredManifestTab = ({ resource }) => {
   if (error) return <p style={{ color: "red" }}>❌ {error}</p>;
 
   return (
-    <div>
+    <div style={{ width: '100%' }}>
       <h3>🎯 Deployment → Argo Rollout 변환 비교</h3>
-      <div style={{ display: 'flex', gap: '1rem' }}>
+      <div style={{ display: 'flex', gap: '1rem', width: '100%' }}>
         <div style={{ flex: 1 }}>
           <h4>📦 Deployment</h4>
           {matchedManifest ? (
@@ -112,6 +112,8 @@ const DeploymentDesiredManifestTab = ({ resource }) => {
               overflowX: "auto",
               fontFamily: "monospace",
               fontSize: "14px",
+              whiteSpace: "pre-wrap",
+              wordBreak: "break-word",
             }}>
               {yaml.dump(matchedManifest)}
             </pre>
@@ -129,6 +131,8 @@ const DeploymentDesiredManifestTab = ({ resource }) => {
               overflowX: "auto",
               fontFamily: "monospace",
               fontSize: "14px",
+              whiteSpace: "pre-wrap",
+              wordBreak: "break-word",
             }}>
               {yaml.dump(rolloutManifest)}
             </pre>
