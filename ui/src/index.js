@@ -162,6 +162,6 @@ export default DeploymentDesiredManifestTab;
     DeploymentDesiredManifestTab,
     'apps',
     'Deployment',
-    'Annotations YAML'
+    'Converting Rollout'
   );
 })(window);
