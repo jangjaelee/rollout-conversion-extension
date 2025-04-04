@@ -35,6 +35,40 @@ const convertDeploymentToRollout = (deployment) => {
   return rollout;
 };
 
+// ✅ YAML + 라인 번호 출력 함수 (flex 기반)
+const renderYamlWithLineNumbers = (yamlString) => {
+  const lines = yamlString.split('\n');
+  return (
+    <div
+      style={{
+        background: '#f0f0f0',
+        padding: '1rem',
+        borderRadius: '8px',
+        fontFamily: 'monospace',
+        fontSize: '14px',
+        whiteSpace: 'pre-wrap',
+        wordBreak: 'break-word',
+        overflowX: 'auto',
+      }}
+    >
+      {lines.map((line, idx) => (
+        <div key={idx} style={{ display: 'flex' }}>
+          <span style={{
+            width: '3em',
+            textAlign: 'right',
+            paddingRight: '1em',
+            color: '#999',
+            userSelect: 'none',
+          }}>
+            {idx + 1}
+          </span>
+          <span style={{ flex: 1 }}>{line}</span>
+        </div>
+      ))}
+    </div>
+  );
+};
+
 const DeploymentDesiredManifestTab = ({ resource }) => {
   const [matchedManifest, setMatchedManifest] = useState(null);
   const [rolloutManifest, setRolloutManifest] = useState(null);
@@ -44,21 +78,19 @@ const DeploymentDesiredManifestTab = ({ resource }) => {
   useEffect(() => {
     const labels = resource.metadata?.labels || {};
     const appName =
-      labels["argocd.argoproj.io/instance"] ||
-      labels["app.kubernetes.io/instance"];
+      labels['argocd.argoproj.io/instance'] || labels['app.kubernetes.io/instance'];
 
     if (!appName) {
-      setError("Application name not found in labels");
+      setError('Application name not found in labels');
       setLoading(false);
       return;
     }
 
     const fetchDesiredManifest = async () => {
       try {
-        const response = await fetch(
-          `/api/v1/applications/${appName}/manifests`,
-          { credentials: "include" }
-        );
+        const response = await fetch(`/api/v1/applications/${appName}/manifests`, {
+          credentials: 'include',
+        });
 
         if (!response.ok) {
           const text = await response.text();
@@ -69,7 +101,7 @@ const DeploymentDesiredManifestTab = ({ resource }) => {
         const rawManifests = data?.manifests ?? [];
 
         const manifests = rawManifests.map((m) =>
-          typeof m === "string" ? JSON.parse(m) : m
+          typeof m === 'string' ? JSON.parse(m) : m
         );
 
         const matched = manifests.find(
@@ -85,7 +117,7 @@ const DeploymentDesiredManifestTab = ({ resource }) => {
           setRolloutManifest(rollout);
         }
       } catch (err) {
-        console.error("Error fetching desired manifest:", err);
+        console.error('Error fetching desired manifest:', err);
         setError(err.message);
       } finally {
         setLoading(false);
@@ -96,7 +128,7 @@ const DeploymentDesiredManifestTab = ({ resource }) => {
   }, [resource]);
 
   if (loading) return <p>Loading...</p>;
-  if (error) return <p style={{ color: "red" }}>❌ {error}</p>;
+  if (error) return <p style={{ color: 'red' }}>❌ {error}</p>;
 
   return (
     <div style={{ width: '100%' }}>
@@ -105,18 +137,7 @@ const DeploymentDesiredManifestTab = ({ resource }) => {
         <div style={{ flex: 1 }}>
           <h4>📦 Deployment</h4>
           {matchedManifest ? (
-            <pre style={{
-              background: "#f0f0f0",
-              padding: "1rem",
-              borderRadius: "8px",
-              overflowX: "auto",
-              fontFamily: "monospace",
-              fontSize: "14px",
-              whiteSpace: "pre-wrap",
-              wordBreak: "break-word",
-            }}>
-              {yaml.dump(matchedManifest)}
-            </pre>
+            renderYamlWithLineNumbers(yaml.dump(matchedManifest))
           ) : (
             <p>⚠️ No matching Deployment found.</p>
           )}
@@ -124,18 +145,7 @@ const DeploymentDesiredManifestTab = ({ resource }) => {
         <div style={{ flex: 1 }}>
           <h4>🚀 Converted Rollout</h4>
           {rolloutManifest ? (
-            <pre style={{
-              background: "#f8f8f8",
-              padding: "1rem",
-              borderRadius: "8px",
-              overflowX: "auto",
-              fontFamily: "monospace",
-              fontSize: "14px",
-              whiteSpace: "pre-wrap",
-              wordBreak: "break-word",
-            }}>
-              {yaml.dump(rolloutManifest)}
-            </pre>
+            renderYamlWithLineNumbers(yaml.dump(rolloutManifest))
           ) : (
             <p>⚠️ Unable to convert to Rollout.</p>
           )}
@@ -150,8 +160,8 @@ export default DeploymentDesiredManifestTab;
 ((window) => {
   window?.extensionsAPI?.registerResourceExtension(
     DeploymentDesiredManifestTab,
-    "apps",
-    "Deployment",
-    "Annotations YAML"
+    'apps',
+    'Deployment',
+    'Annotations YAML'
   );
 })(window);
