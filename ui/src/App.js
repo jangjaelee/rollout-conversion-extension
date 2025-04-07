@@ -5,7 +5,7 @@ import yaml from 'js-yaml';
 
 const PRESETS = {
     'Quick (10%, 50%)': [
-      { setWeight: 20 },
+      { setWeight: 10 },
       { pause: { duration: '30s' } },
       { setWeight: 50 },
       { pause: { duration: '1m' } },
