@@ -2,9 +2,9 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import yaml from 'js-yaml';
 
-const convertDeploymentToRollout = (deployment) => {
+const convertDeploymentToRollout = (props) => {
 
-  //const deployment = props;
+  const deployment = props;
   if (!deployment) return null;
 
   const rollout = {
@@ -38,9 +38,9 @@ const convertDeploymentToRollout = (deployment) => {
 };
 
 // ✅ YAML + 라인 번호 출력 함수 (flex 기반)
-const renderYamlWithLineNumbers = (yamlString) => {
+const renderYamlWithLineNumbers = (props) => {
 
-  //const yamlString
+  const yamlString = props;
   const lines = yamlString.split('\n');
   return (
     <div
