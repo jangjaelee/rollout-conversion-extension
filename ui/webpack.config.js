@@ -11,7 +11,7 @@ const config = {
   },
   output: {
     filename: `extensions-${extName}.js`,
-    path: __dirname + `/dist/resources/${filename}`,
+    path: __dirname + `/dist/resources/extensions-${extName}.js`,
     libraryTarget: "window",
     library: ["tmp", "extensions"],
   },
