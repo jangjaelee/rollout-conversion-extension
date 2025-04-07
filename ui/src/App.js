@@ -193,36 +193,35 @@ const RolloutConvert = ( {application, resource} ) => {
           <h4>Converted Rollout</h4>
           {rolloutManifest ? (
             <>
-                {/* COPY BUTTON - Only for Converted Rollout */}
-                <button
-                    onClick={async () => {
-                    try {
-                        await navigator.clipboard.writeText(yaml.dump(rolloutManifest));
-                        alert('📋 Rollout YAML copied to clipboard!');
-                    } catch (err) {
-                        alert('❌ Failed to copy!');
-                        console.error('Copy failed:', err);
-                    }
-                    }}
-                    style={{
-                    position: 'absolute',
-                    top: 0,
-                    right: 0,
-                    margin: '0.5rem',
-                    padding: '0.3rem 0.6rem',
-                    fontSize: '12px',
-                    borderRadius: '4px',
-                    backgroundColor: '#007bff',
-                    color: 'white',
-                    border: 'none',
-                    cursor: 'pointer',
-                    zIndex: 1,
-                    }}
-                >
-                  Copy
-                </button>
-
-                {renderYamlWithLineNumbers(yaml.dump(rolloutManifest))}
+              {/* COPY BUTTON - Only for Converted Rollout */}
+              <button
+                onClick={async () => {
+                try {
+                    await navigator.clipboard.writeText(yaml.dump(rolloutManifest));
+                    alert('📋 Rollout YAML copied to clipboard!');
+                } catch (err) {
+                    alert('❌ Failed to copy!');
+                    console.error('Copy failed:', err);
+                }
+                }}
+                style={{
+                position: 'absolute',
+                top: 0,
+                right: 0,
+                margin: '0.5rem',
+                padding: '0.3rem 0.6rem',
+                fontSize: '12px',
+                borderRadius: '4px',
+                backgroundColor: '#007bff',
+                color: 'white',
+                border: 'none',
+                cursor: 'pointer',
+                zIndex: 1,
+                }}
+              >
+                Copy
+              </button>
+            {renderYamlWithLineNumbers(yaml.dump(rolloutManifest))}
             </>
           ) : (
             <p>⚠️ Unable to convert to Rollout.</p>
