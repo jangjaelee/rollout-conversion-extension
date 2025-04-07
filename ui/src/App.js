@@ -294,7 +294,6 @@ const RolloutConvert = ( {application, resource} ) => {
               >
                 Copy
               </button>
-
             {renderYamlWithLineNumbers(yaml.dump(rolloutManifest))}
             </>
           ) : (
