@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { useMemo, useState, useEffect } from 'react';
 import yaml from 'js-yaml';
-//import './index.css';
+import './index.css';
 
-/*
+
 ((window) => {
   const { createElement } = React;
 
@@ -142,7 +142,6 @@ import yaml from 'js-yaml';
     'YAML Viewer'
   );
 })(window);
-*/
 
 
  /* const DeploymentAnnotationsYamlTab = ({ resource }: { resource: any }) => {

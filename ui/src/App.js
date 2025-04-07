@@ -2,11 +2,40 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import yaml from 'js-yaml';
 
+
+const PRESETS = {
+    'Quick (20%, 50%)': [
+      { setWeight: 20 },
+      { pause: { duration: '30s' } },
+      { setWeight: 50 },
+      { pause: { duration: '1m' } },
+    ],
+    'Slow (10%, 30%, 50%)': [
+      { setWeight: 10 },
+      { pause: { duration: '1m' } },
+      { setWeight: 30 },
+      { pause: { duration: '2m' } },
+      { setWeight: 50 },
+      { pause: { duration: '3m' } },
+    ],
+    'Full (10% → 100%)': [
+      { setWeight: 10 },
+      { pause: { duration: '1m' } },
+      { setWeight: 30 },
+      { pause: { duration: '2m' } },
+      { setWeight: 50 },
+      { pause: { duration: '2m' } },
+      { setWeight: 100 },
+    ],
+  };
+
+
 // Rollout API Template
 const convertDeploymentToRollout = (props) => {
-  const deployment = props;
+  const { deployment, steps } = props;
 
   if (!deployment) return null;
+  if (!steps) return null;
 
   const rolloutTemplate = {
     apiVersion: 'argoproj.io/v1alpha1',
@@ -24,12 +53,7 @@ const convertDeploymentToRollout = (props) => {
       template: deployment.spec.template,
       strategy: {
         canary: {
-          steps: [
-            { setWeight: 20 },
-            { pause: { duration: '30s' } },
-            { setWeight: 50 },
-            { pause: { duration: '60s' } },
-          ],
+          steps: steps,
         },
       },
     },
@@ -134,6 +158,7 @@ const RolloutConvert = ( {application, resource} ) => {
   const [rolloutManifest, setRolloutManifest] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [selectedPreset, setSelectedPreset] = useState('Quick (20%, 50%)');
 
   useEffect(() => {
 
@@ -179,8 +204,11 @@ const RolloutConvert = ( {application, resource} ) => {
 
         setDesiredManifest(matched || null);
         if (matched) {
-          const rollout = convertDeploymentToRollout(matched);
-          setRolloutManifest(rollout);
+          //const rollout = convertDeploymentToRollout(matched);
+          //setRolloutManifest(rollout);
+
+          const steps = PRESETS[selectedPreset];
+          setRolloutManifest(convertDeploymentToRollout(matched, steps));
         }
       } catch (err) {
         console.error('Error fetching desired manifest:', err);
@@ -199,6 +227,32 @@ const RolloutConvert = ( {application, resource} ) => {
   return (
     <div style={{ width: '100%', color: '#eee' }}>
       <h3 style={{ color: '#000000' }}>Kubernetes Deployment → Argo Rollout 변환 비교</h3>
+
+      {/* Preset 선택 UI */}
+      <div style={{ marginBottom: '1rem' }}>
+        <label htmlFor="preset" style={{ marginRight: '0.5rem', color: '#333' }}>
+          Canary Preset:
+        </label>
+        <select
+          id="preset"
+          value={selectedPreset}
+          onChange={(e) => setSelectedPreset(e.target.value)}
+          style={{
+            padding: '0.3rem',
+            borderRadius: '4px',
+            border: '1px solid #ccc',
+            fontSize: '14px',
+          }}
+        >
+          {Object.keys(PRESETS).map((presetName) => (
+            <option key={presetName} value={presetName}>
+              {presetName}
+            </option>
+          ))}
+        </select>
+      </div>
+
+
       <div style={{ display: 'flex', gap: '1rem', width: '100%' }}>
         <div style={{ flex: 1 }}>
           <h4 style={{ color: '#6E6E6E' }}>Desired Deployment</h4>
