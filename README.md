@@ -4,7 +4,7 @@
 
 ![image](https://raw.githubusercontent.com/jangjaelee/rollout-conversion-extension/refs/heads/main/ui/images/Rollout-Conversion-Extension.png)
 
-
+  
 ## Install UI extension
 
 The UI extension needs to be installed by mounting the React component in Argo CD API server. This process can be automated by using the [argocd-extension-installer](https://github.com/argoproj-labs/argocd-extension-installer). This installation method will run an init container that will download, extract and place the file in the correct location.
