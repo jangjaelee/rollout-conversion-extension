@@ -261,7 +261,7 @@ const RolloutConvert = ( {application, resource} ) => {
                       const url = URL.createObjectURL(blob);
                       const link = document.createElement('a');
                       link.href = url;
-                      link.download = `${rolloutManifest.metadata.name || 'rollout'}.yaml`;
+                      link.download = `rollout-${rolloutManifest.metadata.name || 'rollout'}.yaml`;
                       document.body.appendChild(link);
                       link.click();
                       document.body.removeChild(link);
