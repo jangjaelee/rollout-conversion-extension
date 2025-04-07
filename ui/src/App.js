@@ -58,6 +58,22 @@ const renderYamlWithLineNumbers = (props) => {
   return (
     <div
       style={{
+        background: '#1e1e1e',
+        padding: '1rem',
+        borderRadius: '8px',
+        fontFamily: 'monospace',
+        fontSize: '14px',
+        whiteSpace: 'pre-wrap',
+        wordBreak: 'break-word',
+        overflowX: 'auto',
+        position: 'relative',
+        color: '#ddd',
+      }}
+    >
+
+    {/* Light mode style
+    <div
+      style={{
         background: '#f0f0f0',
         padding: '1rem',
         borderRadius: '8px',
@@ -68,7 +84,10 @@ const renderYamlWithLineNumbers = (props) => {
         overflowX: 'auto',
         position: 'relative',        
       }}
-    >
+    >*/}
+
+    {/* Dark mode style */}
+            
       {/* Copy Button
       <button
         onClick={copyToClipboard}
@@ -96,7 +115,7 @@ const renderYamlWithLineNumbers = (props) => {
             width: '3em',
             textAlign: 'right',
             paddingRight: '1em',
-            color: '#999',
+            color: '#666',
             userSelect: 'none',
           }}>
             {idx + 1}
@@ -178,19 +197,19 @@ const RolloutConvert = ( {application, resource} ) => {
   if (error) return <p style={{ color: 'red' }}>❌ {error}</p>;
 
   return (
-    <div style={{ width: '100%' }}>
-      <h3>Deployment → Argo Rollout 변환 비교</h3>
+    <div style={{ width: '100%', color: '#eee' }}>
+      <h3 style={{ color: '#fff' }}>Deployment → Argo Rollout 변환 비교</h3>
       <div style={{ display: 'flex', gap: '1rem', width: '100%' }}>
         <div style={{ flex: 1 }}>
-          <h4>Desired Deployment</h4>
+          <h4 style={{ color: '#bbb' }}>Desired Deployment</h4>
           {desiredManifest ? (
             renderYamlWithLineNumbers(yaml.dump(desiredManifest))
           ) : (
-            <p>⚠️ No matching Deployment found.</p>
+            <p style={{ color: '#999' }}>⚠️ No matching Deployment found.</p>
           )}
         </div>
         <div style={{ flex: 1, position: 'relative' }}>
-          <h4>Converted Rollout</h4>
+          <h4 style={{ color: '#bbb' }}>Converted Rollout</h4>
           {rolloutManifest ? (
             <>
               {/* COPY BUTTON - Only for Converted Rollout */}
@@ -212,9 +231,9 @@ const RolloutConvert = ( {application, resource} ) => {
                 padding: '0.3rem 0.6rem',
                 fontSize: '12px',
                 borderRadius: '4px',
-                backgroundColor: '#007bff',
-                color: 'white',
-                border: 'none',
+                backgroundColor: '#444',
+                color: '#fff',
+                border: '1px solid #666',
                 cursor: 'pointer',
                 zIndex: 1,
                 }}
@@ -224,7 +243,7 @@ const RolloutConvert = ( {application, resource} ) => {
             {renderYamlWithLineNumbers(yaml.dump(rolloutManifest))}
             </>
           ) : (
-            <p>⚠️ Unable to convert to Rollout.</p>
+            <p style={{ color: '#999' }}>⚠️ Unable to convert to Rollout.</p>
           )}
         </div>
       </div>
