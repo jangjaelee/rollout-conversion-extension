@@ -204,7 +204,7 @@ const RolloutConvert = ( {application, resource} ) => {
         setDesiredManifest(matched || null);
         if (matched) {
           const steps = PRESETS[selectedPreset];
-          const rollout = convertDeploymentToRollout({matched, steps});          
+          const rollout = convertDeploymentToRollout({ deployment: matched, steps });          
           //setRolloutManifest(convertDeploymentToRollout(matched, steps));
           setRolloutManifest(rollout);          
         }
