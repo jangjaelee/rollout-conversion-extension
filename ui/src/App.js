@@ -1,7 +1,5 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import yaml from 'js-yaml';
 
 // Rollout API Template
@@ -198,13 +196,13 @@ const RolloutConvert = ( {application, resource} ) => {
               {/* COPY BUTTON - Only for Converted Rollout */}
               <button
                 onClick={async () => {
-                  try {
-                   await navigator.clipboard.writeText(yaml.dump(rolloutManifest));
-                    toast.success('📋 Rollout YAML copied to clipboard!');
-                  } catch (err) {
-                    toast.error('❌ Failed to copy!');
+                try {
+                    await navigator.clipboard.writeText(yaml.dump(rolloutManifest));
+                    alert('📋 Rollout YAML copied to clipboard!');
+                } catch (err) {
+                    alert('❌ Failed to copy!');
                     console.error('Copy failed:', err);
-                  }
+                }
                 }}
                 style={{
                 position: 'absolute',
@@ -227,10 +225,9 @@ const RolloutConvert = ( {application, resource} ) => {
             </>
           ) : (
             <p>⚠️ Unable to convert to Rollout.</p>
-          )}          
+          )}
         </div>
       </div>
-      <ToastContainer position="bottom-right" autoClose={2000} />
     </div>
   );
 };
