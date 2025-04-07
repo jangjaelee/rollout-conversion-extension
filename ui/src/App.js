@@ -296,9 +296,9 @@ const RolloutConvert = ( {application, resource} ) => {
               </button>
             {renderYamlWithLineNumbers(yaml.dump(rolloutManifest))}
             </>
-          ) : (
+          ) : !loading ? (
             <p style={{ color: '#6E6E6E' }}>⚠️ Unable to convert to Rollout.</p>
-          )}
+          ) : null}
         </div>
       </div>
     </div>
