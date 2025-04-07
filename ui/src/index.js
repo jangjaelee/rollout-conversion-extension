@@ -3,11 +3,11 @@ import { useEffect, useState } from 'react';
 import yaml from 'js-yaml';
 
 const convertDeploymentToRollout = (props) => {
-
   const deployment = props;
+
   if (!deployment) return null;
 
-  const rollout = {
+  const rolloutTemplate = {
     apiVersion: 'argoproj.io/v1alpha1',
     kind: 'Rollout',
     metadata: {
@@ -34,8 +34,9 @@ const convertDeploymentToRollout = (props) => {
     },
   };
 
-  return rollout;
+  return rolloutTemplate;
 };
+
 
 // ✅ YAML + 라인 번호 출력 함수 (flex 기반)
 const renderYamlWithLineNumbers = (props) => {
@@ -73,12 +74,10 @@ const renderYamlWithLineNumbers = (props) => {
   );
 };
 
+
 const RolloutConvert = ( props ) => {
-
-
   const { resource, application } = props;
-
-  const [matchedManifest, setMatchedManifest] = useState(null);
+  const [desiredManifest, setDesiredManifest] = useState(null);
   const [rolloutManifest, setRolloutManifest] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -119,7 +118,7 @@ const RolloutConvert = ( props ) => {
             m.metadata?.name === resource.metadata?.name
         );
 
-        setMatchedManifest(matched || null);
+        setDesiredManifest(matched || null);
         if (matched) {
           const rollout = convertDeploymentToRollout(matched);
           setRolloutManifest(rollout);
@@ -144,8 +143,8 @@ const RolloutConvert = ( props ) => {
       <div style={{ display: 'flex', gap: '1rem', width: '100%' }}>
         <div style={{ flex: 1 }}>
           <h4>Desired Deployment</h4>
-          {matchedManifest ? (
-            renderYamlWithLineNumbers(yaml.dump(matchedManifest))
+          {desiredManifest ? (
+            renderYamlWithLineNumbers(yaml.dump(desiredManifest))
           ) : (
             <p>⚠️ No matching Deployment found.</p>
           )}
@@ -163,7 +162,7 @@ const RolloutConvert = ( props ) => {
   );
 };
 
-RolloutConvert
+
 export default RolloutConvert;
 
 ((window: any) => {
