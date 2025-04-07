@@ -31,11 +31,10 @@ const PRESETS = {
 
 
 // Rollout API Template
-const convertDeploymentToRollout = ({ deployment, steps }) => {
+const convertDeploymentToRollout = ({ deployment, steps, mode }) => {
   //const { deployment, steps } = props;
 
-  if (!deployment) return null;
-  if (!steps) return null;
+  if (!deployment || !steps) return null;
 
   const rolloutTemplate = {
     apiVersion: 'argoproj.io/v1alpha1',
