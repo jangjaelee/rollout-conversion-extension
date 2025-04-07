@@ -198,15 +198,13 @@ const RolloutConvert = ( {application, resource} ) => {
               {/* COPY BUTTON - Only for Converted Rollout */}
               <button
                 onClick={async () => {
-                try {
-                    await navigator.clipboard.writeText(yaml.dump(rolloutManifest));
-                    //alert('📋 Rollout YAML copied to clipboard!');
+                  try {
+                   await navigator.clipboard.writeText(yaml.dump(rolloutManifest));
                     toast.success('📋 Rollout YAML copied to clipboard!');
-                } catch (err) {
-                    //alert('❌ Failed to copy!');
+                  } catch (err) {
                     toast.error('❌ Failed to copy!');
                     console.error('Copy failed:', err);
-                }
+                  }
                 }}
                 style={{
                 position: 'absolute',
