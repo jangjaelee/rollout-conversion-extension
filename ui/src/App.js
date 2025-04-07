@@ -176,7 +176,7 @@ const RolloutConvert = ( {application, resource} ) => {
 
   return (
     <div style={{ width: '100%', color: '#eee' }}>
-      <h3 style={{ color: '#000000' }}>Kubernetes Deployment → Argo Rollout 변환 비교</h3>
+      <h3 style={{ color: '#000000' }}>Kubernetes Deployment to Argo Rollout Conversion</h3>
 
       {/* Preset 선택 UI */}
       <div style={{ marginBottom: '1rem' }}>
