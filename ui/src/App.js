@@ -47,6 +47,7 @@ const convertDeploymentToRollout = ({ deployment, steps, mode }) => {
     },
     spec: {
       replicas: deployment.spec.replicas,
+      revisionHistoryLimit: deployment.spec.revisionHistoryLimit,
       strategy: {
         canary: {
           steps: steps,
@@ -60,6 +61,7 @@ const convertDeploymentToRollout = ({ deployment, steps, mode }) => {
         apiVersion: deployment.apiVersion,
         kind: deployment.kind,
         name: deployment.metadata.name,
+        scaleDown: "onsuccess",
     };
   } else {
     rolloutTemplate.spec.selector = deployment.spec.selector;
