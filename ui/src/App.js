@@ -219,10 +219,10 @@ const RolloutConvert = ( {application, resource} ) => {
                     zIndex: 1,
                     }}
                 >
-                    Copy
+                  Copy
                 </button>
 
-                renderYamlWithLineNumbers(yaml.dump(rolloutManifest))
+                {renderYamlWithLineNumbers(yaml.dump(rolloutManifest))}
             </>
           ) : (
             <p>⚠️ Unable to convert to Rollout.</p>
