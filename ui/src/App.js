@@ -115,7 +115,7 @@ const renderYamlWithLineNumbers = (props) => {
             width: '3em',
             textAlign: 'right',
             paddingRight: '1em',
-            color: '#666',
+            color: '#FFFF00',
             userSelect: 'none',
           }}>
             {idx + 1}
@@ -198,18 +198,18 @@ const RolloutConvert = ( {application, resource} ) => {
 
   return (
     <div style={{ width: '100%', color: '#eee' }}>
-      <h3>Deployment → Argo Rollout 변환 비교</h3>
+      <h3 style={{ color: '#000000' }}>Deployment → Argo Rollout 변환 비교</h3>
       <div style={{ display: 'flex', gap: '1rem', width: '100%' }}>
         <div style={{ flex: 1 }}>
-          <h4>Desired Deployment</h4>
+          <h4 style={{ color: '#6E6E6E' }}>Desired Deployment</h4>
           {desiredManifest ? (
             renderYamlWithLineNumbers(yaml.dump(desiredManifest))
           ) : (
-            <p>⚠️ No matching Deployment found.</p>
+            <p style={{ color: '#6E6E6E' }}>⚠️ No matching Deployment found.</p>
           )}
         </div>
         <div style={{ flex: 1, position: 'relative' }}>
-          <h4>Converted Rollout</h4>
+          <h4 style={{ color: '#6E6E6E' }}>Converted Rollout</h4>
           {rolloutManifest ? (
             <>
               {/* COPY BUTTON - Only for Converted Rollout */}
@@ -243,7 +243,7 @@ const RolloutConvert = ( {application, resource} ) => {
             {renderYamlWithLineNumbers(yaml.dump(rolloutManifest))}
             </>
           ) : (
-            <p>⚠️ Unable to convert to Rollout.</p>
+            <p style={{ color: '#6E6E6E' }}>⚠️ Unable to convert to Rollout.</p>
           )}
         </div>
       </div>
