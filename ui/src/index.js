@@ -162,6 +162,7 @@ export default DeploymentDesiredManifestTab;
     DeploymentDesiredManifestTab,
     'apps',
     'Deployment',
-    'Converting Rollout'
+    'Rollout Convert',
+    {icon: 'fad fa-exchange'}
   );
 })(window);
