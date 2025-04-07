@@ -31,8 +31,8 @@ const PRESETS = {
 
 
 // Rollout API Template
-const convertDeploymentToRollout = (props) => {
-  const { deployment, steps } = props;
+const convertDeploymentToRollout = ({ deployment, steps }) => {
+  //const { deployment, steps } = props;
 
   if (!deployment) return null;
   if (!steps) return null;
