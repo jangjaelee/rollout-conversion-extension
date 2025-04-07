@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import yaml from 'js-yaml';
 
+// Rollout API Template
 const convertDeploymentToRollout = (props) => {
   const deployment = props;
 
@@ -38,11 +39,22 @@ const convertDeploymentToRollout = (props) => {
 };
 
 
-// ✅ YAML + 라인 번호 출력 함수 (flex 기반)
+// YAML + 라인 번호 출력 함수 (flex 기반)
 const renderYamlWithLineNumbers = (props) => {
 
   const yamlString = props;
   const lines = yamlString.split('\n');
+
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(yamlString);
+      alert('📋 YAML copied to clipboard!');
+    } catch (err) {
+      alert('❌ Failed to copy!');
+      console.error('Copy failed:', err);
+    }
+  };
+
   return (
     <div
       style={{
@@ -54,8 +66,29 @@ const renderYamlWithLineNumbers = (props) => {
         whiteSpace: 'pre-wrap',
         wordBreak: 'break-word',
         overflowX: 'auto',
+        position: 'relative',        
       }}
     >
+      {/* Copy Button */}
+      <button
+        onClick={copyToClipboard}
+        style={{
+          position: 'absolute',
+          top: '0.5rem',
+          right: '0.5rem',
+          padding: '0.3rem 0.6rem',
+          fontSize: '12px',
+          borderRadius: '4px',
+          backgroundColor: '#007bff',
+          color: 'white',
+          border: 'none',
+          cursor: 'pointer',
+        }}
+      >
+        Copy
+      </button>
+
+      {/* YAML with line numbers */}
       {lines.map((line, idx) => (
         <div key={idx} style={{ display: 'flex' }}>
           <span style={{
@@ -83,13 +116,14 @@ const RolloutConvert = ( {application, resource} ) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+
+    // ArgoCD Application Name 가져오기
+    const appName = application?.metadata?.name;
     /*
     const labels = resource.metadata?.labels || {};
     const appName =
       labels['argocd.argoproj.io/instance'] || labels['app.kubernetes.io/instance'];
     */
-
-    const appName = application?.metadata?.name;
 
     if (!appName) {
       setError('Application name not found in labels');
@@ -97,6 +131,7 @@ const RolloutConvert = ( {application, resource} ) => {
       return;
     }
 
+    // Desired Manifest 가져오기
     const fetchDesiredManifest = async () => {
       try {
         const response = await fetch(`/api/v1/applications/${appName}/manifests`, {
@@ -137,7 +172,6 @@ const RolloutConvert = ( {application, resource} ) => {
 
     fetchDesiredManifest();
   }, [resource]);
-
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p style={{ color: 'red' }}>❌ {error}</p>;
