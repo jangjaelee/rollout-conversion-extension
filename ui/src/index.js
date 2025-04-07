@@ -2,7 +2,9 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import yaml from 'js-yaml';
 
-const convertDeploymentToRollout = (deployment) => {
+const convertDeploymentToRollout = (props) => {
+
+  const deployment = props;
   if (!deployment) return null;
 
   const rollout = {
@@ -36,7 +38,9 @@ const convertDeploymentToRollout = (deployment) => {
 };
 
 // ✅ YAML + 라인 번호 출력 함수 (flex 기반)
-const renderYamlWithLineNumbers = (yamlString) => {
+const renderYamlWithLineNumbers = (props) => {
+
+  const yamlString = props;
   const lines = yamlString.split('\n');
   return (
     <div
@@ -69,7 +73,11 @@ const renderYamlWithLineNumbers = (yamlString) => {
   );
 };
 
-const DeploymentDesiredManifestTab = ({ resource }) => {
+const RolloutConvert = ({ props }) => {
+
+
+  const { resource, application } = props;
+
   const [matchedManifest, setMatchedManifest] = useState(null);
   const [rolloutManifest, setRolloutManifest] = useState(null);
   const [error, setError] = useState(null);
@@ -155,11 +163,12 @@ const DeploymentDesiredManifestTab = ({ resource }) => {
   );
 };
 
-export default DeploymentDesiredManifestTab;
+RolloutConvert
+export default RolloutConvert;
 
-((window) => {
+((window: any) => {
   window?.extensionsAPI?.registerResourceExtension(
-    DeploymentDesiredManifestTab,
+    RolloutConvert,
     'apps',
     'Deployment',
     'Rollout Convert',
