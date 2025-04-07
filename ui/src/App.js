@@ -240,10 +240,6 @@ const RolloutConvert = ( {application, resource} ) => {
                         }
                     }}
                     style={{
-                        position: 'absolute',
-                        top: 0,
-                        right: 0,
-                        margin: '0.5rem',
                         padding: '0.4rem 0.8rem',
                         fontSize: '12px',
                         fontWeight: 'bold',
@@ -253,7 +249,6 @@ const RolloutConvert = ( {application, resource} ) => {
                         border: 'none',
                         boxShadow: '0 2px 5px rgba(0, 0, 0, 0.3)',
                         cursor: 'pointer',
-                        zIndex: 1,
                     }}
                 >
                 Copy
