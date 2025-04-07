@@ -4,8 +4,8 @@ import yaml from 'js-yaml';
 
 
 const PRESETS = {
-    'Quick (10%, 50%)': [
-      { setWeight: 10 },
+    'Quick (20%, 50%)': [
+      { setWeight: 20 },
       { pause: { duration: '30s' } },
       { setWeight: 50 },
       { pause: { duration: '1m' } },
@@ -14,17 +14,17 @@ const PRESETS = {
       { setWeight: 10 },
       { pause: { duration: '1m' } },
       { setWeight: 30 },
-      { pause: { duration: '1m' } },
+      { pause: { duration: '2m' } },
       { setWeight: 50 },
-      { pause: { duration: '1m' } },
+      { pause: { duration: '3m' } },
     ],
     'Full (10% → 100%)': [
       { setWeight: 10 },
       { pause: { duration: '1m' } },
       { setWeight: 30 },
-      { pause: { duration: '1m' } },
+      { pause: { duration: '2m' } },
       { setWeight: 50 },
-      { pause: { duration: '1m' } },
+      { pause: { duration: '2m' } },
       { setWeight: 100 },
     ],
   };
@@ -68,16 +68,6 @@ const renderYamlWithLineNumbers = (props) => {
   const yamlString = props;
   const lines = yamlString.split('\n');
 
-  const copyToClipboard = async () => {
-    try {
-      await navigator.clipboard.writeText(yamlString);
-      alert('📋 YAML copied to clipboard!');
-    } catch (err) {
-      alert('❌ Failed to copy!');
-      console.error('Copy failed:', err);
-    }
-  };
-
   return (
     <div
       style={{
@@ -93,43 +83,6 @@ const renderYamlWithLineNumbers = (props) => {
         color: '#ddd',
       }}
     >
-
-    {/* Light mode style
-    <div
-      style={{
-        background: '#f0f0f0',
-        padding: '1rem',
-        borderRadius: '8px',
-        fontFamily: 'monospace',
-        fontSize: '14px',
-        whiteSpace: 'pre-wrap',
-        wordBreak: 'break-word',
-        overflowX: 'auto',
-        position: 'relative',        
-      }}
-    >*/}
-
-    {/* Dark mode style */}
-            
-      {/* Copy Button
-      <button
-        onClick={copyToClipboard}
-        style={{
-          position: 'absolute',
-          top: '0.5rem',
-          right: '0.5rem',
-          padding: '0.3rem 0.6rem',
-          fontSize: '12px',
-          borderRadius: '4px',
-          backgroundColor: '#007bff',
-          color: 'white',
-          border: 'none',
-          cursor: 'pointer',
-        }}
-      >
-        Copy
-      </button>
-      */}
 
       {/* YAML with line numbers */}
       {lines.map((line, idx) => (
@@ -160,7 +113,6 @@ const RolloutConvert = ( {application, resource} ) => {
   const [selectedPreset, setSelectedPreset] = useState('Quick (10%, 50%)');
 
   useEffect(() => {
-
     // ArgoCD Application Name 가져오기
     const appName = application?.metadata?.name;
     /*
@@ -250,50 +202,92 @@ const RolloutConvert = ( {application, resource} ) => {
         </select>
       </div>
 
-
       <div style={{ display: 'flex', gap: '1rem', width: '100%' }}>
+        {/* Desired Deployment */}
         <div style={{ flex: 1 }}>
           <h4 style={{ color: '#6E6E6E' }}>Desired Deployment</h4>
           {desiredManifest ? (
             renderYamlWithLineNumbers(yaml.dump(desiredManifest))
           ) : (
-            <p style={{ color: '#6E6E6E' }}>⚠️ No matching Deployment found.</p>
-          )}
+            !loading && <p style={{ color: '#6E6E6E' }}>⚠️ No matching Deployment found.</p>
+          )}          
         </div>
+
+        {/* Converted Rollout */}
         <div style={{ flex: 1, position: 'relative' }}>
           <h4 style={{ color: '#6E6E6E' }}>Converted Rollout</h4>
           {rolloutManifest ? (
             <>
-              {/* COPY BUTTON - Only for Converted Rollout */}
-              <button
-                onClick={async () => {
-                try {
-                    await navigator.clipboard.writeText(yaml.dump(rolloutManifest));
-                    alert('📋 Rollout YAML copied to clipboard!');
-                } catch (err) {
-                    alert('❌ Failed to copy!');
-                    console.error('Copy failed:', err);
-                }
-                }}
-                style={{
+              {/* COPY and Download Buttons- Only for Converted Rollout */}
+              <div
+                  style={{
                     position: 'absolute',
                     top: 0,
                     right: 0,
                     margin: '0.5rem',
-                    padding: '0.4rem 0.8rem',
-                    fontSize: '12px',
-                    fontWeight: 'bold',
-                    borderRadius: '6px',
-                    backgroundColor: '#00bcd4',
-                    color: '#fff',
-                    border: 'none',
-                    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.3)',
-                    cursor: 'pointer',
-                    zIndex: 1,
-                }}
+                    display: 'flex',
+                    gap: '0.5rem',
+                  }}
               >
+                <button
+                    onClick={async () => {
+                        try {
+                            await navigator.clipboard.writeText(yaml.dump(rolloutManifest));
+                            alert('📋 Rollout YAML copied to clipboard!');
+                        } catch (err) {
+                            alert('❌ Failed to copy!');
+                            console.error('Copy failed:', err);
+                        }
+                    }}
+                    style={{
+                        position: 'absolute',
+                        top: 0,
+                        right: 0,
+                        margin: '0.5rem',
+                        padding: '0.4rem 0.8rem',
+                        fontSize: '12px',
+                        fontWeight: 'bold',
+                        borderRadius: '6px',
+                        backgroundColor: '#00bcd4',
+                        color: '#fff',
+                        border: 'none',
+                        boxShadow: '0 2px 5px rgba(0, 0, 0, 0.3)',
+                        cursor: 'pointer',
+                        zIndex: 1,
+                    }}
+                >
                 Copy
               </button>
+
+              <button
+                    onClick={() => {
+                      const yamlString = yaml.dump(rolloutManifest);
+                      const blob = new Blob([yamlString], { type: 'text/yaml' });
+                      const url = URL.createObjectURL(blob);
+                      const link = document.createElement('a');
+                      link.href = url;
+                      link.download = `${rolloutManifest.metadata.name || 'rollout'}.yaml`;
+                      document.body.appendChild(link);
+                      link.click();
+                      document.body.removeChild(link);
+                      URL.revokeObjectURL(url);
+                    }}
+                    style={{
+                        padding: '0.4rem 0.8rem',
+                        fontSize: '12px',
+                        fontWeight: 'bold',
+                        borderRadius: '6px',
+                        backgroundColor: '#4caf50',
+                        color: '#fff',
+                        border: 'none',
+                        boxShadow: '0 2px 5px rgba(0, 0, 0, 0.3)',
+                        cursor: 'pointer',
+                    }}
+                  >
+                    Download
+                  </button>              
+            </div>
+
             {renderYamlWithLineNumbers(yaml.dump(rolloutManifest))}
             </>
           ) : !loading ? (
