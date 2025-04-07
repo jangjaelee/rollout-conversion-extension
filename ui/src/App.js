@@ -184,31 +184,6 @@ const RolloutConvert = ( {application, resource} ) => {
   return (
     <div style={{ width: '100%', color: '#eee' }}>
       <h3 style={{ color: '#000000' }}>Kubernetes Deployment to Argo Rollout Conversion</h3>
-
-      {/* Preset 선택 UI */}
-      <div style={{ marginBottom: '1rem' }}>
-        <label htmlFor="preset" style={{ marginRight: '0.5rem', color: '#333' }}>
-          Canary Preset:
-        </label>
-        <select
-          id="preset"
-          value={selectedPreset}
-          onChange={(e) => setSelectedPreset(e.target.value)}
-          style={{
-            padding: '0.3rem',
-            borderRadius: '4px',
-            border: '1px solid #ccc',
-            fontSize: '14px',
-          }}
-        >
-          {Object.keys(PRESETS).map((presetName) => (
-            <option key={presetName} value={presetName}>
-              {presetName}
-            </option>
-          ))}
-        </select>
-      </div>
-
       <div style={{ display: 'flex', gap: '1rem', width: '100%' }}>
         {/* Desired Deployment */}
         <div style={{ flex: 1 }}>
@@ -245,6 +220,29 @@ const RolloutConvert = ( {application, resource} ) => {
                 </select>
               </div>
 
+              {/* Preset 선택 UI */}
+              <div style={{ marginBottom: '1rem' }}>
+                <label htmlFor="preset" style={{ marginRight: '0.5rem', color: '#333' }}>
+                Canary Preset:
+                </label>
+                <select
+                id="preset"
+                value={selectedPreset}
+                onChange={(e) => setSelectedPreset(e.target.value)}
+                style={{
+                    padding: '0.3rem',
+                    borderRadius: '4px',
+                    border: '1px solid #ccc',
+                    fontSize: '14px',
+                }}
+                >
+                {Object.keys(PRESETS).map((presetName) => (
+                    <option key={presetName} value={presetName}>
+                    {presetName}
+                    </option>
+                ))}
+                </select>
+              </div>
 
               {/* COPY and Download Buttons- Only for Converted Rollout */}
               <div
