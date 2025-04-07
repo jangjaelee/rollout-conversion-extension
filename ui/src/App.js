@@ -295,35 +295,6 @@ const RolloutConvert = ( {application, resource} ) => {
                 Copy
               </button>
 
-              {/* DOWNLOAD BUTTON */}
-              <button
-                onClick={() => {
-                const yamlString = yaml.dump(rolloutManifest);
-                const blob = new Blob([yamlString], { type: 'text/yaml' });
-                const url = URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = `${rolloutManifest.metadata.name || 'rollout'}.yaml`;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                URL.revokeObjectURL(url);
-                }}
-                style={{
-                    padding: '0.4rem 0.8rem',
-                    fontSize: '12px',
-                    fontWeight: 'bold',
-                    borderRadius: '6px',
-                    backgroundColor: '#4caf50',
-                    color: '#fff',
-                    border: 'none',
-                    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.3)',
-                    cursor: 'pointer',
-                }}
-              >
-                Download
-              </button>
-
             {renderYamlWithLineNumbers(yaml.dump(rolloutManifest))}
             </>
           ) : (
