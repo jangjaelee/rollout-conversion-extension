@@ -198,7 +198,7 @@ const RolloutConvert = ( {application, resource} ) => {
 
   return (
     <div style={{ width: '100%', color: '#eee' }}>
-      <h3 style={{ color: '#000000' }}>Deployment → Argo Rollout 변환 비교</h3>
+      <h3 style={{ color: '#000000' }}>Kubernetes Deployment → Argo Rollout 변환 비교</h3>
       <div style={{ display: 'flex', gap: '1rem', width: '100%' }}>
         <div style={{ flex: 1 }}>
           <h4 style={{ color: '#6E6E6E' }}>Desired Deployment</h4>
@@ -224,18 +224,20 @@ const RolloutConvert = ( {application, resource} ) => {
                 }
                 }}
                 style={{
-                position: 'absolute',
-                top: 0,
-                right: 0,
-                margin: '0.5rem',
-                padding: '0.3rem 0.6rem',
-                fontSize: '12px',
-                borderRadius: '4px',
-                backgroundColor: '#444',
-                color: '#fff',
-                border: '1px solid #666',
-                cursor: 'pointer',
-                zIndex: 1,
+                    position: 'absolute',
+                    top: 0,
+                    right: 0,
+                    margin: '0.5rem',
+                    padding: '0.4rem 0.8rem',
+                    fontSize: '12px',
+                    fontWeight: 'bold',
+                    borderRadius: '6px',
+                    backgroundColor: '#00bcd4',
+                    color: '#fff',
+                    border: 'none',
+                    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.3)',
+                    cursor: 'pointer',
+                    zIndex: 1,
                 }}
               >
                 Copy
