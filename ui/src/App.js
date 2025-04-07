@@ -75,8 +75,8 @@ const renderYamlWithLineNumbers = (props) => {
 };
 
 
-const RolloutConvert = ( props ) => {
-  const { resource, application } = props;
+const RolloutConvert = ( {resource} ) => {
+  //const { resource, application } = props;
   const [desiredManifest, setDesiredManifest] = useState(null);
   const [rolloutManifest, setRolloutManifest] = useState(null);
   const [error, setError] = useState(null);
@@ -133,7 +133,7 @@ const RolloutConvert = ( props ) => {
 
     fetchDesiredManifest();
   }, [resource]);
-  
+
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p style={{ color: 'red' }}>❌ {error}</p>;
