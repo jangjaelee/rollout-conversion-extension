@@ -65,7 +65,6 @@ const convertDeploymentToRollout = (props) => {
 
 // YAML + 라인 번호 출력 함수 (flex 기반)
 const renderYamlWithLineNumbers = (props) => {
-
   const yamlString = props;
   const lines = yamlString.split('\n');
 
@@ -204,11 +203,10 @@ const RolloutConvert = ( {application, resource} ) => {
 
         setDesiredManifest(matched || null);
         if (matched) {
-          //const rollout = convertDeploymentToRollout(matched);
-          //setRolloutManifest(rollout);
-
           const steps = PRESETS[selectedPreset];
-          setRolloutManifest(convertDeploymentToRollout(matched, steps));
+          const rollout = convertDeploymentToRollout(matched, steps);          
+          //setRolloutManifest(convertDeploymentToRollout(matched, steps));
+          setRolloutManifest(rollout);          
         }
       } catch (err) {
         console.error('Error fetching desired manifest:', err);
