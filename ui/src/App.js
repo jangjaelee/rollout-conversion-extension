@@ -219,7 +219,7 @@ const RolloutConvert = ( {application, resource} ) => {
     };
 
     fetchDesiredManifest();
-  }, [resource]);
+  }, [resource, selectedPreset]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p style={{ color: 'red' }}>❌ {error}</p>;
