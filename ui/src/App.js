@@ -48,9 +48,6 @@ const convertDeploymentToRollout = ({ deployment, steps }) => {
     },
     spec: {
       replicas: deployment.spec.replicas,
-      revisionHistoryLimit: deployment.spec.revisionHistoryLimit,
-      selector: deployment.spec.selector,
-      template: deployment.spec.template,
       strategy: {
         canary: {
           steps: steps,
@@ -58,6 +55,17 @@ const convertDeploymentToRollout = ({ deployment, steps }) => {
       },
     },
   };
+
+  if (mode === 'workloadRef') {
+    rolloutTemplate.spec.workloadRef = {
+        apiVersion: deployment.apiVersion,
+        kind: deployment.kind,
+        name: deployment.metadata.name,
+    };
+  } else {
+    rolloutTemplate.spec.selector = deployment.spec.selector;
+    rolloutTemplate.spec.template = deployment.spec.template;
+  }
 
   return rolloutTemplate;
 };
@@ -111,6 +119,7 @@ const RolloutConvert = ( {application, resource} ) => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedPreset, setSelectedPreset] = useState('Quick (10%, 50%)');
+  const [conversionMode, setConversionMode] = useState('workloadRef'); 
 
   useEffect(() => {
     // ArgoCD Application Name 가져오기
@@ -156,8 +165,7 @@ const RolloutConvert = ( {application, resource} ) => {
         setDesiredManifest(matched || null);
         if (matched) {
           const steps = PRESETS[selectedPreset];
-          const rollout = convertDeploymentToRollout({ deployment: matched, steps });          
-          //setRolloutManifest(convertDeploymentToRollout(matched, steps));
+          const rollout = convertDeploymentToRollout({ deployment: matched, steps, mode: conversionMode });          
           setRolloutManifest(rollout);          
         }
       } catch (err) {
@@ -169,7 +177,7 @@ const RolloutConvert = ( {application, resource} ) => {
     };
 
     fetchDesiredManifest();
-  }, [resource, selectedPreset]);
+  }, [resource, selectedPreset, selectedPreset, conversionMode]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p style={{ color: 'red' }}>❌ {error}</p>;
@@ -218,6 +226,27 @@ const RolloutConvert = ( {application, resource} ) => {
           <h4 style={{ color: '#6E6E6E' }}>Converted Rollout</h4>
           {rolloutManifest ? (
             <>
+              <div style={{ marginBottom: '1rem' }}>
+                <label htmlFor="mode" style={{ marginRight: '0.5rem', color: '#333' }}>
+                    Conversion Mode:
+                </label>
+                <select
+                    id="mode"
+                    value={conversionMode}
+                    onChange={(e) => setConversionMode(e.target.value)}
+                    style={{
+                    padding: '0.3rem',
+                    borderRadius: '4px',
+                    border: '1px solid #ccc',
+                    fontSize: '14px',
+                    }}
+                >
+                    <option value="template">Classic (with template)</option>
+                    <option value="workloadRef">WorkloadRef (reference Deployment)</option>
+                </select>
+              </div>
+
+
               {/* COPY and Download Buttons- Only for Converted Rollout */}
               <div
                   style={{
