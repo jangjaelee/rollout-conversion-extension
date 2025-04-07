@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom/client'
 import RolloutConvert from './App.js'
 
 
-//((window: any) => {
+((window: any) => {
 (window?.extensionsAPI?.registerResourceExtension) ?  
   window?.extensionsAPI?.registerResourceExtension(
     RolloutConvert,
@@ -19,4 +19,4 @@ import RolloutConvert from './App.js'
       </React.StrictMode>,
   );
 
-//})(window);
+})(window);
