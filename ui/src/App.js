@@ -75,7 +75,7 @@ const renderYamlWithLineNumbers = (props) => {
 };
 
 
-const RolloutConvert = ( {resource} ) => {
+const RolloutConvert = ( {application, resource} ) => {
   //const { resource, application } = props;
   const [desiredManifest, setDesiredManifest] = useState(null);
   const [rolloutManifest, setRolloutManifest] = useState(null);
@@ -83,9 +83,13 @@ const RolloutConvert = ( {resource} ) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    /*
     const labels = resource.metadata?.labels || {};
     const appName =
       labels['argocd.argoproj.io/instance'] || labels['app.kubernetes.io/instance'];
+    */
+
+    const appName = application?.metadata?.name;
 
     if (!appName) {
       setError('Application name not found in labels');
