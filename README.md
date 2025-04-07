@@ -1,4 +1,4 @@
-# # Rollout Conversion Extension for Argo CD UI
+# Rollout Conversion Extension for Argo CD UI
 
 이 프로젝트는 Argo CD UI에서 Kubernetes Deployment를 Argo Rollout의 YAML 형식으로 자동으로 변환해주는 확장 도구입니다.
 
