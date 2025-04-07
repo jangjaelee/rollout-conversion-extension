@@ -73,7 +73,7 @@ const renderYamlWithLineNumbers = (yamlString) => {
   );
 };
 
-const RolloutConvert = ({ props }) => {
+const RolloutConvert = ( props ) => {
 
 
   const { resource, application } = props;
