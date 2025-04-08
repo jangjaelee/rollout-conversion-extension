@@ -7,6 +7,7 @@ import RolloutConvert from './App.js'
 })(window);
 */
 
+/*
 (window?.extensionsAPI?.registerResourceExtension) ?
   window?.extensionsAPI?.registerResourceExtension(
     RolloutConvert,
@@ -15,3 +16,20 @@ import RolloutConvert from './App.js'
     'Rollout Convert',
     { icon: 'fad fa-exchange' }
   ) : console.warn('extensionsAPI not found');
+*/
+
+const resourceTargets = [
+  { group: 'apps', kind: 'Deployment' },
+  { group: 'core', kind: 'Service' },
+  { group: 'gateway.networking.k8s.io', kind: 'HTTPRoute' },
+];
+
+resourceTargets.forEach(({ group, kind }) => {
+  window?.extensionsAPI?.registerResourceExtension?.(
+    RolloutConvert,
+    group,
+    kind,
+    'Rollout Convert',
+    { icon: 'fad fa-exchange' }
+  );
+});
