@@ -20,7 +20,7 @@ import RolloutConvert from './App.js'
 
 const resourceTargets = [
   { group: 'apps', kind: 'Deployment' },
-  { group: 'core', kind: 'Service' },
+  { group: '', kind: 'Service' },
   { group: 'gateway.networking.k8s.io', kind: 'HTTPRoute' },
 ];
 
