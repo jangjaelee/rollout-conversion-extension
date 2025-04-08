@@ -184,8 +184,6 @@ const RolloutConvert = ( {application, resource} ) => {
   if (error) return <p style={{ color: 'red' }}>❌ {error}</p>;
 
 
- 
-  // [여기] Service 리소스일 경우 YAML만 출력
   if (resource.kind === 'Service') {
     return (
       <div style={{ width: '100%', color: '#eee' }}>
@@ -199,7 +197,19 @@ const RolloutConvert = ( {application, resource} ) => {
     );
   } 
 
-  
+  if (resource.kind === 'HTTPRoute') {
+    return (
+      <div style={{ width: '100%', color: '#eee' }}>
+        <h3 style={{ color: '#000000' }}>Kubernetes Gateway API HTTPRoute YAML</h3>
+        {desiredManifest ? (
+          renderYamlWithLineNumbers(yaml.dump(desiredManifest))
+        ) : (
+          <p style={{ color: '#6E6E6E' }}>⚠️ No matching Service found.</p>
+        )}
+      </div>
+    );
+  }   
+
   return (
     <div style={{ width: '100%', color: '#eee' }}>
       <h3 style={{ color: '#000000' }}>Kubernetes Deployment to Argo Rollout Conversion</h3>
