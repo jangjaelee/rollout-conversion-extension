@@ -183,6 +183,23 @@ const RolloutConvert = ( {application, resource} ) => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p style={{ color: 'red' }}>❌ {error}</p>;
 
+
+ 
+  // [여기] Service 리소스일 경우 YAML만 출력
+  if (resource.kind === 'Service') {
+    return (
+      <div style={{ width: '100%', color: '#eee' }}>
+        <h3 style={{ color: '#000000' }}>Kubernetes Service YAML</h3>
+        {desiredManifest ? (
+          renderYamlWithLineNumbers(yaml.dump(desiredManifest))
+        ) : (
+          <p style={{ color: '#6E6E6E' }}>⚠️ No matching Service found.</p>
+        )}
+      </div>
+    );
+  } 
+
+  
   return (
     <div style={{ width: '100%', color: '#eee' }}>
       <h3 style={{ color: '#000000' }}>Kubernetes Deployment to Argo Rollout Conversion</h3>
