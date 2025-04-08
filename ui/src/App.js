@@ -204,7 +204,7 @@ const RolloutConvert = ( {application, resource} ) => {
         {desiredManifest ? (
           renderYamlWithLineNumbers(yaml.dump(desiredManifest))
         ) : (
-          <p style={{ color: '#6E6E6E' }}>⚠️ No matching Service found.</p>
+          <p style={{ color: '#6E6E6E' }}>⚠️ No matching HTTPRoute found.</p>
         )}
       </div>
     );
