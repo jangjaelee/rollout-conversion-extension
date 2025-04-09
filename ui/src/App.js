@@ -79,34 +79,13 @@ const renderYamlWithLineNumbers = (props) => {
   const lines = yamlString.split('\n');
 
   return (
-    <div
-      style={{
-        background: '#1e1e1e',
-        padding: '1rem',
-        borderRadius: '8px',
-        fontFamily: 'monospace',
-        fontSize: '14px',
-        whiteSpace: 'pre-wrap',
-        wordBreak: 'break-word',
-        overflowX: 'auto',
-        position: 'relative',
-        color: '#ddd',
-      }}
-    >
+    <div className="yaml-container">
 
       {/* YAML with line numbers */}
       {lines.map((line, idx) => (
-        <div key={idx} style={{ display: 'flex' }}>
-          <span style={{
-            width: '3em',
-            textAlign: 'right',
-            paddingRight: '1em',
-            color: '#FFFF00',
-            userSelect: 'none',
-          }}>
-            {idx + 1}
-          </span>
-          <span style={{ flex: 1 }}>{line}</span>
+        <div key={idx} className="yaml-line">
+        <span className="yaml-line-number">{idx + 1}</span>
+        <span className="yaml-line-content">{line}</span>
         </div>
       ))}
     </div>
