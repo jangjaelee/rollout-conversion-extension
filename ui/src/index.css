@@ -1,63 +1,102 @@
-h3 {
-  font-size: 16px;
-  margin-bottom: 8px;
+.section {
+  width: 100%;
+  color: #eee;
+}
+
+.error-text {
+  color: red;
+}
+
+.warn-text {
+  color: #6e6e6e;
+}
+
+.conversion-wrapper {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+}
+
+.column {
+  flex: 1;
+  position: relative;
+}
+
+.subheading {
+  color: #6e6e6e;
+}
+
+.controls {
+  margin-bottom: 1rem;
   color: #333;
 }
 
-.container {
-  font-family: sans-serif;
-  padding: 12px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  max-height: 1000px;
-  overflow-y: auto;  
+.controls label {
+  margin-right: 0.5rem;
 }
 
-.diff-container {
-  display: flex;
-  gap: 24px;
-  padding: 16px;
-  flex-wrap: wrap;
-}
-
-.diff-column {
-  flex: 1 1 48%;
-  display: flex;
-  flex-direction: column;
-}
-
-.yaml-box {
-  background: #272822;
-  color: #f8f8f2;
-  padding: 12px;
+.controls select {
+  padding: 0.3rem;
   border-radius: 4px;
-  font-size: 13px;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  overflow-x: auto;  
-  margin-top: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.button-group {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.copy-btn,
+.download-btn {
+  padding: 0.4rem 0.8rem;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 6px;
+  color: #fff;
+  border: none;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
 }
 
 .copy-btn {
-  background-color: #4f46e5;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  margin-top: 6px;
-  margin-bottom: 8px;
-  cursor: pointer;
-  border-radius: 4px;
+  background-color: #00bcd4;
 }
 
-.copy-btn:hover {
-  background-color: #3730a3;
+.download-btn {
+  background-color: #4caf50;
 }
 
-.block {
-  margin-bottom: 32px;
+/* YAML View */
+.yaml-container {
+  background: #1e1e1e;
+  padding: 1rem;
+  border-radius: 8px;
+  font-family: monospace;
+  font-size: 14px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-x: auto;
+  position: relative;
+  color: #ddd;
 }
 
-.preset-select {
-  margin: 12px 0;
+.yaml-line {
+  display: flex;
+}
+
+.line-number {
+  width: 3em;
+  text-align: right;
+  padding-right: 1em;
+  color: #ffff00;
+  user-select: none;
+}
+
+.line-content {
+  flex: 1;
 }

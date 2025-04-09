@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import yaml from 'js-yaml';
+import './index.css';
 
 
 const PRESETS = {
@@ -181,172 +182,102 @@ const RolloutConvert = ( {application, resource} ) => {
   }, [resource, selectedPreset, conversionMode]);
 
   if (loading) return <p>Loading...</p>;
-  if (error) return <p style={{ color: 'red' }}>❌ {error}</p>;
-
+  if (error) return <p className="error-text">❌ {error}</p>;
 
   if (resource.kind === 'Service') {
     return (
-      <div style={{ width: '100%', color: '#eee' }}>
-        <h3 style={{ color: '#000000' }}>Kubernetes Service YAML</h3>
-        {desiredManifest ? (
-          renderYamlWithLineNumbers(yaml.dump(desiredManifest))
-        ) : (
-          <p style={{ color: '#6E6E6E' }}>⚠️ No matching Service found.</p>
-        )}
+      <div className="section">
+        <h3>Kubernetes Service YAML</h3>
+        {desiredManifest ? renderYamlWithLineNumbers(yaml.dump(desiredManifest)) : <p className="warn-text">⚠️ No matching Service found.</p>}
+      </div>
+    );
+  }
+
+  if (resource.kind === 'HTTPRoute') {
+    return (
+      <div className="section">
+        <h3>Kubernetes Gateway API HTTPRoute YAML</h3>
+        {desiredManifest ? renderYamlWithLineNumbers(yaml.dump(desiredManifest)) : <p className="warn-text">⚠️ No matching HTTPRoute found.</p>}
       </div>
     );
   } 
 
-  if (resource.kind === 'HTTPRoute') {
-    return (
-      <div style={{ width: '100%', color: '#eee' }}>
-        <h3 style={{ color: '#000000' }}>Kubernetes Gateway API HTTPRoute YAML</h3>
-        {desiredManifest ? (
-          renderYamlWithLineNumbers(yaml.dump(desiredManifest))
-        ) : (
-          <p style={{ color: '#6E6E6E' }}>⚠️ No matching HTTPRoute found.</p>
-        )}
-      </div>
-    );
-  }   
-
   return (
-    <div style={{ width: '100%', color: '#eee' }}>
-      <h3 style={{ color: '#000000' }}>Kubernetes Deployment to Argo Rollout Conversion</h3>
-      <div style={{ display: 'flex', gap: '1rem', width: '100%' }}>
-        {/* Desired Deployment */}
-        <div style={{ flex: 1 }}>
-          <h4 style={{ color: '#6E6E6E' }}>Desired Deployment</h4>
-          {desiredManifest ? (
-            renderYamlWithLineNumbers(yaml.dump(desiredManifest))
-          ) : (
-            !loading && <p style={{ color: '#6E6E6E' }}>⚠️ No matching Deployment found.</p>
-          )}          
+    <div className="section">
+      <h3>Kubernetes Deployment to Argo Rollout Conversion</h3>
+      <div className="conversion-wrapper">
+        <div className="column">
+          <h4 className="subheading">Desired Deployment</h4>
+          {desiredManifest ? renderYamlWithLineNumbers(yaml.dump(desiredManifest)) : <p className="warn-text">⚠️ No matching Deployment found.</p>}
         </div>
 
-        {/* Converted Rollout */}
-        <div style={{ flex: 1, position: 'relative' }}>
-          <h4 style={{ color: '#6E6E6E' }}>Converted Rollout</h4>
+        <div className="column">
+          <h4 className="subheading">Converted Rollout</h4>
+
+          <div className="controls">
+            <label htmlFor="mode">Conversion Mode:</label>
+            <select id="mode" value={conversionMode} onChange={(e) => setConversionMode(e.target.value)}>
+              <option value="template">Classic (with template)</option>
+              <option value="workloadRef">WorkloadRef (reference Deployment)</option>
+            </select>
+          </div>
+
+          <div className="controls">
+            <label htmlFor="preset">Canary Preset:</label>
+            <select id="preset" value={selectedPreset} onChange={(e) => setSelectedPreset(e.target.value)}>
+              {Object.keys(PRESETS).map((presetName) => (
+                <option key={presetName} value={presetName}>
+                  {presetName}
+                </option>
+              ))}
+            </select>
+          </div>
+
           {rolloutManifest ? (
             <>
-              <div style={{ marginBottom: '1rem' }}>
-                <label htmlFor="mode" style={{ marginRight: '0.5rem', color: '#333' }}>
-                    Conversion Mode:
-                </label>
-                <select
-                    id="mode"
-                    value={conversionMode}
-                    onChange={(e) => setConversionMode(e.target.value)}
-                    style={{
-                    padding: '0.3rem',
-                    borderRadius: '4px',
-                    border: '1px solid #ccc',
-                    fontSize: '14px',
-                    }}
-                >
-                    <option value="template">Classic (with template)</option>
-                    <option value="workloadRef">WorkloadRef (reference Deployment)</option>
-                </select>
-              </div>
-
-              {/* Preset 선택 UI */}
-              <div style={{ marginBottom: '1rem' }}>
-                <label htmlFor="preset" style={{ marginRight: '0.5rem', color: '#333' }}>
-                Canary Preset:
-                </label>
-                <select
-                id="preset"
-                value={selectedPreset}
-                onChange={(e) => setSelectedPreset(e.target.value)}
-                style={{
-                    padding: '0.3rem',
-                    borderRadius: '4px',
-                    border: '1px solid #ccc',
-                    fontSize: '14px',
-                }}
-                >
-                {Object.keys(PRESETS).map((presetName) => (
-                    <option key={presetName} value={presetName}>
-                    {presetName}
-                    </option>
-                ))}
-                </select>
-              </div>
-
-              {/* COPY and Download Buttons- Only for Converted Rollout */}
-              <div
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    right: 0,
-                    margin: '0.5rem',
-                    display: 'flex',
-                    gap: '0.5rem',
-                  }}
-              >
+              <div className="button-group">
                 <button
-                    onClick={async () => {
-                        try {
-                            await navigator.clipboard.writeText(yaml.dump(rolloutManifest));
-                            alert('📋 Rollout YAML copied to clipboard!');
-                        } catch (err) {
-                            alert('❌ Failed to copy!');
-                            console.error('Copy failed:', err);
-                        }
-                    }}
-                    style={{
-                        padding: '0.4rem 0.8rem',
-                        fontSize: '12px',
-                        fontWeight: 'bold',
-                        borderRadius: '6px',
-                        backgroundColor: '#00bcd4',
-                        color: '#fff',
-                        border: 'none',
-                        boxShadow: '0 2px 5px rgba(0, 0, 0, 0.3)',
-                        cursor: 'pointer',
-                    }}
+                  className="copy-btn"
+                  onClick={async () => {
+                    try {
+                      await navigator.clipboard.writeText(yaml.dump(rolloutManifest));
+                      alert('📋 Rollout YAML copied to clipboard!');
+                    } catch (err) {
+                      alert('❌ Failed to copy!');
+                      console.error('Copy failed:', err);
+                    }
+                  }}
                 >
-                Copy
-              </button>
+                  Copy
+                </button>
+                <button
+                  className="download-btn"
+                  onClick={() => {
+                    const yamlString = yaml.dump(rolloutManifest);
+                    const blob = new Blob([yamlString], { type: 'text/yaml' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = `rollout-${rolloutManifest.metadata.name || 'rollout'}.yaml`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+                  }}
+                >
+                  Download
+                </button>
+              </div>
 
-              <button
-                    onClick={() => {
-                      const yamlString = yaml.dump(rolloutManifest);
-                      const blob = new Blob([yamlString], { type: 'text/yaml' });
-                      const url = URL.createObjectURL(blob);
-                      const link = document.createElement('a');
-                      link.href = url;
-                      link.download = `rollout-${rolloutManifest.metadata.name || 'rollout'}.yaml`;
-                      document.body.appendChild(link);
-                      link.click();
-                      document.body.removeChild(link);
-                      URL.revokeObjectURL(url);
-                    }}
-                    style={{
-                        padding: '0.4rem 0.8rem',
-                        fontSize: '12px',
-                        fontWeight: 'bold',
-                        borderRadius: '6px',
-                        backgroundColor: '#4caf50',
-                        color: '#fff',
-                        border: 'none',
-                        boxShadow: '0 2px 5px rgba(0, 0, 0, 0.3)',
-                        cursor: 'pointer',
-                    }}
-                  >
-                    Download
-                  </button>              
-            </div>
-
-            {renderYamlWithLineNumbers(yaml.dump(rolloutManifest))}
+              {renderYamlWithLineNumbers(yaml.dump(rolloutManifest))}
             </>
-          ) : !loading ? (
-            <p style={{ color: '#6E6E6E' }}>⚠️ Unable to convert to Rollout.</p>
-          ) : null}
+          ) : (
+            <p className="warn-text">⚠️ Unable to convert to Rollout.</p>
+          )}
         </div>
       </div>
     </div>
   );
 };
 
-export default RolloutConvert;
+export default RolloutConvert; 
