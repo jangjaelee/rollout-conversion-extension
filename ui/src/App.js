@@ -202,82 +202,84 @@ const RolloutConvert = ( {application, resource} ) => {
     );
   } 
 
-  return (
-    <div className="section">
-      <h3>Kubernetes Deployment to Argo Rollout Conversion</h3>
-      <div className="conversion-wrapper">
-        <div className="column">
-          <h4 className="subheading">Desired Deployment</h4>
-          {desiredManifest ? renderYamlWithLineNumbers(yaml.dump(desiredManifest)) : <p className="warn-text">⚠️ No matching Deployment found.</p>}
-        </div>
-
-        <div className="column">
-          <h4 className="subheading">Converted Rollout</h4>
-
-          <div className="controls">
-            <label htmlFor="mode">Conversion Mode:</label>
-            <select id="mode" value={conversionMode} onChange={(e) => setConversionMode(e.target.value)}>
-              <option value="template">Classic (with template)</option>
-              <option value="workloadRef">WorkloadRef (reference Deployment)</option>
-            </select>
+  if (resource.kind === 'Deployment') {
+    return (
+      <div className="section">
+        <h3>Kubernetes Deployment to Argo Rollout Conversion</h3>
+        <div className="conversion-wrapper">
+          <div className="column">
+            <h4 className="subheading">Desired Deployment</h4>
+            {desiredManifest ? renderYamlWithLineNumbers(yaml.dump(desiredManifest)) : <p className="warn-text">⚠️ No matching Deployment found.</p>}
           </div>
 
-          <div className="controls">
-            <label htmlFor="preset">Canary Preset:</label>
-            <select id="preset" value={selectedPreset} onChange={(e) => setSelectedPreset(e.target.value)}>
-              {Object.keys(PRESETS).map((presetName) => (
-                <option key={presetName} value={presetName}>
-                  {presetName}
-                </option>
-              ))}
-            </select>
+          <div className="column">
+            <h4 className="subheading">Converted Rollout</h4>
+
+            <div className="controls">
+              <label htmlFor="mode">Conversion Mode:</label>
+              <select id="mode" value={conversionMode} onChange={(e) => setConversionMode(e.target.value)}>
+                <option value="template">Classic (with template)</option>
+                <option value="workloadRef">WorkloadRef (reference Deployment)</option>
+              </select>
+            </div>
+
+            <div className="controls">
+              <label htmlFor="preset">Canary Preset:</label>
+              <select id="preset" value={selectedPreset} onChange={(e) => setSelectedPreset(e.target.value)}>
+                {Object.keys(PRESETS).map((presetName) => (
+                  <option key={presetName} value={presetName}>
+                    {presetName}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {rolloutManifest ? (
+              <>
+                <div className="button-group">
+                  <button
+                    className="copy-btn"
+                    onClick={async () => {
+                      try {
+                        await navigator.clipboard.writeText(yaml.dump(rolloutManifest));
+                        alert('📋 Rollout YAML copied to clipboard!');
+                      } catch (err) {
+                        alert('❌ Failed to copy!');
+                        console.error('Copy failed:', err);
+                      }
+                    }}
+                  >
+                    Copy
+                  </button>
+                  <button
+                    className="download-btn"
+                    onClick={() => {
+                      const yamlString = yaml.dump(rolloutManifest);
+                      const blob = new Blob([yamlString], { type: 'text/yaml' });
+                      const url = URL.createObjectURL(blob);
+                      const link = document.createElement('a');
+                      link.href = url;
+                      link.download = `rollout-${rolloutManifest.metadata.name || 'rollout'}.yaml`;
+                      document.body.appendChild(link);
+                      link.click();
+                      document.body.removeChild(link);
+                      URL.revokeObjectURL(url);
+                    }}
+                  >
+                    Download
+                  </button>
+                </div>
+
+                {renderYamlWithLineNumbers(yaml.dump(rolloutManifest))}
+              </>
+            ) : (
+              <p className="warn-text">⚠️ Unable to convert to Rollout.</p>
+            )}
           </div>
-
-          {rolloutManifest ? (
-            <>
-              <div className="button-group">
-                <button
-                  className="copy-btn"
-                  onClick={async () => {
-                    try {
-                      await navigator.clipboard.writeText(yaml.dump(rolloutManifest));
-                      alert('📋 Rollout YAML copied to clipboard!');
-                    } catch (err) {
-                      alert('❌ Failed to copy!');
-                      console.error('Copy failed:', err);
-                    }
-                  }}
-                >
-                  Copy
-                </button>
-                <button
-                  className="download-btn"
-                  onClick={() => {
-                    const yamlString = yaml.dump(rolloutManifest);
-                    const blob = new Blob([yamlString], { type: 'text/yaml' });
-                    const url = URL.createObjectURL(blob);
-                    const link = document.createElement('a');
-                    link.href = url;
-                    link.download = `rollout-${rolloutManifest.metadata.name || 'rollout'}.yaml`;
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                    URL.revokeObjectURL(url);
-                  }}
-                >
-                  Download
-                </button>
-              </div>
-
-              {renderYamlWithLineNumbers(yaml.dump(rolloutManifest))}
-            </>
-          ) : (
-            <p className="warn-text">⚠️ Unable to convert to Rollout.</p>
-          )}
         </div>
       </div>
-    </div>
-  );
+    );
+  }
 };
 
 export default RolloutConvert; 
