@@ -145,9 +145,12 @@ const RolloutConvert = ( {application, resource} ) => {
 
         setDesiredManifest(matched || null);
         if (matched) {
-          const steps = PRESETS[selectedPreset];
-          const rollout = convertDeploymentToRollout({ deployment: matched, steps, mode: conversionMode });          
-          setRolloutManifest(rollout);          
+          // Deployment일 경우에만 Rollout 변환 수행
+          if (resource.kind === 'Deployment') {          
+            const steps = PRESETS[selectedPreset];
+            const rollout = convertDeploymentToRollout({ deployment: matched, steps, mode: conversionMode });          
+            setRolloutManifest(rollout);          
+          }
         }
       } catch (err) {
         console.error('Error fetching desired manifest:', err);
