@@ -57,7 +57,7 @@ const convertDeploymentToRollout = ({ deployment, steps, mode }) => {
 
   if (!deployment || !steps) return null;
 
-  const rolloutTemplate = {
+  const rolloutCanaryTemplate = {
     apiVersion: 'argoproj.io/v1alpha1',
     kind: 'Rollout',
     metadata: {
@@ -73,23 +73,31 @@ const convertDeploymentToRollout = ({ deployment, steps, mode }) => {
         canary: {
           steps: steps,
         },
+        trafficRouting: {
+          plugins: {
+            'argoproj-labs/gatewayAPI': {
+              httpRoute: 'claim-api-test-public',
+              namespace: 'dev-claim',
+            },
+          },
+        },
       },
     },
   };
 
   if (mode === 'workloadRef') {
-    rolloutTemplate.spec.workloadRef = {
+    rolloutCanaryTemplate.spec.workloadRef = {
         apiVersion: deployment.apiVersion,
         kind: deployment.kind,
         name: deployment.metadata.name,
         scaleDown: "onsuccess",
     };
   } else {
-    rolloutTemplate.spec.selector = deployment.spec.selector;
-    rolloutTemplate.spec.template = deployment.spec.template;
+    rolloutCanaryTemplate.spec.selector = deployment.spec.selector;
+    rolloutCanaryTemplate.spec.template = deployment.spec.template;
   }
 
-  return rolloutTemplate;
+  return rolloutCanaryTemplate;
 };
 
 
