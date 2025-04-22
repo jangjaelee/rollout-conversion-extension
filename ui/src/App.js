@@ -82,10 +82,12 @@ const convertDeploymentToRollout = ({ deployment, steps, mode }) => {
           },
         },
       },
+      selector: deployment.spec.selector,
     },
   };
 
   if (mode === 'workloadRef') {
+
     rolloutCanaryTemplate.spec.workloadRef = {
         apiVersion: deployment.apiVersion,
         kind: deployment.kind,
@@ -93,7 +95,7 @@ const convertDeploymentToRollout = ({ deployment, steps, mode }) => {
         scaleDown: "onsuccess",
     };
   } else {
-    rolloutCanaryTemplate.spec.selector = deployment.spec.selector;
+    //rolloutCanaryTemplate.spec.selector = deployment.spec.selector;
     rolloutCanaryTemplate.spec.template = deployment.spec.template;
   }
 
