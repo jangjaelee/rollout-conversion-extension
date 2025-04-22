@@ -5,29 +5,49 @@ import './index.css';
 
 
 const PRESETS = {
-    'Quick (10%, 50%)': [
+    'Quick (10%, 30%, 100%)': [
       { setWeight: 10 },
       { pause: { duration: '30s' } },
-      { setWeight: 50 },
+      { setWeight: 30 },
       { pause: { duration: '1m' } },
+      { setWeight: 100 },
     ],
-    'Slow (10%, 30%, 50%)': [
+    'Balanced (10%, 30%, 60%, 100%)': [
       { setWeight: 10 },
       { pause: { duration: '1m' } },
       { setWeight: 30 },
       { pause: { duration: '2m' } },
-      { setWeight: 50 },
-      { pause: { duration: '3m' } },
-    ],
-    'Full (10% → 100%)': [
-      { setWeight: 10 },
-      { pause: { duration: '1m' } },
-      { setWeight: 30 },
-      { pause: { duration: '2m' } },
-      { setWeight: 50 },
+      { setWeight: 60 },
       { pause: { duration: '2m' } },
       { setWeight: 100 },
     ],
+    'SRE Recommend (10%, 25%, 50%, 75%, 100%)': [
+      { setWeight: 10 },
+      { pause: { duration: '1m' } },
+      { setWeight: 25 },
+      { pause: { duration: '2m' } },
+      { setWeight: 50 },
+      { pause: { duration: '3m' } },
+      { setWeight: 75 },
+      { pause: { duration: '3m' } },
+      { setWeight: 100 },
+    ],
+    'Progressive Safe (5%, 10%, 25%, 50%, 100%)': [
+      { setWeight: 5 },
+      { pause: { duration: '2m' } },
+      { setWeight: 10 },
+      { pause: { duration: '2m' } },
+      { setWeight: 25 },
+      { pause: { duration: '2m' } },
+      { setWeight: 50 },
+      { pause: { duration: '3m' } },
+      { setWeight: 100 },      
+    ],
+    'Rapid Majority (10% → 100%)': [
+      { setWeight: 10 },
+      { pause: { duration: '1m' } },
+      { setWeight: 100 },
+    ],    
   };
 
 
@@ -99,7 +119,7 @@ const RolloutConvert = ( {application, resource} ) => {
   const [rolloutManifest, setRolloutManifest] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [selectedPreset, setSelectedPreset] = useState('Quick (10%, 50%)');
+  const [selectedPreset, setSelectedPreset] = useState('Quick (10%, 30%, 100%)');
   const [conversionMode, setConversionMode] = useState('workloadRef'); 
 
   useEffect(() => {
@@ -128,7 +148,7 @@ const RolloutConvert = ( {application, resource} ) => {
           const text = await response.text();
           throw new Error(`HTTP ${response.status}: ${text}`);
         }
-
+746298
         const data = await response.json();
         const rawManifests = data?.manifests ?? [];
 
