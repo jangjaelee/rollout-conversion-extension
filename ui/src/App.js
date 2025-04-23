@@ -71,6 +71,24 @@ const convertDeploymentToRollout = ({ deployment, steps, mode }) => {
       revisionHistoryLimit: deployment.spec.revisionHistoryLimit,
       strategy: {
         canary: {
+          canaryService: 'canary-service',
+          stableService: 'stable-service',
+          canaryMetadata: {
+            annotations: {
+              role: 'canary',
+            },
+            labels: {
+              role: 'canary',
+            },
+          },
+          stableMetadata: {
+            annotations: {
+              role: 'stable',
+            },
+            labels: {
+              role: 'stable',
+            },
+          },
           steps: steps,
         },
         trafficRouting: {
@@ -81,6 +99,8 @@ const convertDeploymentToRollout = ({ deployment, steps, mode }) => {
             },
           },
         },
+        abortScaleDownDelaySeconds: '30',
+        dynamicStableScale: 'false',
       },
       selector: deployment.spec.selector,
     },
