@@ -5,6 +5,7 @@ import './index.css';
 import { PRESETS } from './utils/presets';
 import { convertDeploymentToRollout } from './utils/convertDeployment';
 import { duplicateServiceForCanary } from './utils/serviceDuplicate';
+import { addCanaryBackendToHTTPRoute } from './utils/addCanaryToHttpRoute';
 
 
 // YAML + 라인 번호 출력 함수 (flex 기반)
@@ -31,7 +32,8 @@ const RolloutConvert = ( {application, resource} ) => {
   //const { resource, application } = props;
   const [desiredManifest, setDesiredManifest] = useState(null);
   const [rolloutManifest, setRolloutManifest] = useState(null);
-  const [serviceManifest, setServiceManifest] = useState([]);  
+  const [serviceManifest, setServiceManifest] = useState([]);
+  const [httprouteManifest, setHttprouteManifest] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedPreset, setSelectedPreset] = useState('Quick (10%, 30%, 100%)');
@@ -79,6 +81,7 @@ const RolloutConvert = ( {application, resource} ) => {
         );
 
         setDesiredManifest(matched || null);
+        
         if (matched) {
           // Deployment일 경우에만 Rollout 변환 수행
           if (resource.kind === 'Deployment') {          
@@ -91,6 +94,11 @@ const RolloutConvert = ( {application, resource} ) => {
             const { stable, canary } = duplicateServiceForCanary(matched);
             setServiceManifest([canary]);
           }
+          // HTTPRoute일 경우에만 canary를 위한 rules[].backendRefs 추가 수행
+          if (resource.kind === 'HTTPRoute') {
+            const httproute = addCanaryBackendToHTTPRoute(matched);
+            setHttprouteManifest(httproute);
+          }          
         }
       } catch (err) {
         console.error('Error fetching desired manifest:', err);
