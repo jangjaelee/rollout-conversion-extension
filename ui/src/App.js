@@ -81,7 +81,7 @@ const RolloutConvert = ( {application, resource} ) => {
         );
 
         setDesiredManifest(matched || null);
-        
+
         if (matched) {
           // Deployment일 경우에만 Rollout 변환 수행
           if (resource.kind === 'Deployment') {          
@@ -177,7 +177,57 @@ const RolloutConvert = ( {application, resource} ) => {
     return (
       <div className="section">
         <h3>Kubernetes Gateway API HTTPRoute YAML</h3>
-        {desiredManifest ? renderYamlWithLineNumbers(yaml.dump(desiredManifest)) : <p className="warn-text">⚠️ No matching HTTPRoute found.</p>}
+        <div className="conversion-wrapper">
+          <div className="column">
+            <h4 className="subheading">Desired Service</h4>
+            {desiredManifest ? renderYamlWithLineNumbers(yaml.dump(desiredManifest)) : <p className="warn-text">⚠️ No matching HTTPRoute found.</p>}
+          </div>
+
+          <div className="column">
+            <h4 className="subheading">Converted HTTPRoute</h4>
+            {httprouteManifest ? (
+            <>
+              <div className="button-group">
+                <button
+                  className="copy-btn"
+                  onClick={async () => {
+                    try {
+                      await navigator.clipboard.writeText(yaml.dump(httprouteManifest));
+                      alert('📋 Canary HTTPRoute YAML copied to clipboard!');
+                    } catch (err) {
+                      alert('❌ Failed to copy!');
+                      console.error('Copy failed:', err);
+                    }
+                  }}
+                >
+                  Copy
+                </button>
+                <button
+                  className="download-btn"
+                  onClick={() => {
+                    const yamlString = yaml.dump(httprouteManifest[0]);
+                    const blob = new Blob([yamlString], { type: 'text/yaml' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = `httproute-${httprouteManifest.metadata.name || 'httproute'}.yaml`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+                  }}
+                >
+                  Download
+                </button>
+              </div>
+
+              {renderYamlWithLineNumbers(yaml.dump(httprouteManifest[0]))}
+            </>
+            ) : (
+              <p className="warn-text">⚠️ Unable to convert to HTTPRoute.</p>
+            )}
+          </div>
+        </div>
       </div>
     );
   } 
