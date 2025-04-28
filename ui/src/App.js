@@ -224,7 +224,7 @@ const RolloutConvert = ( {application, resource} ) => {
           // Service일 경우에만 canary를 위한 Service 변환 수행
           if (resource.kind === 'Service') {
             const { stable, canary } = duplicateServiceForCanary(matched);
-            setServiceManifest(canary);
+            setServiceManifest([canary]);
           }
         }
       } catch (err) {
@@ -247,47 +247,47 @@ const RolloutConvert = ( {application, resource} ) => {
         <h3>Kubernetes Service YAML</h3>
         {desiredManifest ? renderYamlWithLineNumbers(yaml.dump(desiredManifest)) : <p className="warn-text">⚠️ No matching Service found.</p>}
 
-
-        {serviceManifest.length > 0 && (
+        {serviceManifest ? (
         <>
-              <div className="button-group">
-                  <button
-                    className="copy-btn"
-                    onClick={async () => {
-                      try {
-                        await navigator.clipboard.writeText(yaml.dump(serviceManifest));
-                        alert('📋 Rollout YAML copied to clipboard!');
-                      } catch (err) {
-                        alert('❌ Failed to copy!');
-                        console.error('Copy failed:', err);
-                      }
-                    }}
-                  >
-                    Copy
-                  </button>
-                  <button
-                    className="download-btn"
-                    onClick={() => {
-                      const yamlString = yaml.dump(serviceManifest);
-                      const blob = new Blob([yamlString], { type: 'text/yaml' });
-                      const url = URL.createObjectURL(blob);
-                      const link = document.createElement('a');
-                      link.href = url;
-                      link.download = `service-${serviceManifest.metadata.name || 'service'}.yaml`;
-                      document.body.appendChild(link);
-                      link.click();
-                      document.body.removeChild(link);
-                      URL.revokeObjectURL(url);
-                    }}
-                  >
-                    Download
-                  </button>
-                </div>
-
+          <div className="button-group">
+             <button
+              className="copy-btn"
+              onClick={async () => {
+                try {
+                  await navigator.clipboard.writeText(yaml.dump(serviceManifest));
+                  alert('📋 Rollout YAML copied to clipboard!');
+                } catch (err) {
+                  alert('❌ Failed to copy!');
+                  console.error('Copy failed:', err);
+                }
+              }}
+            >
+              Copy
+            </button>
+            <button
+              className="download-btn"
+              onClick={() => {
+                const yamlString = yaml.dump(serviceManifest);
+                const blob = new Blob([yamlString], { type: 'text/yaml' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `service-${serviceManifest.metadata.name || 'service'}.yaml`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+              }}
+            >
+              Download
+            </button>
+          </div>
 
           {renderYamlWithLineNumbers(yaml.dump(serviceManifest))}
         </>
-      )}
+        ) : (
+          <p className="warn-text">⚠️ Unable to convert to Rollout.</p>
+        )}
       </div>
     );
   }
