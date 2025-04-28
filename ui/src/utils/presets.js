@@ -1,6 +1,6 @@
 // src/utils/presets.js
 
-const PRESETS = {
+export const PRESETS = {
     'Quick (10%, 30%, 100%)': [
       { setWeight: 10 },
       { pause: { duration: '30s' } },

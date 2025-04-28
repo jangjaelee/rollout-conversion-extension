@@ -1,7 +1,7 @@
 // src/utils/convertDeployment.js
 
 // Rollout API Template
-const convertDeploymentToRollout = ({ deployment, steps, mode }) => {
+export const convertDeploymentToRollout = ({ deployment, steps, mode }) => {
   //const { deployment, steps } = props;
   if (!deployment || !steps) return null;
 

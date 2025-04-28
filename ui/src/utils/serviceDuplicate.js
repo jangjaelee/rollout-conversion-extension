@@ -1,6 +1,6 @@
 // src/utils/serviceDuplicate.js
 
-const duplicateServiceForCanary = (service) => {
+export const duplicateServiceForCanary = (service) => {
     if (!service) return { stable: null, canary: null };
   
     const stable = JSON.parse(JSON.stringify(service));
