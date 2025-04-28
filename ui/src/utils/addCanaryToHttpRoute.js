@@ -8,7 +8,13 @@ export const addCanaryBackendToHTTPRoute = (httpRoute) => {
   
     // Deep Copy 방지용 안전 복사
     const updatedRoute = JSON.parse(JSON.stringify(httpRoute));
-  
+
+    // rollout-conversion-extension으로 변환되었다는 표시 추가
+    updatedRoute.metadata.labels = {
+        ...(updatedRoute.metadata.labels || {}),
+        'converted-by': 'rollout-conversion-extension',
+    };    
+
     // rules가 없으면 그냥 반환
     if (!Array.isArray(updatedRoute.spec?.rules)) {
       console.error('HTTPRoute has no rules.');
@@ -35,11 +41,5 @@ export const addCanaryBackendToHTTPRoute = (httpRoute) => {
       }
     });
 
-    // rollout-conversion-extension으로 변환되었다는 표시 추가
-    updatedRoute.metadata.labels = {
-        ...(updatedRoute.metadata.labels || {}),  // 기존 labels 유지
-        'converted-by': 'rollout-conversion-extension', // 변환 표시 추가
-      };    
-  
     return updatedRoute;
   };
