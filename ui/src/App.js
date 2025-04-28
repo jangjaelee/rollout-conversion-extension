@@ -221,6 +221,7 @@ const RolloutConvert = ( {application, resource} ) => {
             const rollout = convertDeploymentToRollout({ deployment: matched, steps, mode: conversionMode });          
             setRolloutManifest(rollout);          
           }
+          
           // Service일 경우에만 canary를 위한 Service 변환 수행
           if (resource.kind === 'Service') {
             const { stable, canary } = duplicateServiceForCanary(matched);
