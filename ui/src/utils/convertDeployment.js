@@ -11,7 +11,10 @@ export const convertDeploymentToRollout = ({ deployment, steps, mode }) => {
     metadata: {
       name: deployment.metadata.name,
       namespace: deployment.metadata.namespace,
-      labels: deployment.metadata.labels,
+      labels: {
+        ...(deployment.metadata.labels || {}),
+        'converted-by': 'rollout-conversion-extension',
+      },
       annotations: deployment.metadata.annotations,
     },
     spec: {

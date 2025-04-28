@@ -157,7 +157,7 @@ const RolloutConvert = ( {application, resource} ) => {
               {renderYamlWithLineNumbers(yaml.dump(serviceManifest[0]))}
             </>
             ) : (
-              <p className="warn-text">⚠️ Unable to convert to Rollout.</p>
+              <p className="warn-text">⚠️ Unable to convert to Service.</p>
             )}
           </div>
         </div>
