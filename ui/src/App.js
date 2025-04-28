@@ -250,22 +250,42 @@ const RolloutConvert = ( {application, resource} ) => {
 
         {serviceManifest.length > 0 && (
         <>
-          <h4 className="subheading">Converted</h4>
-          {serviceManifest.map((m, idx) => (
-            <div key={idx} style={{ marginBottom: '20px' }}>
               <div className="button-group">
-                <button
-                  onClick={async () => {
-                    await navigator.clipboard.writeText(yaml.dump(m));
-                    alert('Copied to clipboard!');
-                  }}
-                >
-                  Copy YAML
-                </button>
-              </div>
-              {renderYamlWithLineNumbers(yaml.dump(serviceManifest))}
-            </div>
-          ))}
+                  <button
+                    className="copy-btn"
+                    onClick={async () => {
+                      try {
+                        await navigator.clipboard.writeText(yaml.dump(serviceManifest));
+                        alert('📋 Rollout YAML copied to clipboard!');
+                      } catch (err) {
+                        alert('❌ Failed to copy!');
+                        console.error('Copy failed:', err);
+                      }
+                    }}
+                  >
+                    Copy
+                  </button>
+                  <button
+                    className="download-btn"
+                    onClick={() => {
+                      const yamlString = yaml.dump(serviceManifest);
+                      const blob = new Blob([yamlString], { type: 'text/yaml' });
+                      const url = URL.createObjectURL(blob);
+                      const link = document.createElement('a');
+                      link.href = url;
+                      link.download = `rollout-${serviceManifest.metadata.name || 'rollout'}.yaml`;
+                      document.body.appendChild(link);
+                      link.click();
+                      document.body.removeChild(link);
+                      URL.revokeObjectURL(url);
+                    }}
+                  >
+                    Download
+                  </button>
+                </div>
+
+
+          {renderYamlWithLineNumbers(yaml.dump(serviceManifest))}
         </>
       )}
       </div>
