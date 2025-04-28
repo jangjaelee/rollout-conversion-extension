@@ -127,43 +127,43 @@ const RolloutConvert = ( {application, resource} ) => {
           <div className="column">
             <h4 className="subheading">Converted Service</h4>
             {serviceManifest.length > 0 ? (
-            <>
-              <div className="button-group">
-                <button
-                  className="copy-btn"
-                  onClick={async () => {
-                    try {
-                      await navigator.clipboard.writeText(yaml.dump(serviceManifest[0]));
-                      alert('📋 Canary Service YAML copied to clipboard!');
-                    } catch (err) {
-                      alert('❌ Failed to copy!');
-                      console.error('Copy failed:', err);
-                    }
-                  }}
-                >
-                  Copy
-                </button>
-                <button
-                  className="download-btn"
-                  onClick={() => {
-                    const yamlString = yaml.dump(serviceManifest[0]);
-                    const blob = new Blob([yamlString], { type: 'text/yaml' });
-                    const url = URL.createObjectURL(blob);
-                    const link = document.createElement('a');
-                    link.href = url;
-                    link.download = `service-${serviceManifest[0].metadata.name || 'service'}.yaml`;
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                    URL.revokeObjectURL(url);
-                  }}
-                >
-                  Download
-                </button>
-              </div>
+              <>
+                <div className="button-group">
+                  <button
+                    className="copy-btn"
+                    onClick={async () => {
+                      try {
+                        await navigator.clipboard.writeText(yaml.dump(serviceManifest[0]));
+                        alert('📋 Canary Service YAML copied to clipboard!');
+                      } catch (err) {
+                        alert('❌ Failed to copy!');
+                        console.error('Copy failed:', err);
+                      }
+                    }}
+                  >
+                    Copy
+                  </button>
+                  <button
+                    className="download-btn"
+                    onClick={() => {
+                      const yamlString = yaml.dump(serviceManifest[0]);
+                      const blob = new Blob([yamlString], { type: 'text/yaml' });
+                      const url = URL.createObjectURL(blob);
+                      const link = document.createElement('a');
+                      link.href = url;
+                      link.download = `service-${serviceManifest[0].metadata.name || 'service'}.yaml`;
+                      document.body.appendChild(link);
+                      link.click();
+                      document.body.removeChild(link);
+                      URL.revokeObjectURL(url);
+                    }}
+                  >
+                    Download
+                  </button>
+                </div>
 
-              {renderYamlWithLineNumbers(yaml.dump(serviceManifest[0]))}
-            </>
+                {renderYamlWithLineNumbers(yaml.dump(serviceManifest[0]))}
+              </>
             ) : (
               <p className="warn-text">⚠️ Unable to convert to Service.</p>
             )}
@@ -179,50 +179,50 @@ const RolloutConvert = ( {application, resource} ) => {
         <h3>Kubernetes Gateway API HTTPRoute YAML</h3>
         <div className="conversion-wrapper">
           <div className="column">
-            <h4 className="subheading">Desired Service</h4>
+            <h4 className="subheading">Desired HTTPRoute</h4>
             {desiredManifest ? renderYamlWithLineNumbers(yaml.dump(desiredManifest)) : <p className="warn-text">⚠️ No matching HTTPRoute found.</p>}
           </div>
 
           <div className="column">
             <h4 className="subheading">Converted HTTPRoute</h4>
             {httprouteManifest ? (
-            <>
-              <div className="button-group">
-                <button
-                  className="copy-btn"
-                  onClick={async () => {
-                    try {
-                      await navigator.clipboard.writeText(yaml.dump(httprouteManifest));
-                      alert('📋 Canary HTTPRoute YAML copied to clipboard!');
-                    } catch (err) {
-                      alert('❌ Failed to copy!');
-                      console.error('Copy failed:', err);
-                    }
-                  }}
-                >
-                  Copy
-                </button>
-                <button
-                  className="download-btn"
-                  onClick={() => {
-                    const yamlString = yaml.dump(httprouteManifest);
-                    const blob = new Blob([yamlString], { type: 'text/yaml' });
-                    const url = URL.createObjectURL(blob);
-                    const link = document.createElement('a');
-                    link.href = url;
-                    link.download = `httproute-${httprouteManifest.metadata.name || 'httproute'}.yaml`;
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                    URL.revokeObjectURL(url);
-                  }}
-                >
-                  Download
-                </button>
-              </div>
+              <>
+                <div className="button-group">
+                  <button
+                    className="copy-btn"
+                    onClick={async () => {
+                      try {
+                        await navigator.clipboard.writeText(yaml.dump(httprouteManifest));
+                        alert('📋 Canary HTTPRoute YAML copied to clipboard!');
+                      } catch (err) {
+                        alert('❌ Failed to copy!');
+                        console.error('Copy failed:', err);
+                      }
+                    }}
+                  >
+                    Copy
+                  </button>
+                  <button
+                    className="download-btn"
+                    onClick={() => {
+                      const yamlString = yaml.dump(httprouteManifest);
+                      const blob = new Blob([yamlString], { type: 'text/yaml' });
+                      const url = URL.createObjectURL(blob);
+                      const link = document.createElement('a');
+                      link.href = url;
+                      link.download = `httproute-${httprouteManifest.metadata.name || 'httproute'}.yaml`;
+                      document.body.appendChild(link);
+                      link.click();
+                      document.body.removeChild(link);
+                      URL.revokeObjectURL(url);
+                    }}
+                  >
+                    Download
+                  </button>
+                </div>
 
-              {renderYamlWithLineNumbers(yaml.dump(httprouteManifest))}
-            </>
+                {renderYamlWithLineNumbers(yaml.dump(httprouteManifest))}
+              </>
             ) : (
               <p className="warn-text">⚠️ Unable to convert to HTTPRoute.</p>
             )}
