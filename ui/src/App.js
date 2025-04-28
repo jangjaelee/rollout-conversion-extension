@@ -221,7 +221,7 @@ const RolloutConvert = ( {application, resource} ) => {
                 </button>
               </div>
 
-              {renderYamlWithLineNumbers(yaml.dump(httprouteManifest[0]))}
+              {renderYamlWithLineNumbers(yaml.dump(httprouteManifest))}
             </>
             ) : (
               <p className="warn-text">⚠️ Unable to convert to HTTPRoute.</p>
