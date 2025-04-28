@@ -166,7 +166,7 @@ const RolloutConvert = ( {application, resource} ) => {
   //const { resource, application } = props;
   const [desiredManifest, setDesiredManifest] = useState(null);
   const [rolloutManifest, setRolloutManifest] = useState(null);
-  const [serviceManifest, setServiceManifest] = useState(null);  
+  const [serviceManifest, setServiceManifest] = useState([]);  
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedPreset, setSelectedPreset] = useState('Quick (10%, 30%, 100%)');
@@ -221,11 +221,10 @@ const RolloutConvert = ( {application, resource} ) => {
             const rollout = convertDeploymentToRollout({ deployment: matched, steps, mode: conversionMode });          
             setRolloutManifest(rollout);          
           }
-
           // Service일 경우에만 canary를 위한 Service 변환 수행
           if (resource.kind === 'Service') {
             const { stable, canary } = duplicateServiceForCanary(matched);
-            setServiceManifest(canary);
+            setServiceManifest([canary]);
           }
         }
       } catch (err) {
@@ -255,7 +254,7 @@ const RolloutConvert = ( {application, resource} ) => {
 
           <div className="column">
             <h4 className="subheading">Converted Service</h4>
-        {serviceManifest ? (
+        {serviceManifest.length > 0 ? (
         <>
           <div className="button-group">
              <button
@@ -280,7 +279,7 @@ const RolloutConvert = ( {application, resource} ) => {
                 const url = URL.createObjectURL(blob);
                 const link = document.createElement('a');
                 link.href = url;
-                link.download = `service-${serviceManifest.metadata.name || 'service'}.yaml`;
+                link.download = `service-${serviceManifest[0].metadata.name || 'service'}.yaml`;
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
@@ -291,10 +290,10 @@ const RolloutConvert = ( {application, resource} ) => {
             </button>
           </div>
 
-          {renderYamlWithLineNumbers(yaml.dump(serviceManifest))}
+          {renderYamlWithLineNumbers(yaml.dump(serviceManifest[0]))}
         </>
         ) : (
-          <p className="warn-text">⚠️ Unable to convert to Service.</p>
+          <p className="warn-text">⚠️ Unable to convert to Rollout.</p>
         )}
           </div>
         </div>
