@@ -250,7 +250,7 @@ const RolloutConvert = ( {application, resource} ) => {
             <h4 className="subheading">Desired Service</h4>
             {desiredManifest ? renderYamlWithLineNumbers(yaml.dump(desiredManifest)) : <p className="warn-text">⚠️ No matching Service found.</p>}
           </div>
-          
+
           <div className="column">
             <h4 className="subheading">Converted Service</h4>
             {serviceManifest.length > 0 ? (
@@ -273,7 +273,7 @@ const RolloutConvert = ( {application, resource} ) => {
                 <button
                   className="download-btn"
                   onClick={() => {
-                    const yamlString = yaml.dump(serviceManifest);
+                    const yamlString = yaml.dump(serviceManifest[0]);
                     const blob = new Blob([yamlString], { type: 'text/yaml' });
                     const url = URL.createObjectURL(blob);
                     const link = document.createElement('a');
