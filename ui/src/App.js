@@ -246,17 +246,9 @@ const RolloutConvert = ( {application, resource} ) => {
       <div className="section">
         <h3>Kubernetes Service YAML</h3>
         {desiredManifest ? renderYamlWithLineNumbers(yaml.dump(desiredManifest)) : <p className="warn-text">⚠️ No matching Service found.</p>}
-      </div>
-    );
-  }
 
-  if (resource.kind === 'HTTPRoute') {
-    return (
-      <div className="section">
-        <h3>Kubernetes Gateway API HTTPRoute YAML</h3>
-        {desiredManifest ? renderYamlWithLineNumbers(yaml.dump(desiredManifest)) : <p className="warn-text">⚠️ No matching HTTPRoute found.</p>}
 
-      {serviceManifest.length > 0 && (
+        {serviceManifest.length > 0 && (
         <>
           <h4 className="subheading">Converted</h4>
           {serviceManifest.map((m, idx) => (
@@ -276,6 +268,15 @@ const RolloutConvert = ( {application, resource} ) => {
           ))}
         </>
       )}
+      </div>
+    );
+  }
+
+  if (resource.kind === 'HTTPRoute') {
+    return (
+      <div className="section">
+        <h3>Kubernetes Gateway API HTTPRoute YAML</h3>
+        {desiredManifest ? renderYamlWithLineNumbers(yaml.dump(desiredManifest)) : <p className="warn-text">⚠️ No matching HTTPRoute found.</p>}
       </div>
     );
   } 
