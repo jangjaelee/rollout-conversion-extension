@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import yaml from 'js-yaml';
 import './index.css';
 
-
 const PRESETS = {
     'Quick (10%, 30%, 100%)': [
       { setWeight: 10 },
@@ -54,7 +53,6 @@ const PRESETS = {
 // Rollout API Template
 const convertDeploymentToRollout = ({ deployment, steps, mode }) => {
   //const { deployment, steps } = props;
-
   if (!deployment || !steps) return null;
 
   const rolloutCanaryTemplate = {
@@ -123,6 +121,27 @@ const convertDeploymentToRollout = ({ deployment, steps, mode }) => {
 };
 
 
+const duplicateServiceForCanary = (service) => {
+  if (!service) return { stable: null, canary: null };
+
+  const stable = { ...service };
+
+  const canary = {
+    apiVersion: service.apiVersion,
+    kind: service.kind,
+    metadata: {
+      ...service.metadata,
+      name: `${service.metadata.name}-canary`,
+    },
+    spec: {
+      ...service.spec,
+    },
+  };
+
+  return { stable, canary };
+};
+
+
 // YAML + 라인 번호 출력 함수 (flex 기반)
 const renderYamlWithLineNumbers = (props) => {
   const yamlString = props;
@@ -147,6 +166,7 @@ const RolloutConvert = ( {application, resource} ) => {
   //const { resource, application } = props;
   const [desiredManifest, setDesiredManifest] = useState(null);
   const [rolloutManifest, setRolloutManifest] = useState(null);
+  const [serviceManifests, setServiceManifests] = useState([]);  
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedPreset, setSelectedPreset] = useState('Quick (10%, 30%, 100%)');
@@ -201,6 +221,11 @@ const RolloutConvert = ( {application, resource} ) => {
             const rollout = convertDeploymentToRollout({ deployment: matched, steps, mode: conversionMode });          
             setRolloutManifest(rollout);          
           }
+          // Service일 경우에만 canary를 위한 Service 변환 수행
+          if (resource.kind === 'Service') {
+            const { stable, canary } = duplicateServiceForCanary(matched);
+            setServiceManifests([stable, canary]);
+          }
         }
       } catch (err) {
         console.error('Error fetching desired manifest:', err);
@@ -230,6 +255,27 @@ const RolloutConvert = ( {application, resource} ) => {
       <div className="section">
         <h3>Kubernetes Gateway API HTTPRoute YAML</h3>
         {desiredManifest ? renderYamlWithLineNumbers(yaml.dump(desiredManifest)) : <p className="warn-text">⚠️ No matching HTTPRoute found.</p>}
+
+      {convertedManifests.length > 0 && (
+        <>
+          <h4 className="subheading">Converted</h4>
+          {convertedManifests.map((m, idx) => (
+            <div key={idx} style={{ marginBottom: '20px' }}>
+              <div className="button-group">
+                <button
+                  onClick={async () => {
+                    await navigator.clipboard.writeText(yaml.dump(m));
+                    alert('Copied to clipboard!');
+                  }}
+                >
+                  Copy YAML
+                </button>
+              </div>
+              {renderYamlWithLineNumbers(yaml.dump(m))}
+            </div>
+          ))}
+        </>
+      )}
       </div>
     );
   } 
