@@ -166,7 +166,7 @@ const RolloutConvert = ( {application, resource} ) => {
   //const { resource, application } = props;
   const [desiredManifest, setDesiredManifest] = useState(null);
   const [rolloutManifest, setRolloutManifest] = useState(null);
-  const [serviceManifest, setServiceManifest] = useState([]);  
+  const [serviceManifest, setServiceManifest] = useState(null);  
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedPreset, setSelectedPreset] = useState('Quick (10%, 30%, 100%)');
@@ -224,7 +224,7 @@ const RolloutConvert = ( {application, resource} ) => {
           // Service일 경우에만 canary를 위한 Service 변환 수행
           if (resource.kind === 'Service') {
             const { stable, canary } = duplicateServiceForCanary(matched);
-            setServiceManifest([stable, canary]);
+            setServiceManifest(canary);
           }
         }
       } catch (err) {
