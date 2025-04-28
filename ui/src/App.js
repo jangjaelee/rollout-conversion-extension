@@ -166,7 +166,7 @@ const RolloutConvert = ( {application, resource} ) => {
   //const { resource, application } = props;
   const [desiredManifest, setDesiredManifest] = useState(null);
   const [rolloutManifest, setRolloutManifest] = useState(null);
-  const [serviceManifests, setServiceManifests] = useState([]);  
+  const [serviceManifest, setServiceManifest] = useState([]);  
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedPreset, setSelectedPreset] = useState('Quick (10%, 30%, 100%)');
@@ -224,7 +224,7 @@ const RolloutConvert = ( {application, resource} ) => {
           // Service일 경우에만 canary를 위한 Service 변환 수행
           if (resource.kind === 'Service') {
             const { stable, canary } = duplicateServiceForCanary(matched);
-            setServiceManifests([stable, canary]);
+            setServiceManifest([stable, canary]);
           }
         }
       } catch (err) {
@@ -256,10 +256,10 @@ const RolloutConvert = ( {application, resource} ) => {
         <h3>Kubernetes Gateway API HTTPRoute YAML</h3>
         {desiredManifest ? renderYamlWithLineNumbers(yaml.dump(desiredManifest)) : <p className="warn-text">⚠️ No matching HTTPRoute found.</p>}
 
-      {convertedManifests.length > 0 && (
+      {serviceManifests.length > 0 && (
         <>
           <h4 className="subheading">Converted</h4>
-          {convertedManifests.map((m, idx) => (
+          {serviceManifest.map((m, idx) => (
             <div key={idx} style={{ marginBottom: '20px' }}>
               <div className="button-group">
                 <button
