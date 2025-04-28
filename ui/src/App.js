@@ -205,7 +205,7 @@ const RolloutConvert = ( {application, resource} ) => {
                 <button
                   className="download-btn"
                   onClick={() => {
-                    const yamlString = yaml.dump(httprouteManifest[0]);
+                    const yamlString = yaml.dump(httprouteManifest);
                     const blob = new Blob([yamlString], { type: 'text/yaml' });
                     const url = URL.createObjectURL(blob);
                     const link = document.createElement('a');
