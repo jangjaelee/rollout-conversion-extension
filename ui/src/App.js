@@ -124,19 +124,11 @@ const convertDeploymentToRollout = ({ deployment, steps, mode }) => {
 const duplicateServiceForCanary = (service) => {
   if (!service) return { stable: null, canary: null };
 
-  const stable = { ...service };
+  const stable = JSON.parse(JSON.stringify(service));
+  const canary = JSON.parse(JSON.stringify(service));
 
-  const canary = {
-    apiVersion: service.apiVersion,
-    kind: service.kind,
-    metadata: {
-      ...service.metadata,
-      name: `${service.metadata.name}-canary`,
-    },
-    spec: {
-      ...service.spec,
-    },
-  };
+  // canary 이름만 변경
+  canary.metadata.name = `${service.metadata.name}-canary`;
 
   return { stable, canary };
 };
