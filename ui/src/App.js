@@ -262,7 +262,7 @@ const RolloutConvert = ( {application, resource} ) => {
               onClick={async () => {
                 try {
                   await navigator.clipboard.writeText(yaml.dump(serviceManifest));
-                  alert('📋 Rollout YAML copied to clipboard!');
+                  alert('📋 Canary Service YAML copied to clipboard!');
                 } catch (err) {
                   alert('❌ Failed to copy!');
                   console.error('Copy failed:', err);
@@ -279,7 +279,7 @@ const RolloutConvert = ( {application, resource} ) => {
                 const url = URL.createObjectURL(blob);
                 const link = document.createElement('a');
                 link.href = url;
-                link.download = `service-${serviceManifest.metadata.name || 'service'}.yaml`;
+                link.download = `service-${serviceManifest[0].metadata.name || 'service'}.yaml`;
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
