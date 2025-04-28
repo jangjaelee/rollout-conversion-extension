@@ -256,7 +256,7 @@ const RolloutConvert = ( {application, resource} ) => {
         <h3>Kubernetes Gateway API HTTPRoute YAML</h3>
         {desiredManifest ? renderYamlWithLineNumbers(yaml.dump(desiredManifest)) : <p className="warn-text">⚠️ No matching HTTPRoute found.</p>}
 
-      {serviceManifests.length > 0 && (
+      {serviceManifest.length > 0 && (
         <>
           <h4 className="subheading">Converted</h4>
           {serviceManifest.map((m, idx) => (
