@@ -245,8 +245,15 @@ const RolloutConvert = ( {application, resource} ) => {
     return (
       <div className="section">
         <h3>Kubernetes Service YAML</h3>
-        {desiredManifest ? renderYamlWithLineNumbers(yaml.dump(desiredManifest)) : <p className="warn-text">⚠️ No matching Service found.</p>}
+        <div className="conversion-wrapper">
+          <div className="column">
+            <h4 className="subheading">Desired Service</h4>
+            {desiredManifest ? renderYamlWithLineNumbers(yaml.dump(desiredManifest)) : <p className="warn-text">⚠️ No matching Service found.</p>}
+          </div>
 
+
+          <div className="column">
+            <h4 className="subheading">Converted Service</h4>
         {serviceManifest.length > 0 ? (
         <>
           <div className="button-group">
@@ -288,6 +295,8 @@ const RolloutConvert = ( {application, resource} ) => {
         ) : (
           <p className="warn-text">⚠️ Unable to convert to Rollout.</p>
         )}
+          </div>
+        </div>
       </div>
     );
   }
