@@ -198,7 +198,7 @@ const RolloutConvert = ( {application, resource} ) => {
           const text = await response.text();
           throw new Error(`HTTP ${response.status}: ${text}`);
         }
-746298
+
         const data = await response.json();
         const rawManifests = data?.manifests ?? [];
 
@@ -263,7 +263,7 @@ const RolloutConvert = ( {application, resource} ) => {
                   Copy YAML
                 </button>
               </div>
-              {renderYamlWithLineNumbers(yaml.dump(m))}
+              {renderYamlWithLineNumbers(yaml.dump(serviceManifest))}
             </div>
           ))}
         </>
