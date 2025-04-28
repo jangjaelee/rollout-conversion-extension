@@ -34,6 +34,12 @@ export const addCanaryBackendToHTTPRoute = (httpRoute) => {
         }
       }
     });
+
+    // rollout-conversion-extension으로 변환되었다는 표시 추가
+    updateRoute.metadata.labels = {
+        ...(updateRoute.metadata.labels || {}),  // 기존 labels 유지
+        'converted-by': 'rollout-conversion-extension', // 변환 표시 추가
+      };    
   
     return updatedRoute;
   };
