@@ -247,7 +247,7 @@ const RolloutConvert = ( {application, resource} ) => {
         <h3>Kubernetes Service YAML</h3>
         {desiredManifest ? renderYamlWithLineNumbers(yaml.dump(desiredManifest)) : <p className="warn-text">⚠️ No matching Service found.</p>}
 
-        {serviceManifest ? (
+        {serviceManifest.length > 0 ? (
         <>
           <div className="button-group">
              <button
