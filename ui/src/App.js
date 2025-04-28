@@ -221,7 +221,7 @@ const RolloutConvert = ( {application, resource} ) => {
             const rollout = convertDeploymentToRollout({ deployment: matched, steps, mode: conversionMode });          
             setRolloutManifest(rollout);          
           }
-          
+
           // Service일 경우에만 canary를 위한 Service 변환 수행
           if (resource.kind === 'Service') {
             const { stable, canary } = duplicateServiceForCanary(matched);
@@ -255,7 +255,7 @@ const RolloutConvert = ( {application, resource} ) => {
 
           <div className="column">
             <h4 className="subheading">Converted Service</h4>
-        {serviceManifest.length > 0 ? (
+        {serviceManifest ? (
         <>
           <div className="button-group">
              <button
@@ -294,7 +294,7 @@ const RolloutConvert = ( {application, resource} ) => {
           {renderYamlWithLineNumbers(yaml.dump(serviceManifest))}
         </>
         ) : (
-          <p className="warn-text">⚠️ Unable to convert to Rollout.</p>
+          <p className="warn-text">⚠️ Unable to convert to Service.</p>
         )}
           </div>
         </div>
