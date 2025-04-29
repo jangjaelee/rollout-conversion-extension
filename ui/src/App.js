@@ -259,25 +259,27 @@ const RolloutConvert = ( {application, resource} ) => {
               </select>
             </div>
 
-            <div className="controls">
-              <label htmlFor="mode">Conversion Mode:</label>
-              <select id="mode" value={conversionMode} onChange={(e) => setConversionMode(e.target.value)}>
-                <option value="template">Classic (with template)</option>
-                <option value="workloadRef">WorkloadRef (reference Deployment)</option>
-              </select>
-            </div>
-
             {conversionStrategy === 'canary' && (
-              <div className="controls">
-                <label htmlFor="preset">Canary Preset:</label>
-                <select id="preset" value={selectedPreset} onChange={(e) => setSelectedPreset(e.target.value)}>
-                  {Object.keys(PRESETS).map((presetName) => (
-                    <option key={presetName} value={presetName}>
-                      {presetName}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              <>
+                <div className="controls">
+                  <label htmlFor="mode">Conversion Mode:</label>
+                  <select id="mode" value={conversionMode} onChange={(e) => setConversionMode(e.target.value)}>
+                    <option value="template">Classic (with template)</option>
+                    <option value="workloadRef">WorkloadRef (reference Deployment)</option>
+                  </select>
+                </div>
+
+                <div className="controls">
+                  <label htmlFor="preset">Canary Preset:</label>
+                  <select id="preset" value={selectedPreset} onChange={(e) => setSelectedPreset(e.target.value)}>
+                    {Object.keys(PRESETS).map((presetName) => (
+                      <option key={presetName} value={presetName}>
+                        {presetName}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </>
             )}
 
             {rolloutManifest ? (
@@ -297,6 +299,7 @@ const RolloutConvert = ( {application, resource} ) => {
                   >
                     Copy
                   </button>
+                  
                   <button
                     className="download-btn"
                     onClick={() => {
