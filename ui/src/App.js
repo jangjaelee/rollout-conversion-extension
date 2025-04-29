@@ -27,7 +27,6 @@ const renderYamlWithLineNumbers = (props) => {
   );
 };
 
-
 const RolloutConvert = ( {application, resource} ) => {
   //const { resource, application } = props;
   const [desiredManifest, setDesiredManifest] = useState(null);
@@ -123,7 +122,7 @@ const RolloutConvert = ( {application, resource} ) => {
                   templates: [{ templateName }],
                 };
               }
-              
+
               setAnalysisTemplateManifest(analysisTemplate);
             } else {
               setAnalysisTemplateManifest(null);
@@ -327,7 +326,7 @@ const RolloutConvert = ( {application, resource} ) => {
                   checked={enableAnalysisTemplate}
                   onChange={(e) => setEnableAnalysisTemplate(e.target.checked)}
                 />
-                Use AnalysisTemplate
+                 Use AnalysisTemplate
               </label>
             </div>
 
