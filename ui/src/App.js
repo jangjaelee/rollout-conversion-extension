@@ -6,7 +6,7 @@ import { PRESETS } from './utils/presets';
 import { convertDeploymentToRollout } from './utils/convertDeployment';
 import { duplicateServiceForCanary } from './utils/serviceDuplicate';
 import { addCanaryBackendToHTTPRoute } from './utils/addCanaryToHttpRoute';
-
+import { createAnalysisTemplate } from './utils/createAnalysisTemplate';
 
 // YAML + 라인 번호 출력 함수 (flex 기반)
 const renderYamlWithLineNumbers = (props) => {
@@ -38,7 +38,8 @@ const RolloutConvert = ( {application, resource} ) => {
   const [loading, setLoading] = useState(true);
   const [selectedPreset, setSelectedPreset] = useState('Quick (10%, 30%, 100%)');
   const [conversionMode, setConversionMode] = useState('workloadRef');
-  const [conversionStrategy, setConversionStrategy] = useState('canary');  
+  const [conversionStrategy, setConversionStrategy] = useState('canary');
+  const [analysisTemplateManifest, setAnalysisTemplateManifest] = useState(null);
 
   useEffect(() => {
     // ArgoCD Application Name 가져오기
@@ -93,13 +94,22 @@ const RolloutConvert = ( {application, resource} ) => {
               mode: conversionMode,
               strategy: conversionStrategy
             });          
-            setRolloutManifest(rollout);          
+            setRolloutManifest(rollout);
+
+            // 함께 AnalysisTemplate 생성
+            const analysisTemplate = createAnalysisTemplate({
+              name: matched.metadata.name,
+              namespace: matched.metadata.namespace,
+            });
+            setAnalysisTemplateManifest(analysisTemplate);
           }
+
           // Service일 경우에만 canary를 위한 Service 변환 수행
           if (resource.kind === 'Service') {
             const { stable, canary } = duplicateServiceForCanary(matched);
             setServiceManifest([canary]);
           }
+
           // HTTPRoute일 경우에만 canary를 위한 rules[].backendRefs 추가 수행
           if (resource.kind === 'HTTPRoute') {
             const httproute = addCanaryBackendToHTTPRoute(matched);
@@ -324,6 +334,48 @@ const RolloutConvert = ( {application, resource} ) => {
             ) : (
               <p className="warn-text">⚠️ Unable to convert to Rollout.</p>
             )}
+
+            {analysisTemplateManifest && (
+              <div className="column">
+                <h4 className="subheading">Generated AnalysisTemplate</h4>
+                <div className="button-group">
+                  <button
+                    className="copy-btn"
+                    onClick={async () => {
+                      try {
+                        await navigator.clipboard.writeText(yaml.dump(analysisTemplateManifest));
+                        alert('📋 AnalysisTemplate YAML copied to clipboard!');
+                      } catch (err) {
+                        alert('❌ Failed to copy!');
+                        console.error('Copy failed:', err);
+                      }
+                    }}
+                  >
+                    Copy
+                  </button>
+                  <button
+                    className="download-btn"
+                    onClick={() => {
+                      const yamlString = yaml.dump(analysisTemplateManifest);
+                      const blob = new Blob([yamlString], { type: 'text/yaml' });
+                      const url = URL.createObjectURL(blob);
+                      const link = document.createElement('a');
+                      link.href = url;
+                      link.download = `analysistemplate-${analysisTemplateManifest.metadata.name || 'analysis-template'}.yaml`;
+                      document.body.appendChild(link);
+                      link.click();
+                      document.body.removeChild(link);
+                      URL.revokeObjectURL(url);
+                    }}
+                  >
+                    Download
+                  </button>
+                </div>
+
+                {renderYamlWithLineNumbers(yaml.dump(analysisTemplateManifest))}
+              </div>
+            )}
+
           </div>
         </div>
       </div>
