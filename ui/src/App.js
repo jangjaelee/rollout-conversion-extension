@@ -95,7 +95,6 @@ const RolloutConvert = ( {application, resource} ) => {
               mode: conversionMode,
               strategy: conversionStrategy
             });          
-            setRolloutManifest(rollout);
 
             // 함께 AnalysisTemplate 생성
             /*
@@ -109,22 +108,28 @@ const RolloutConvert = ( {application, resource} ) => {
             // enableAnalysisTemplate가 true인 경우 rollout에 analysis 추가
             if (enableAnalysisTemplate) {
               const templateName = `${matched.metadata.name}-analysis-template`;
-
-              rollout.spec.strategy.canary.analysis = {
-                templates: [
-                  { templateName: templateName }
-                ],
-                startingStep: 1,
-              };
-
               const analysisTemplate = createAnalysisTemplate({
                 name: matched.metadata.name,
                 namespace: matched.metadata.namespace,
               });
+
+              if (conversionStrategy === 'canary') {
+                rollout.spec.strategy.canary.analysis = {
+                  templates: [{ templateName }],
+                  startingStep: 1,
+                };
+              } else if (conversionStrategy === 'blueGreen') {
+                rollout.spec.strategy.blueGreen.prePromotionAnalysis = {
+                  templates: [{ templateName }],
+                };
+              }
+              
               setAnalysisTemplateManifest(analysisTemplate);
             } else {
               setAnalysisTemplateManifest(null);
-            }          
+            }
+            
+            setRolloutManifest(rollout);
           }
 
           // Service일 경우에만 canary를 위한 Service 변환 수행
