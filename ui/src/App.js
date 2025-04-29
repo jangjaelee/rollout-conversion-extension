@@ -106,8 +106,8 @@ const RolloutConvert = ( {application, resource} ) => {
             setAnalysisTemplateManifest(analysisTemplate);
             */
 
-            // useAnalysisTemplate가 true인 경우 rollout 수정
-            if (useAnalysisTemplate) {
+            // enableAnalysisTemplate가 true인 경우 rollout에 analysis 추가
+            if (enableAnalysisTemplate) {
               const templateName = `${matched.metadata.name}-analysis-template`;
 
               rollout.spec.strategy.canary.analysis = {
@@ -319,8 +319,8 @@ const RolloutConvert = ( {application, resource} ) => {
               <label>
                 <input
                   type="checkbox"
-                  checked={useAnalysisTemplate}
-                  onChange={(e) => setUseAnalysisTemplate(e.target.checked)}
+                  checked={enableAnalysisTemplate}
+                  onChange={(e) => setEnableAnalysisTemplate(e.target.checked)}
                 />
                 Use AnalysisTemplate
               </label>
@@ -369,7 +369,7 @@ const RolloutConvert = ( {application, resource} ) => {
               <p className="warn-text">⚠️ Unable to convert to Rollout.</p>
             )}
 
-            {useAnalysisTemplate && analysisTemplateManifest && (
+            {enableAnalysisTemplate && analysisTemplateManifest && (
               <div className="column">
                 <h4 className="subheading">Generated AnalysisTemplate</h4>
                 <div className="button-group">
