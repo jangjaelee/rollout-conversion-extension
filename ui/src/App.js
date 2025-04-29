@@ -37,7 +37,8 @@ const RolloutConvert = ( {application, resource} ) => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedPreset, setSelectedPreset] = useState('Quick (10%, 30%, 100%)');
-  const [conversionMode, setConversionMode] = useState('workloadRef'); 
+  const [conversionMode, setConversionMode] = useState('workloadRef');
+  const [conversionStrategy, setConversionStrategy] = useState('canary');  
 
   useEffect(() => {
     // ArgoCD Application Name 가져오기
@@ -85,8 +86,13 @@ const RolloutConvert = ( {application, resource} ) => {
         if (matched) {
           // Deployment일 경우에만 Rollout 변환 수행
           if (resource.kind === 'Deployment') {          
-            const steps = PRESETS[selectedPreset];
-            const rollout = convertDeploymentToRollout({ deployment: matched, steps, mode: conversionMode });          
+            const steps = conversionStrategy === 'canary' ? PRESETS[selectedPreset] : undefined;
+            const rollout = convertDeploymentToRollout({
+              deployment: matched,
+              steps,
+              mode: conversionMode,
+              strategy: conversionStrategy
+            });          
             setRolloutManifest(rollout);          
           }
           // Service일 경우에만 canary를 위한 Service 변환 수행
@@ -109,7 +115,7 @@ const RolloutConvert = ( {application, resource} ) => {
     };
 
     fetchDesiredManifest();
-  }, [resource, selectedPreset, conversionMode]);
+  }, [resource, selectedPreset, conversionMode, conversionStrategy]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p className="error-text">❌ {error}</p>;
@@ -246,6 +252,14 @@ const RolloutConvert = ( {application, resource} ) => {
             <h4 className="subheading">Converted Rollout</h4>
 
             <div className="controls">
+              <label htmlFor="strategy">Conversion Strategy:</label>
+              <select id="strategy" value={conversionStrategy} onChange={(e) => setConversionStrategy(e.target.value)}>
+                <option value="canary">Canary</option>
+                <option value="blueGreen">BlueGreen</option>
+              </select>
+            </div>
+
+            <div className="controls">
               <label htmlFor="mode">Conversion Mode:</label>
               <select id="mode" value={conversionMode} onChange={(e) => setConversionMode(e.target.value)}>
                 <option value="template">Classic (with template)</option>
@@ -253,16 +267,18 @@ const RolloutConvert = ( {application, resource} ) => {
               </select>
             </div>
 
-            <div className="controls">
-              <label htmlFor="preset">Canary Preset:</label>
-              <select id="preset" value={selectedPreset} onChange={(e) => setSelectedPreset(e.target.value)}>
-                {Object.keys(PRESETS).map((presetName) => (
-                  <option key={presetName} value={presetName}>
-                    {presetName}
-                  </option>
-                ))}
-              </select>
-            </div>
+            {conversionStrategy === 'canary' && (
+              <div className="controls">
+                <label htmlFor="preset">Canary Preset:</label>
+                <select id="preset" value={selectedPreset} onChange={(e) => setSelectedPreset(e.target.value)}>
+                  {Object.keys(PRESETS).map((presetName) => (
+                    <option key={presetName} value={presetName}>
+                      {presetName}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
 
             {rolloutManifest ? (
               <>

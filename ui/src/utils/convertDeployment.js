@@ -1,7 +1,7 @@
 // src/utils/convertDeployment.js
 
 // Rollout API Template
-export const convertDeploymentToRollout = ({ deployment, steps, mode }) => {
+export const convertDeploymentToRollout = ({ deployment, steps, mode, strategy = 'canary'  }) => {
   //const { deployment, steps } = props;
   if (!deployment || !steps) return null;
 
@@ -20,28 +20,25 @@ export const convertDeploymentToRollout = ({ deployment, steps, mode }) => {
     spec: {
       replicas: deployment.spec.replicas,
       revisionHistoryLimit: deployment.spec.revisionHistoryLimit,
-      strategy: {
-        canary: {
-          canaryService: 'canary-service',
-          stableService: 'stable-service',
-          canaryMetadata: {
-            annotations: {
-              role: 'canary',
-            },
-            labels: {
-              role: 'canary',
-            },
-          },
-          stableMetadata: {
-            annotations: {
-              role: 'stable',
-            },
-            labels: {
-              role: 'stable',
-            },
-          },
-          steps: steps,
+      selector: deployment.spec.selector,
+    },
+  };
+
+  // strategy 별로 spec.strategy 다르게 구성 (canary or blue/green)
+  if (strategy === 'canary') {
+    rolloutTemplate.spec.strategy = {
+      canary: {
+        canaryService: 'canary-service',
+        stableService: 'stable-service',
+        canaryMetadata: {
+          annotations: { role: 'canary' },
+          labels: { role: 'canary' },
         },
+        stableMetadata: {
+          annotations: { role: 'stable' },
+          labels: { role: 'stable' },
+        },
+        steps: steps || [],
         trafficRouting: {
           plugins: {
             'argoproj-labs/gatewayAPI': {
@@ -53,20 +50,35 @@ export const convertDeploymentToRollout = ({ deployment, steps, mode }) => {
         abortScaleDownDelaySeconds: 30,
         dynamicStableScale: false,
       },
-      selector: deployment.spec.selector,
-    },
+    };
+  } else if (strategy === 'blueGreen') {
+    rolloutTemplate.spec.strategy = {
+      blueGreen: {
+        activeService: 'stable-service',
+        previewService: 'bluegreen-service',
+        autoPromotionEnabled: false,
+        scaleDownDelaySeconds: 30,
+        abortScaleDownDelaySeconds: 30,        
+        previewMetadata: {
+          labels: { role: 'bluegreen' },
+        },
+        activeMetadata: {
+          labels: { role: 'stable' },
+        },
+      },
+    };
   };
 
+  // Canary 배포 전략에서 workloadRef 모드일 경우
   if (mode === 'workloadRef') {
-
     rolloutCanaryTemplate.spec.workloadRef = {
         apiVersion: deployment.apiVersion,
         kind: deployment.kind,
         name: deployment.metadata.name,
         scaleDown: "onsuccess",
     };
+  // Canary 배포 전략에서 template 모드일 경우
   } else {
-    //rolloutCanaryTemplate.spec.selector = deployment.spec.selector;
     rolloutCanaryTemplate.spec.template = deployment.spec.template;
   }
 
