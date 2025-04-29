@@ -54,19 +54,6 @@ export const convertDeploymentToRollout = ({ deployment, steps, mode, strategy =
         dynamicStableScale: false,
       },
     };
-
-    // Canary 배포 전략에서 workloadRef 모드일 경우
-    if (mode === 'workloadRef') {
-      rolloutTemplate.spec.workloadRef = {
-          apiVersion: deployment.apiVersion,
-          kind: deployment.kind,
-          name: deployment.metadata.name,
-          scaleDown: "onsuccess",
-      };
-    // Canary 배포 전략에서 template 모드일 경우
-    } else {
-      rolloutTemplate.spec.template = deployment.spec.template;
-    };
   } else if (strategy === 'blueGreen') {
     rolloutTemplate.spec.strategy = {
       blueGreen: {
@@ -83,6 +70,19 @@ export const convertDeploymentToRollout = ({ deployment, steps, mode, strategy =
         },
       },
     };
+  };
+
+  // Canary 배포 전략에서 workloadRef 모드일 경우
+  if (mode === 'workloadRef') {
+    rolloutTemplate.spec.workloadRef = {
+        apiVersion: deployment.apiVersion,
+        kind: deployment.kind,
+        name: deployment.metadata.name,
+        scaleDown: "onsuccess",
+    };
+  // Canary 배포 전략에서 template 모드일 경우
+  } else {
+    rolloutTemplate.spec.template = deployment.spec.template;
   };
 
   return rolloutTemplate;
