@@ -148,7 +148,7 @@ const RolloutConvert = ( {application, resource} ) => {
     };
 
     fetchDesiredManifest();
-  }, [resource, selectedPreset, conversionMode, conversionStrategy]);
+  }, [resource, selectedPreset, conversionMode, conversionStrategy, enableAnalysisTemplate]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p className="error-text">❌ {error}</p>;
