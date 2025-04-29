@@ -1,7 +1,7 @@
 // src/utils/convertDeployment.js
 
 // Rollout API Template
-export const convertDeploymentToRollout = ({ deployment, steps, mode, strategy = 'canary' }) => {
+export const convertDeploymentToRollout = ({ deployment, steps, mode, strategy }) => {
   //const { deployment, steps } = props;
   if (!deployment) return null;
 
