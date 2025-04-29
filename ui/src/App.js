@@ -40,6 +40,7 @@ const RolloutConvert = ( {application, resource} ) => {
   const [conversionMode, setConversionMode] = useState('workloadRef');
   const [conversionStrategy, setConversionStrategy] = useState('canary');
   const [analysisTemplateManifest, setAnalysisTemplateManifest] = useState(null);
+  const [enableAnalysisTemplate, setEnableAnalysisTemplate] = useState(false);
 
   useEffect(() => {
     // ArgoCD Application Name 가져오기
@@ -97,11 +98,33 @@ const RolloutConvert = ( {application, resource} ) => {
             setRolloutManifest(rollout);
 
             // 함께 AnalysisTemplate 생성
+            /*
             const analysisTemplate = createAnalysisTemplate({
               name: matched.metadata.name,
               namespace: matched.metadata.namespace,
             });
             setAnalysisTemplateManifest(analysisTemplate);
+            */
+
+            // useAnalysisTemplate가 true인 경우 rollout 수정
+            if (useAnalysisTemplate) {
+              const templateName = `${matched.metadata.name}-analysis-template`;
+
+              rollout.spec.strategy.canary.analysis = {
+                templates: [
+                  { templateName: templateName }
+                ],
+                startingStep: 1,
+              };
+
+              const analysisTemplate = createAnalysisTemplate({
+                name: matched.metadata.name,
+                namespace: matched.metadata.namespace,
+              });
+              setAnalysisTemplateManifest(analysisTemplate);
+            } else {
+              setAnalysisTemplateManifest(null);
+            }          
           }
 
           // Service일 경우에만 canary를 위한 Service 변환 수행
@@ -292,6 +315,17 @@ const RolloutConvert = ( {application, resource} ) => {
               </>
             )}
 
+            <div className="controls">
+              <label>
+                <input
+                  type="checkbox"
+                  checked={useAnalysisTemplate}
+                  onChange={(e) => setUseAnalysisTemplate(e.target.checked)}
+                />
+                Use AnalysisTemplate
+              </label>
+            </div>
+
             {rolloutManifest ? (
               <>
                 <div className="button-group">
@@ -335,7 +369,7 @@ const RolloutConvert = ( {application, resource} ) => {
               <p className="warn-text">⚠️ Unable to convert to Rollout.</p>
             )}
 
-            {analysisTemplateManifest && (
+            {useAnalysisTemplate && analysisTemplateManifest && (
               <div className="column">
                 <h4 className="subheading">Generated AnalysisTemplate</h4>
                 <div className="button-group">
