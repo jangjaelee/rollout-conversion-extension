@@ -1,11 +1,11 @@
 // src/utils/convertDeployment.js
 
 // Rollout API Template
-export const convertDeploymentToRollout = ({ deployment, steps, mode, strategy = 'canary'  }) => {
+export const convertDeploymentToRollout = ({ deployment, steps, mode, strategy = 'canary' }) => {
   //const { deployment, steps } = props;
   if (!deployment || !steps) return null;
 
-  const rolloutCanaryTemplate = {
+  const rolloutTemplate = {
     apiVersion: 'argoproj.io/v1alpha1',
     kind: 'Rollout',
     metadata: {
@@ -71,7 +71,7 @@ export const convertDeploymentToRollout = ({ deployment, steps, mode, strategy =
 
   // Canary 배포 전략에서 workloadRef 모드일 경우
   if (mode === 'workloadRef') {
-    rolloutCanaryTemplate.spec.workloadRef = {
+    rolloutTemplate.spec.workloadRef = {
         apiVersion: deployment.apiVersion,
         kind: deployment.kind,
         name: deployment.metadata.name,
@@ -79,8 +79,8 @@ export const convertDeploymentToRollout = ({ deployment, steps, mode, strategy =
     };
   // Canary 배포 전략에서 template 모드일 경우
   } else {
-    rolloutCanaryTemplate.spec.template = deployment.spec.template;
+    rolloutTemplate.spec.template = deployment.spec.template;
   }
 
-  return rolloutCanaryTemplate;
+  return rolloutTemplate;
 };
