@@ -3,7 +3,10 @@
 // Rollout API Template
 export const convertDeploymentToRollout = ({ deployment, steps, mode, strategy = 'canary' }) => {
   //const { deployment, steps } = props;
-  if (!deployment || !steps) return null;
+  if (!deployment) return null;
+
+  // strategy가 canary일 때만 steps 존재 여부를 확인
+  if (strategy === 'canary' && !steps) return null;
 
   const rolloutTemplate = {
     apiVersion: 'argoproj.io/v1alpha1',
