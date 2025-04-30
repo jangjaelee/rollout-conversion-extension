@@ -133,6 +133,15 @@ const RolloutConvert = ( {application, resource} ) => {
 
           // Service일 경우에만 canary를 위한 Service 변환 수행
           if (resource.kind === 'Service') {
+            // rollouts-pod-template-hash는 Argo Rollouts가 관리하는 Deployment가 생성한 ReplicaSet이 가진 라벨이며, Service가 selector로 가지고 있으며 ResourceTab에 표시하지 않음
+            const hasRolloutSelector = matched?.spec?.selector && Object.prototype.hasOwnProperty.call(matched.spec.selector, 'rollouts-pod-template-hash');
+        
+            if (hasRolloutSelector) {
+              setError('This Service is already managed by Argo Rollouts (has rollouts-pod-template-hash selector).');
+              setLoading(false);
+              return;
+            }
+
             const { stable, canary } = duplicateServiceForCanary(matched);
             setServiceManifest([canary]);
           }
