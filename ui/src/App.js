@@ -96,15 +96,6 @@ const RolloutConvert = ( {application, resource} ) => {
               strategy: conversionStrategy
             });          
 
-            // 함께 AnalysisTemplate 생성
-            /*
-            const analysisTemplate = createAnalysisTemplate({
-              name: matched.metadata.name,
-              namespace: matched.metadata.namespace,
-            });
-            setAnalysisTemplateManifest(analysisTemplate);
-            */
-
             // enableAnalysisTemplate가 true인 경우 rollout에 analysis 추가
             if (enableAnalysisTemplate) {
               const templateName = `${matched.metadata.name}-analysis-template`;
