@@ -4,7 +4,7 @@ import yaml from 'js-yaml';
 import './index.css';
 import { PRESETS } from './utils/presets';
 import { convertDeploymentToRollout } from './utils/convertDeployment';
-import { duplicateServiceForCanary } from './utils/serviceDuplicate';
+import { duplicateServiceForCanary, useIsRolloutManagedService } from './utils/serviceDuplicate';
 import { addCanaryBackendToHTTPRoute } from './utils/addCanaryToHttpRoute';
 import { createAnalysisTemplate } from './utils/createAnalysisTemplate';
 
@@ -40,6 +40,7 @@ const RolloutConvert = ( {application, resource} ) => {
   const [conversionStrategy, setConversionStrategy] = useState('canary');
   const [analysisTemplateManifest, setAnalysisTemplateManifest] = useState(null);
   const [enableAnalysisTemplate, setEnableAnalysisTemplate] = useState(false);
+  const isRolloutManaged = useIsRolloutManagedService(resource);
 
   useEffect(() => {
     // ArgoCD Application Name 가져오기
@@ -178,7 +179,10 @@ const RolloutConvert = ( {application, resource} ) => {
 
           <div className="column">
             <h4 className="subheading">Converted Service</h4>
-            {serviceManifest.length > 0 ? (
+
+            {isRolloutManaged ? (
+              <p className="warn-text">⚠️ This Service is already managed by Argo Rollouts.</p>
+            ) : serviceManifest.length > 0 ? (
               <>
                 <div className="button-group">
                   <button

@@ -22,4 +22,14 @@ export const duplicateServiceForCanary = (service) => {
     };
 
     return { stable, canary };
-  };
+};
+
+export const useIsRolloutManagedService = (resource) => {
+  if (resource?.kind !== 'Service') return false;
+
+  const selector = resource?.spec?.selector;
+  return (
+    selector &&
+    Object.prototype.hasOwnProperty.call(selector, 'rollouts-pod-template-hash')
+  );
+};
