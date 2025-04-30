@@ -181,7 +181,7 @@ const RolloutConvert = ( {application, resource} ) => {
             <h4 className="subheading">Converted Service</h4>
 
             {isRolloutManaged ? (
-              <p className="warn-text">⚠️ This Service is already managed by Argo Rollouts.</p>
+              <p className="warn-text">⚠️ This Service is already managed by Argo Rollouts (has rollouts-pod-template-hash selector).</p>
             ) : serviceManifest.length > 0 ? (
               <>
                 <div className="button-group">
