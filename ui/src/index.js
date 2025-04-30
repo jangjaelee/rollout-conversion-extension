@@ -22,6 +22,8 @@ const resourceTargets = [
   { group: 'apps', kind: 'Deployment' },
   { group: '', kind: 'Service' }, // core group
   { group: 'gateway.networking.k8s.io', kind: 'HTTPRoute' },
+  { group: 'keda.sh', kind: 'ScaledObject' },
+  { group: 'autoscaling', kind: 'HorizontalPodAutoscaler' },  
 ];
 
 resourceTargets.forEach(({ group, kind }) => {
