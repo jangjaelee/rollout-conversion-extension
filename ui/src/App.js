@@ -104,14 +104,26 @@ const RolloutConvert = ( {application, resource} ) => {
         const targetNamespace =
           resource?.metadata?.namespace ||
           matched?.metadata?.namespace ||
-          application?.metadata?.namespace ||
+          application?.spec?.destination?.namespace ||
           null;
 
         // targetNamespace가 있을 경우에만 필터링        
-        const routes = manifests.filter(
-          (m) =>
-            m.kind === 'HTTPRoute' &&
-              (targetNamespace ? m.metadata?.namespace === targetNamespace : true)
+        const routes = manifests.filter((m) => m.kind === 'HTTPRoute')
+          .map((m) => {
+            if (!m.metadata?.namespace && targetNamespace) {
+              // 메모리 상에서만 임시로 namespace 주입
+              return {
+                ...m,
+                metadata: {
+                  ...m.metadata,
+                  namespace: targetNamespace,
+                },
+              };
+            }
+
+            return m;
+        })
+          .filter((m) => targetNamespace ? m.metadata.namespace === targetNamespace : true
         );
         setHttpRoutes(routes);
 
