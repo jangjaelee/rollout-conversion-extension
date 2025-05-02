@@ -132,12 +132,14 @@ const RolloutConvert = ( {application, resource} ) => {
           if (resource.kind === 'Deployment') {          
             const steps = conversionStrategy === 'canary' ? PRESETS[selectedPreset] : undefined;
             const selectedRouteObj = httpRoutes.find(route => route.metadata.name === selectedHttpRoute);
+
             const rollout = convertDeploymentToRollout({
               deployment: matched,
               steps,
               mode: conversionMode,
               strategy: conversionStrategy,
-              httpRoute: selectedRouteObj,
+              httpRoute: selectedHttpRoute,
+              namespace: targetNamespace,
             });          
 
             // enableAnalysisTemplate가 true인 경우 rollout에 analysis 추가

@@ -1,7 +1,7 @@
 // src/utils/convertDeployment.js
 
 // Rollout API Template
-export const convertDeploymentToRollout = ({ deployment, steps, mode, strategy, httpRoute }) => {
+export const convertDeploymentToRollout = ({ deployment, steps, mode, strategy, httpRoute, namespace }) => {
   //const { deployment, steps } = props;
   if (!deployment) return null;
 
@@ -46,7 +46,7 @@ export const convertDeploymentToRollout = ({ deployment, steps, mode, strategy, 
           plugins: {
             'argoproj-labs/gatewayAPI': {
               httpRoute: httpRoute,
-              namespace: httpRoute,
+              namespace: namespace,
             },
           },
         },
