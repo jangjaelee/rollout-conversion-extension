@@ -131,8 +131,6 @@ const RolloutConvert = ( {application, resource} ) => {
           // Deployment일 경우에만 Rollout 변환 수행
           if (resource.kind === 'Deployment') {          
             const steps = conversionStrategy === 'canary' ? PRESETS[selectedPreset] : undefined;
-            const selectedRouteObj = httpRoutes.find(route => route.metadata.name === selectedHttpRoute);
-
             const rollout = convertDeploymentToRollout({
               deployment: matched,
               steps,
