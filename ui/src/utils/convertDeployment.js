@@ -12,13 +12,13 @@ export const convertDeploymentToRollout = ({ deployment, steps, mode, strategy, 
     apiVersion: 'argoproj.io/v1alpha1',
     kind: 'Rollout',
     metadata: {
-      name: deployment.metadata.name,
-      namespace: deployment.metadata.namespace,
+      annotations: deployment.metadata.annotations,
       labels: {
         ...(deployment.metadata.labels || {}),
         'converted-by': 'rollout-conversion-extension',
       },
-      annotations: deployment.metadata.annotations,
+      name: deployment.metadata.name,
+      namespace: namespace,
     },
     spec: {
       replicas: deployment.spec.replicas,
