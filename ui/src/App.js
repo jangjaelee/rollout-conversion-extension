@@ -117,7 +117,7 @@ const RolloutConvert = ( {application, resource} ) => {
               steps,
               mode: conversionMode,
               strategy: conversionStrategy,
-              httpRoute: selectedHttpRoute
+              httpRoute: selectedHttpRoute,
             });          
 
             // enableAnalysisTemplate가 true인 경우 rollout에 analysis 추가
@@ -183,7 +183,7 @@ const RolloutConvert = ( {application, resource} ) => {
     conversionMode,
     conversionStrategy,
     enableAnalysisTemplate,
-    selectedHttpRoute
+    selectedHttpRoute,
   ]);
 
   if (loading) return <p>Loading...</p>;
@@ -279,30 +279,22 @@ const RolloutConvert = ( {application, resource} ) => {
                   <label htmlFor="preset">Canary Preset:</label>
                   <select id="preset" value={selectedPreset} onChange={(e) => setSelectedPreset(e.target.value)}>
                     {Object.keys(PRESETS).map((presetName) => (
-                      <option key={presetName} value={presetName}>
-                        {presetName}
-                      </option>
+                      <option key={presetName} value={presetName}>{presetName}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="controls">
+                  <label htmlFor="httpRoute">HTTPRoute:</label>
+                  <select id="httpRoute" value={selectedHttpRoute} onChange={(e) => setSelectedHttpRoute(e.target.value)}>
+                    <option value="">Select HTTPRoute</option>
+                    {httpRoutes.map((route) => (
+                      <option key={route.metadata.name} value={route.metadata.name}>{route.metadata.name}</option>
                     ))}
                   </select>
                 </div>
               </>
             )}
-
-            <div className="controls">
-              <label htmlFor="httpRoute">HTTPRoute:</label>
-              <select
-                id="httpRoute"
-                value={selectedHttpRoute}
-                onChange={(e) => setSelectedHttpRoute(e.target.value)}
-              >
-                <option value="">Select HTTPRoute</option>
-                {httpRoutes.map((route) => (
-                  <option key={route.metadata.name} value={route.metadata.name}>
-                    {route.metadata.name}
-                  </option>
-                ))}
-              </select>
-            </div>
 
             <div className="controls">
               <label>
