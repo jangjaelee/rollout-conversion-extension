@@ -45,8 +45,8 @@ export const convertDeploymentToRollout = ({ deployment, steps, mode, strategy }
         trafficRouting: {
           plugins: {
             'argoproj-labs/gatewayAPI': {
-              httpRoute: 'claim-api-test-public',
-              namespace: 'dev-claim',
+              httpRoute: httpRoute,
+              namespace: deployment.metadata.namespace,
             },
           },
         },

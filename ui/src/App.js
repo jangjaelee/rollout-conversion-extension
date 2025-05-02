@@ -28,6 +28,8 @@ const renderYamlWithLineNumbers = (props) => {
   );
 };
 
+
+// YAML copy to clipboard and download buttons 
 const YamlActionButtons = ({ yamlObject, filenamePrefix }) => (
   <div className="button-group">
     <button className="copy-btn" onClick={() => copyToClipboard(yamlObject)}>
@@ -53,6 +55,8 @@ const RolloutConvert = ( {application, resource} ) => {
   const [analysisTemplateManifest, setAnalysisTemplateManifest] = useState(null);
   const [enableAnalysisTemplate, setEnableAnalysisTemplate] = useState(false);
   const isRolloutManaged = useIsRolloutManagedService(resource);
+  const [httpRoutes, setHttpRoutes] = useState([]);
+  const [selectedHttpRoute, setSelectedHttpRoute] = useState('');
 
   useEffect(() => {
     // ArgoCD Application Name 가져오기
@@ -94,8 +98,15 @@ const RolloutConvert = ( {application, resource} ) => {
             m.kind === resource.kind &&
             m.metadata?.name === resource.metadata?.name
         );
-
         setDesiredManifest(matched || null);
+
+        const routes = manifests.filter(
+          (m) =>
+            m.kind === 'HTTPRoute' &&
+            m.metadata?.namespace === resource.metadata?.namespace
+        );
+        setHttpRoutes(routes);
+
 
         if (matched) {
           // Deployment일 경우에만 Rollout 변환 수행
@@ -165,7 +176,14 @@ const RolloutConvert = ( {application, resource} ) => {
     };
 
     fetchDesiredManifest();
-  }, [resource, selectedPreset, conversionMode, conversionStrategy, enableAnalysisTemplate]);
+  }, [
+    resource,
+    selectedPreset,
+    conversionMode,
+    conversionStrategy,
+    enableAnalysisTemplate,
+    selectedHttpRoute
+  ]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p className="error-text">❌ {error}</p>;
@@ -268,6 +286,22 @@ const RolloutConvert = ( {application, resource} ) => {
                 </div>
               </>
             )}
+
+            <div className="controls">
+              <label htmlFor="httpRoute">HTTPRoute:</label>
+              <select
+                id="httpRoute"
+                value={selectedHttpRoute}
+                onChange={(e) => setSelectedHttpRoute(e.target.value)}
+              >
+                <option value="">Select HTTPRoute</option>
+                {httpRoutes.map((route) => (
+                  <option key={route.metadata.name} value={route.metadata.name}>
+                    {route.metadata.name}
+                  </option>
+                ))}
+              </select>
+            </div>
 
             <div className="controls">
               <label>
