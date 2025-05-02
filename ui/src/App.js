@@ -116,7 +116,8 @@ const RolloutConvert = ( {application, resource} ) => {
               deployment: matched,
               steps,
               mode: conversionMode,
-              strategy: conversionStrategy
+              strategy: conversionStrategy,
+              httpRoute: selectedHttpRoute
             });          
 
             // enableAnalysisTemplate가 true인 경우 rollout에 analysis 추가
