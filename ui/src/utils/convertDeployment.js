@@ -45,8 +45,8 @@ export const convertDeploymentToRollout = ({ deployment, steps, mode, strategy, 
         trafficRouting: {
           plugins: {
             'argoproj-labs/gatewayAPI': {
-              httpRoute: httpRoute,
-              namespace: deployment.metadata.namespace,
+              httpRoute: httpRoute.metadata.name,
+              namespace: httpRoute.metadata.namespace,
             },
           },
         },
