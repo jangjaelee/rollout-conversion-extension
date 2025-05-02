@@ -100,24 +100,32 @@ const RolloutConvert = ( {application, resource} ) => {
         );
         setDesiredManifest(matched || null);
 
+        // 우선순위: resource → matched → application (fallback)
+        const targetNamespace =
+          resource?.metadata?.namespace ||
+          matched?.metadata?.namespace ||
+          application?.spec?.destination?.namespace ||
+          null;
+
+        // targetNamespace가 있을 경우에만 필터링        
         const routes = manifests.filter(
           (m) =>
             m.kind === 'HTTPRoute' &&
-            m.metadata?.namespace === resource.metadata?.namespace
+              (targetNamespace ? m.metadata?.namespace === targetNamespace : true)
         );
         setHttpRoutes(routes);
-
 
         if (matched) {
           // Deployment일 경우에만 Rollout 변환 수행
           if (resource.kind === 'Deployment') {          
             const steps = conversionStrategy === 'canary' ? PRESETS[selectedPreset] : undefined;
+            const selectedRouteObj = httpRoutes.find(route => route.metadata.name === selectedHttpRoute);
             const rollout = convertDeploymentToRollout({
               deployment: matched,
               steps,
               mode: conversionMode,
               strategy: conversionStrategy,
-              httpRoute: selectedHttpRoute,
+              httpRoute: selectedRouteObj,
             });          
 
             // enableAnalysisTemplate가 true인 경우 rollout에 analysis 추가
