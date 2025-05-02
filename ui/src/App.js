@@ -7,6 +7,7 @@ import { convertDeploymentToRollout } from './utils/convertDeployment';
 import { duplicateServiceForCanary, useIsRolloutManagedService } from './utils/serviceDuplicate';
 import { addCanaryBackendToHTTPRoute } from './utils/addCanaryToHttpRoute';
 import { createAnalysisTemplate } from './utils/createAnalysisTemplate';
+import { copyToClipboard, downloadYaml } from './utils/downloadCopy';
 
 // YAML + 라인 번호 출력 함수 (flex 기반)
 const renderYamlWithLineNumbers = (props) => {
@@ -26,6 +27,17 @@ const renderYamlWithLineNumbers = (props) => {
     </div>
   );
 };
+
+const YamlActionButtons = ({ yamlObject, filenamePrefix }) => (
+  <div className="button-group">
+    <button className="copy-btn" onClick={() => copyToClipboard(yamlObject)}>
+      Copy
+    </button>
+    <button className="download-btn" onClick={() => downloadYaml(yamlObject, filenamePrefix)}>
+      Download
+    </button>
+  </div>
+);
 
 const RolloutConvert = ( {application, resource} ) => {
   //const { resource, application } = props;
@@ -175,40 +187,7 @@ const RolloutConvert = ( {application, resource} ) => {
               <p className="warn-text">⚠️ This Service is already managed by Argo Rollouts (has rollouts-pod-template-hash selector).</p>
             ) : serviceManifest.length > 0 ? (
               <>
-                <div className="button-group">
-                  <button
-                    className="copy-btn"
-                    onClick={async () => {
-                      try {
-                        await navigator.clipboard.writeText(yaml.dump(serviceManifest[0]));
-                        alert('📋 Canary Service YAML copied to clipboard!');
-                      } catch (err) {
-                        alert('❌ Failed to copy!');
-                        console.error('Copy failed:', err);
-                      }
-                    }}
-                  >
-                    Copy
-                  </button>
-                  <button
-                    className="download-btn"
-                    onClick={() => {
-                      const yamlString = yaml.dump(serviceManifest[0]);
-                      const blob = new Blob([yamlString], { type: 'text/yaml' });
-                      const url = URL.createObjectURL(blob);
-                      const link = document.createElement('a');
-                      link.href = url;
-                      link.download = `service-${serviceManifest[0].metadata.name || 'service'}.yaml`;
-                      document.body.appendChild(link);
-                      link.click();
-                      document.body.removeChild(link);
-                      URL.revokeObjectURL(url);
-                    }}
-                  >
-                    Download
-                  </button>
-                </div>
-
+                <YamlActionButtons yamlObject={serviceManifest[0]} filenamePrefix="service" />
                 {renderYamlWithLineNumbers(yaml.dump(serviceManifest[0]))}
               </>
             ) : (
