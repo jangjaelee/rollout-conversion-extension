@@ -29,46 +29,54 @@ export const convertDeploymentToRollout = ({ deployment, steps, mode, strategy, 
 
   // strategy 별로 spec.strategy 다르게 구성 (canary or blue/green)
   if (strategy === 'canary') {
-    rolloutTemplate.spec.strategy = {
-      canary: {
-        canaryService: 'canary-service',
-        stableService: 'stable-service',
-        canaryMetadata: {
-          annotations: { role: 'canary' },
-          labels: { role: 'canary' },
-        },
-        stableMetadata: {
-          annotations: { role: 'stable' },
-          labels: { role: 'stable' },
-        },
-        steps: steps || [],
-        trafficRouting: {
-          plugins: {
-            'argoproj-labs/gatewayAPI': {
-              httpRoute: httpRoute,
-              namespace: namespace,
-            },
+    const canaryStrategy = {
+      canaryService: 'canary-service',
+      stableService: 'stable-service',
+      canaryMetadata: {
+        annotations: { role: 'canary' },
+        labels: { role: 'canary' },
+      },
+      stableMetadata: {
+        annotations: { role: 'stable' },
+        labels: { role: 'stable' },
+      },
+      steps: steps || [],
+      abortScaleDownDelaySeconds: 30,
+      dynamicStableScale: false,
+    };
+  
+    // httpRoute가 존재할 경우에만 trafficRouting 필드 추가
+    if (httpRoute) {
+      canaryStrategy.trafficRouting = {
+        plugins: {
+          'argoproj-labs/gatewayAPI': {
+            httpRoute: httpRoute,
+            namespace: namespace,
           },
         },
-        abortScaleDownDelaySeconds: 30,
-        dynamicStableScale: false,
-      },
+      };
+    }
+  
+    rolloutTemplate.spec.strategy = {
+      canary: canaryStrategy,
     };
   } else if (strategy === 'blueGreen') {
-    rolloutTemplate.spec.strategy = {
-      blueGreen: {
-        activeService: 'stable-service',
-        previewService: 'bluegreen-service',
-        autoPromotionEnabled: false,
-        scaleDownDelaySeconds: 30,
-        abortScaleDownDelaySeconds: 30,        
-        previewMetadata: {
-          labels: { role: 'bluegreen' },
-        },
-        activeMetadata: {
-          labels: { role: 'stable' },
-        },
+    const blueGreenStrategy = {
+      activeService: 'stable-service',
+      previewService: 'bluegreen-service',
+      autoPromotionEnabled: false,
+      scaleDownDelaySeconds: 30,
+      abortScaleDownDelaySeconds: 30,
+      previewMetadata: {
+        labels: { role: 'bluegreen' },
       },
+      activeMetadata: {
+        labels: { role: 'stable' },
+      },
+    };
+  
+    rolloutTemplate.spec.strategy = {
+      blueGreen: blueGreenStrategy,
     };
   };
 
