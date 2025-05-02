@@ -2,11 +2,11 @@
 
 import yaml from 'js-yaml';
 
-export const copyToClipboard = async (object, filenamePrefix) => {
+export const copyToClipboard = async (object) => {
   try {
     const yamlString = yaml.dump(object);
     await navigator.clipboard.writeText(yamlString);
-    alert(`📋 ${filenamePrefix} YAML copied to clipboard!`);
+    alert('📋 YAML copied to clipboard!');
   } catch (err) {
     alert('❌ Failed to copy!');
     console.error('Copy failed:', err);
