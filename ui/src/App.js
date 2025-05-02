@@ -213,40 +213,7 @@ const RolloutConvert = ( {application, resource} ) => {
             <h4 className="subheading">Converted HTTPRoute</h4>
             {httprouteManifest ? (
               <>
-                <div className="button-group">
-                  <button
-                    className="copy-btn"
-                    onClick={async () => {
-                      try {
-                        await navigator.clipboard.writeText(yaml.dump(httprouteManifest));
-                        alert('📋 Canary HTTPRoute YAML copied to clipboard!');
-                      } catch (err) {
-                        alert('❌ Failed to copy!');
-                        console.error('Copy failed:', err);
-                      }
-                    }}
-                  >
-                    Copy
-                  </button>
-                  <button
-                    className="download-btn"
-                    onClick={() => {
-                      const yamlString = yaml.dump(httprouteManifest);
-                      const blob = new Blob([yamlString], { type: 'text/yaml' });
-                      const url = URL.createObjectURL(blob);
-                      const link = document.createElement('a');
-                      link.href = url;
-                      link.download = `httproute-${httprouteManifest.metadata.name || 'httproute'}.yaml`;
-                      document.body.appendChild(link);
-                      link.click();
-                      document.body.removeChild(link);
-                      URL.revokeObjectURL(url);
-                    }}
-                  >
-                    Download
-                  </button>
-                </div>
-
+                <YamlActionButtons yamlObject={httprouteManifest} filenamePrefix="httproute" />
                 {renderYamlWithLineNumbers(yaml.dump(httprouteManifest))}
               </>
             ) : (
@@ -315,41 +282,7 @@ const RolloutConvert = ( {application, resource} ) => {
 
             {rolloutManifest ? (
               <>
-                <div className="button-group">
-                  <button
-                    className="copy-btn"
-                    onClick={async () => {
-                      try {
-                        await navigator.clipboard.writeText(yaml.dump(rolloutManifest));
-                        alert('📋 Rollout YAML copied to clipboard!');
-                      } catch (err) {
-                        alert('❌ Failed to copy!');
-                        console.error('Copy failed:', err);
-                      }
-                    }}
-                  >
-                    Copy
-                  </button>
-
-                  <button
-                    className="download-btn"
-                    onClick={() => {
-                      const yamlString = yaml.dump(rolloutManifest);
-                      const blob = new Blob([yamlString], { type: 'text/yaml' });
-                      const url = URL.createObjectURL(blob);
-                      const link = document.createElement('a');
-                      link.href = url;
-                      link.download = `rollout-${rolloutManifest.metadata.name || 'rollout'}.yaml`;
-                      document.body.appendChild(link);
-                      link.click();
-                      document.body.removeChild(link);
-                      URL.revokeObjectURL(url);
-                    }}
-                  >
-                    Download
-                  </button>
-                </div>
-
+                <YamlActionButtons yamlObject={rolloutManifest} filenamePrefix="rollout" />
                 {renderYamlWithLineNumbers(yaml.dump(rolloutManifest))}
               </>
             ) : (
@@ -359,40 +292,7 @@ const RolloutConvert = ( {application, resource} ) => {
             {enableAnalysisTemplate && analysisTemplateManifest && (
               <div className="column">
                 <h4 className="subheading">Generated AnalysisTemplate</h4>
-                <div className="button-group">
-                  <button
-                    className="copy-btn"
-                    onClick={async () => {
-                      try {
-                        await navigator.clipboard.writeText(yaml.dump(analysisTemplateManifest));
-                        alert('📋 AnalysisTemplate YAML copied to clipboard!');
-                      } catch (err) {
-                        alert('❌ Failed to copy!');
-                        console.error('Copy failed:', err);
-                      }
-                    }}
-                  >
-                    Copy
-                  </button>
-                  <button
-                    className="download-btn"
-                    onClick={() => {
-                      const yamlString = yaml.dump(analysisTemplateManifest);
-                      const blob = new Blob([yamlString], { type: 'text/yaml' });
-                      const url = URL.createObjectURL(blob);
-                      const link = document.createElement('a');
-                      link.href = url;
-                      link.download = `analysistemplate-${analysisTemplateManifest.metadata.name || 'analysis-template'}.yaml`;
-                      document.body.appendChild(link);
-                      link.click();
-                      document.body.removeChild(link);
-                      URL.revokeObjectURL(url);
-                    }}
-                  >
-                    Download
-                  </button>
-                </div>
-
+                <YamlActionButtons yamlObject={analysisTemplateManifest} filenamePrefix="analysistemplate" />
                 {renderYamlWithLineNumbers(yaml.dump(analysisTemplateManifest))}
               </div>
             )}
