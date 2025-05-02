@@ -30,7 +30,7 @@ const renderYamlWithLineNumbers = (props) => {
 
 const YamlActionButtons = ({ yamlObject, filenamePrefix }) => (
   <div className="button-group">
-    <button className="copy-btn" onClick={() => copyToClipboard(yamlObject)}>
+    <button className="copy-btn" onClick={() => copyToClipboard(yamlObject, filenamePrefix)}>
       Copy
     </button>
     <button className="download-btn" onClick={() => downloadYaml(yamlObject, filenamePrefix)}>

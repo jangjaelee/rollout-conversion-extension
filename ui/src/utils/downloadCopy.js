@@ -2,7 +2,7 @@
 
 import yaml from 'js-yaml';
 
-export const copyToClipboard = async (object) => {
+export const copyToClipboard = async (object, filenamePrefix) => {
   try {
     const yamlString = yaml.dump(object);
     await navigator.clipboard.writeText(yamlString);
