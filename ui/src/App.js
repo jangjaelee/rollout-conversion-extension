@@ -104,7 +104,7 @@ const RolloutConvert = ( {application, resource} ) => {
         const targetNamespace =
           resource?.metadata?.namespace ||
           matched?.metadata?.namespace ||
-          application?.destination?.namespace ||
+          application?.metadata?.namespace ||
           null;
 
         // targetNamespace가 있을 경우에만 필터링        
