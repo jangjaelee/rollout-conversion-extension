@@ -206,6 +206,7 @@ const RolloutConvert = ( {application, resource} ) => {
     conversionStrategy,
     enableAnalysisTemplate,
     selectedHttpRoute,
+    duplicateCanaryBackend,
   ]);
 
   if (loading) return <p>Loading...</p>;
