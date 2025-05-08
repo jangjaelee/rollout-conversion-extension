@@ -295,9 +295,7 @@ const RolloutConvert = ( {application, resource} ) => {
         <div className="conversion-wrapper">
           <div className="column">
             <h4 className="subheading">Original ScaledObject</h4>
-            {desiredManifest
-              ? renderYamlWithLineNumbers(yaml.dump(desiredManifest))
-              : <p className="warn-text">⚠️ No matching ScaledObject found.</p>}
+            {desiredManifest ? renderYamlWithLineNumbers(yaml.dump(desiredManifest)) : <p className="warn-text">⚠️ No matching ScaledObject found.</p>}
           </div>
   
           <div className="column">
