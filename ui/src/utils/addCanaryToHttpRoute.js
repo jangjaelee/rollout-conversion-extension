@@ -1,9 +1,11 @@
 // src/utils/addCanaryToHttpRoute.js
 
 export const addCanaryBackendToHTTPRoute = (httpRoute) => {
+    let duplicate = false;
+
     if (!httpRoute || httpRoute.kind !== 'HTTPRoute') {
       console.error('Provided resource is not a valid HTTPRoute.');
-      return { updatedRoute: null, duplicate: false };
+      return { updatedRoute: null, duplicate };
     }
   
     // Deep Copy 방지용 안전 복사
@@ -18,9 +20,9 @@ export const addCanaryBackendToHTTPRoute = (httpRoute) => {
     // rules가 없으면 그냥 반환
     if (!Array.isArray(updatedRoute.spec?.rules)) {
       console.error('HTTPRoute has no rules.');
-      return { updatedRoute, duplicate: false };
+      return { updatedRoute, duplicate };
     }
-  
+
     updatedRoute.spec.rules.forEach((rule) => {
       if (!Array.isArray(rule.backendRefs)) {
         rule.backendRefs = [];
