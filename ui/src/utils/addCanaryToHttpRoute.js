@@ -3,7 +3,7 @@
 export const addCanaryBackendToHTTPRoute = (httpRoute) => {
     if (!httpRoute || httpRoute.kind !== 'HTTPRoute') {
       console.error('Provided resource is not a valid HTTPRoute.');
-      return null;
+      return { updatedRoute: null, duplicate: false };
     }
   
     // Deep Copy 방지용 안전 복사
@@ -18,7 +18,7 @@ export const addCanaryBackendToHTTPRoute = (httpRoute) => {
     // rules가 없으면 그냥 반환
     if (!Array.isArray(updatedRoute.spec?.rules)) {
       console.error('HTTPRoute has no rules.');
-      return updatedRoute;
+      return { updatedRoute, duplicate: false };
     }
   
     updatedRoute.spec.rules.forEach((rule) => {
@@ -28,6 +28,11 @@ export const addCanaryBackendToHTTPRoute = (httpRoute) => {
   
       // 이미 canary backend가 있는지 체크 (중복 방지)
       const hasCanary = rule.backendRefs.some(ref => ref.name.endsWith('-canary'));
+      if (hasCanary) {
+        duplicate = true;
+        return;
+      }
+
       if (!hasCanary) {
         // 첫 번째 backend를 기준으로 port 복사
         const baseBackend = rule.backendRefs[0];
@@ -41,5 +46,5 @@ export const addCanaryBackendToHTTPRoute = (httpRoute) => {
       }
     });
 
-    return updatedRoute;
+  return { updatedRoute, duplicate };
   };

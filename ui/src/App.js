@@ -57,6 +57,7 @@ const RolloutConvert = ( {application, resource} ) => {
   const isRolloutManaged = useIsRolloutManagedService(resource);
   const [httpRoutes, setHttpRoutes] = useState([]);
   const [selectedHttpRoute, setSelectedHttpRoute] = useState('');
+  const [duplicateCanaryBackend, setDuplicateCanaryBackend] = useState(false);  
 
   useEffect(() => {
     // ArgoCD Application Name 가져오기
@@ -184,8 +185,9 @@ const RolloutConvert = ( {application, resource} ) => {
 
           // HTTPRoute일 경우에만 canary를 위한 rules[].backendRefs 추가 수행
           if (resource.kind === 'HTTPRoute') {
-            const httproute = addCanaryBackendToHTTPRoute(matched);
+            const { httproute, duplicate } = addCanaryBackendToHTTPRoute(matched);
             setHttprouteManifest(httproute);
+            setDuplicateCanaryBackend(duplicate);
           }          
         }
       } catch (err) {
@@ -250,7 +252,9 @@ const RolloutConvert = ( {application, resource} ) => {
 
           <div className="column">
             <h4 className="subheading">Converted HTTPRoute</h4>
-            {httprouteManifest ? (
+            {duplicateCanaryBackend ? (
+              <p className="warn-text">⚠️ Canary backend already exists in HTTPRoute.</p>
+            ) : httprouteManifest ? (
               <>
                 <YamlActionButtons yamlObject={httprouteManifest} filenamePrefix="httproute" />
                 {renderYamlWithLineNumbers(yaml.dump(httprouteManifest))}
