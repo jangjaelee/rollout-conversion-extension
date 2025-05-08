@@ -57,7 +57,8 @@ const RolloutConvert = ( {application, resource} ) => {
   const isRolloutManaged = useIsRolloutManagedService(resource);
   const [httpRoutes, setHttpRoutes] = useState([]);
   const [selectedHttpRoute, setSelectedHttpRoute] = useState('');
-  const [duplicateCanaryBackend, setDuplicateCanaryBackend] = useState(false);  
+  const [duplicateCanaryBackend, setDuplicateCanaryBackend] = useState(false);
+  const [scaledObjectManifest, setScaledObjectManifest] = useState(null);
 
   useEffect(() => {
     // ArgoCD Application Name 가져오기
@@ -188,7 +189,25 @@ const RolloutConvert = ( {application, resource} ) => {
             const { updatedRoute, duplicate } = addCanaryBackendToHTTPRoute(matched);
             setHttprouteManifest(updatedRoute);
             setDuplicateCanaryBackend(duplicate);
-          }          
+          }
+
+          // ScaledObject일 경우에만 sacleTargetRef의 kind를 변경
+          if (resource.kind === 'ScaledObject') {
+            const scaleTargetKind = resource.spec?.scaleTargetRef?.kind;
+            if (scaleTargetKind === 'Rollout') {
+              // 이미 Rollout을 대상으로 하고 있으면 변환 비활성화
+              setError('This ScaledObject is already targeting a Rollout.');
+              setLoading(false);
+              return;
+            }
+          
+            if (scaleTargetKind === 'Deployment') {
+              // Deployment → Rollout 변환
+              const updated = JSON.parse(JSON.stringify(resource));
+              updated.spec.scaleTargetRef.kind = 'Rollout';
+              setScaledObjectManifest(updated);
+            }
+          }
         }
       } catch (err) {
         console.error('Error fetching desired manifest:', err);
@@ -267,7 +286,35 @@ const RolloutConvert = ( {application, resource} ) => {
         </div>
       </div>
     );
-  } 
+  }
+
+  if (resource.kind === 'ScaledObject') {
+    return (
+      <div className="section">
+        <h3>KEDA ScaledObject YAML</h3>
+        <div className="conversion-wrapper">
+          <div className="column">
+            <h4 className="subheading">Original ScaledObject</h4>
+            {desiredManifest
+              ? renderYamlWithLineNumbers(yaml.dump(desiredManifest))
+              : <p className="warn-text">⚠️ No matching ScaledObject found.</p>}
+          </div>
+  
+          <div className="column">
+            <h4 className="subheading">Converted ScaledObject</h4>
+            {scaledObjectManifest ? (
+              <>
+                <YamlActionButtons yamlObject={scaledObjectManifest} filenamePrefix="scaledobject" />
+                {renderYamlWithLineNumbers(yaml.dump(scaledObjectManifest))}
+              </>
+            ) : (
+              <p className="warn-text">⚠️ Unable to convert to Rollout-targeted ScaledObject.</p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (resource.kind === 'Deployment') {
     return (
