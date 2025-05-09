@@ -59,6 +59,7 @@ const RolloutConvert = ( {application, resource} ) => {
   const [selectedHttpRoute, setSelectedHttpRoute] = useState('');
   const [duplicateCanaryBackend, setDuplicateCanaryBackend] = useState(false);
   const [scaledObjectManifest, setScaledObjectManifest] = useState(null);
+  const [isAlreadyRolloutTarget, setIsAlreadyRolloutTarget] = useState(false);
 
   useEffect(() => {
     // ArgoCD Application Name 가져오기
@@ -196,9 +197,12 @@ const RolloutConvert = ( {application, resource} ) => {
             const scaleTargetKind = resource.spec?.scaleTargetRef?.kind;
             if (scaleTargetKind === 'Rollout') {
               // 이미 Rollout을 대상으로 하고 있으면 변환 비활성화
+              /*
               setError('This ScaledObject is already targeting a Rollout.');
               setLoading(false);
               return;
+              */
+             setIsAlreadyRolloutTarget(true)
             }
           
             if (scaleTargetKind === 'Deployment') {
@@ -273,7 +277,7 @@ const RolloutConvert = ( {application, resource} ) => {
           <div className="column">
             <h4 className="subheading">Converted HTTPRoute</h4>
             {duplicateCanaryBackend ? (
-              <p className="warn-text">⚠️ Canary backend already exists in HTTPRoute.</p>
+              <p className="warn-text">⚠️ The Canary backend already exists in HTTPRoute.</p>
             ) : httprouteManifest ? (
               <>
                 <YamlActionButtons yamlObject={httprouteManifest} filenamePrefix="httproute" />
@@ -300,7 +304,9 @@ const RolloutConvert = ( {application, resource} ) => {
   
           <div className="column">
             <h4 className="subheading">Converted ScaledObject</h4>
-            {scaledObjectManifest ? (
+            { isAlreadyRolloutTarget ? (
+                <p className="warn-text">⚠️ This ScaledObject is already targeting a Rollout.</p>            
+            ) : scaledObjectManifest ? (
               <>
                 <YamlActionButtons yamlObject={scaledObjectManifest} filenamePrefix="scaledobject" />
                 {renderYamlWithLineNumbers(yaml.dump(scaledObjectManifest))}
