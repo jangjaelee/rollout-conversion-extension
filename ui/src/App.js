@@ -60,6 +60,8 @@ const RolloutConvert = ( {application, resource} ) => {
   const [duplicateCanaryBackend, setDuplicateCanaryBackend] = useState(false);
   const [scaledObjectManifest, setScaledObjectManifest] = useState(null);
   const [isAlreadyRolloutTarget, setIsAlreadyRolloutTarget] = useState(false);
+  const [hpaManifest, setHpaManifest] = useState(null);
+  const [isKedaBasedHPA, setIsKedaBasedHPA] = useState(false);  
 
   useEffect(() => {
     // ArgoCD Application Name 가져오기
@@ -195,6 +197,7 @@ const RolloutConvert = ( {application, resource} ) => {
           // ScaledObject일 경우에만 sacleTargetRef의 kind를 변경
           if (resource.kind === 'ScaledObject') {
             const scaleTargetKind = resource.spec?.scaleTargetRef?.kind;
+
             if (scaleTargetKind === 'Rollout') {
               // 이미 Rollout을 대상으로 하고 있으면 변환 비활성화
               /*
@@ -210,6 +213,23 @@ const RolloutConvert = ( {application, resource} ) => {
               const updated = JSON.parse(JSON.stringify(resource));
               updated.spec.scaleTargetRef.kind = 'Rollout';
               setScaledObjectManifest(updated);
+            }
+          }
+
+          // HorizontalPodAutoscaler일 경우에만 sacleTargetRef의 kind를 변경
+          if (resource.kind === 'HorizontalPodAutoscaler') {
+            const scaleTarget = resource.spec?.scaleTargetRef;
+            const isFromKeda = !!resource.metadata?.labels?.['scaledobject.keda.sh/name'];
+          
+            if (isFromKeda) {
+              setIsKedaBasedHPA(true);
+              return;
+            }
+          
+            if (scaleTarget?.kind === 'Deployment') {
+              const updated = JSON.parse(JSON.stringify(resource));
+              updated.spec.scaleTargetRef.kind = 'Rollout';
+              setHpaManifest(updated);
             }
           }
         }
@@ -313,6 +333,34 @@ const RolloutConvert = ( {application, resource} ) => {
               </>
             ) : (
               <p className="warn-text">⚠️ Unable to convert to Rollout-targeted ScaledObject.</p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (resource.kind === 'HorizontalPodAutoscaler') {
+    return (
+      <div className="section">
+        <h3>Horizontal Pod Autoscaler (HPA) YAML</h3>
+        <div className="conversion-wrapper">
+          <div className="column">
+            <h4 className="subheading">Original HPA</h4>
+            {desiredManifest ? renderYamlWithLineNumbers(yaml.dump(desiredManifest)) : <p className="warn-text">⚠️ No matching HPA found.</p>}
+          </div>
+  
+          <div className="column">
+            <h4 className="subheading">Converted HPA</h4>
+            {isKedaBasedHPA ? (
+              <p className="warn-text">⚠️ This HPA is managed by KEDA (conversion disabled).</p>
+            ) : hpaManifest ? (
+              <>
+                <YamlActionButtons yamlObject={hpaManifest} filenamePrefix="hpa" />
+                {renderYamlWithLineNumbers(yaml.dump(hpaManifest))}
+              </>
+            ) : (
+              <p className="warn-text">⚠️ Unable to convert HPA to Rollout target.</p>
             )}
           </div>
         </div>
