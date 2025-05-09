@@ -210,7 +210,7 @@ const RolloutConvert = ( {application, resource} ) => {
           
             if (scaleTargetKind === 'Deployment') {
               // Deployment → Rollout 변환
-              const updated = JSON.parse(JSON.stringify(resource));
+              const updated = JSON.parse(JSON.stringify(matched));
               updated.spec.scaleTargetRef.kind = 'Rollout';
               setScaledObjectManifest(updated);
             }
@@ -227,7 +227,7 @@ const RolloutConvert = ( {application, resource} ) => {
             }
           
             if (scaleTarget?.kind === 'Deployment') {
-              const updated = JSON.parse(JSON.stringify(resource));
+              const updated = JSON.parse(JSON.stringify(matched));
               updated.spec.scaleTargetRef.kind = 'Rollout';
               setHpaManifest(updated);
             }
