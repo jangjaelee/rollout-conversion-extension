@@ -8,6 +8,7 @@ import { duplicateServiceForCanary, useIsRolloutManagedService } from './utils/s
 import { addCanaryBackendToHTTPRoute } from './utils/addCanaryToHttpRoute';
 import { createAnalysisTemplate } from './utils/createAnalysisTemplate';
 import { copyToClipboard, downloadYaml } from './utils/downloadCopy';
+import { convertScaledObject, convertHPA } from './utils/convertAutoscalers';
 
 // YAML + 라인 번호 출력 함수 (flex 기반)
 const renderYamlWithLineNumbers = (props) => {
@@ -196,54 +197,23 @@ const RolloutConvert = ( {application, resource} ) => {
 
           // ScaledObject일 경우에만 sacleTargetRef의 kind를 변경
           if (resource.kind === 'ScaledObject') {
-            const scaleTarget = resource.spec?.scaleTargetRef;
-
-            if (scaleTarget?.kind === 'Rollout') {
-              // 이미 Rollout을 대상으로 하고 있으면 변환 비활성화
-              /*
-              setError('This ScaledObject is already targeting a Rollout.');
-              setLoading(false);
-              return;
-              */
-             setIsAlreadyRolloutTarget(true)
-            }
-          
-            if (scaleTarget?.kind === 'Deployment') {
-              // Deployment → Rollout 변환
-              const updated = JSON.parse(JSON.stringify(matched));
-              updated.spec.scaleTargetRef.apiVersion = 'argoproj.io/v1alpha1'
-              updated.spec.scaleTargetRef.kind = 'Rollout';
-              // rollout-conversion-extension으로 변환되었다는 표시 추가
-              updated.metadata.labels = {
-                ...(updated.metadata.labels || {}),
-                'converted-by': 'rollout-conversion-extension',
-              };              
-              setScaledObjectManifest(updated);
+            const { converted, isAlreadyRolloutTarget } = convertScaledObject(matched);
+            
+            setIsAlreadyRolloutTarget(isAlreadyRolloutTarget);
+            
+            if (!isAlreadyRolloutTarget && converted) {
+              setScaledObjectManifest(converted);
             }
           }
 
           // HorizontalPodAutoscaler일 경우에만 sacleTargetRef의 kind를 변경
           if (resource.kind === 'HorizontalPodAutoscaler') {
-            const scaleTarget = resource.spec?.scaleTargetRef;
-            const isFromKeda = !!resource.metadata?.labels?.['scaledobject.keda.sh/name'];
-          
-            if (isFromKeda) {
-              setIsKedaBasedHPA(true);
-              return;
-            }
-          
-            if (scaleTarget?.kind === 'Deployment') {
-              // Deployment → Rollout 변환
-              const updated = JSON.parse(JSON.stringify(matched));
-              updated.spec.scaleTargetRef.apiVersion = 'argoproj.io/v1alpha1'
-              updated.spec.scaleTargetRef.kind = 'Rollout';
-              // rollout-conversion-extension으로 변환되었다는 표시 추가
-              updated.metadata.labels = {
-                ...(updated.metadata.labels || {}),
-                'converted-by': 'rollout-conversion-extension',
-              };
+            const { converted, isKedaBased } = convertHPA(matched);
 
-              setHpaManifest(updated);
+            setIsKedaBasedHPA(isKedaBased);
+
+            if (!isKedaBased && converted) {
+              setHpaManifest(converted);
             }
           }
         }
