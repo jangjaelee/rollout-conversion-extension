@@ -213,6 +213,11 @@ const RolloutConvert = ( {application, resource} ) => {
               const updated = JSON.parse(JSON.stringify(matched));
               updated.spec.scaleTargetRef.apiVersion = 'argoproj.io/v1alpha1'
               updated.spec.scaleTargetRef.kind = 'Rollout';
+              // rollout-conversion-extension으로 변환되었다는 표시 추가
+              updated.metadata.labels = {
+                ...(updated.metadata.labels || {}),
+                'converted-by': 'rollout-conversion-extension',
+              };              
               setScaledObjectManifest(updated);
             }
           }
@@ -232,6 +237,12 @@ const RolloutConvert = ( {application, resource} ) => {
               const updated = JSON.parse(JSON.stringify(matched));
               updated.spec.scaleTargetRef.apiVersion = 'argoproj.io/v1alpha1'
               updated.spec.scaleTargetRef.kind = 'Rollout';
+              // rollout-conversion-extension으로 변환되었다는 표시 추가
+              updated.metadata.labels = {
+                ...(updated.metadata.labels || {}),
+                'converted-by': 'rollout-conversion-extension',
+              };
+
               setHpaManifest(updated);
             }
           }
