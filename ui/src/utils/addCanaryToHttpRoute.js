@@ -15,7 +15,7 @@ export const addCanaryBackendToHTTPRoute = (httpRoute) => {
     updatedRoute.metadata.labels = {
         ...(updatedRoute.metadata.labels || {}),
         'converted-by': 'rollout-conversion-extension',
-    };    
+    };
 
     // rules가 없으면 그냥 반환
     if (!Array.isArray(updatedRoute.spec?.rules)) {

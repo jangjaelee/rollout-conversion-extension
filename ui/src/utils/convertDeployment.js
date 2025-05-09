@@ -41,6 +41,7 @@ export const convertDeploymentToRollout = ({ deployment, steps, mode, strategy, 
         labels: { role: 'stable' },
       },
       steps: steps || [],
+      scaleDownDelaySeconds: 30,      
       abortScaleDownDelaySeconds: 30,
       dynamicStableScale: false,
     };
@@ -67,11 +68,11 @@ export const convertDeploymentToRollout = ({ deployment, steps, mode, strategy, 
       autoPromotionEnabled: false,
       scaleDownDelaySeconds: 30,
       abortScaleDownDelaySeconds: 30,
-      previewMetadata: {
-        labels: { role: 'bluegreen' },
-      },
       activeMetadata: {
         labels: { role: 'stable' },
+      },
+      previewMetadata: {
+        labels: { role: 'bluegreen' },
       },
     };
   

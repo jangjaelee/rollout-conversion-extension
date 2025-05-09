@@ -157,11 +157,18 @@ const RolloutConvert = ( {application, resource} ) => {
               if (conversionStrategy === 'canary') {
                 rollout.spec.strategy.canary.analysis = {
                   templates: [{ templateName }],
-                  startingStep: 1,
+                  args: {
+                    name: 'service-name',
+                    value: 'guestbook-svc.default.svc.cluster.local'
+                  },
                 };
               } else if (conversionStrategy === 'blueGreen') {
                 rollout.spec.strategy.blueGreen.prePromotionAnalysis = {
                   templates: [{ templateName }],
+                  args: {
+                    name: 'service-name',
+                    value: 'guestbook-svc.default.svc.cluster.local'
+                  },                  
                 };
               }
 
