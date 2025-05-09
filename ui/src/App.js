@@ -196,9 +196,9 @@ const RolloutConvert = ( {application, resource} ) => {
 
           // ScaledObject일 경우에만 sacleTargetRef의 kind를 변경
           if (resource.kind === 'ScaledObject') {
-            const scaleTargetKind = resource.spec?.scaleTargetRef?.kind;
+            const scaleTarget = resource.spec?.scaleTargetRef;
 
-            if (scaleTargetKind === 'Rollout') {
+            if (scaleTarget?.kind === 'Rollout') {
               // 이미 Rollout을 대상으로 하고 있으면 변환 비활성화
               /*
               setError('This ScaledObject is already targeting a Rollout.');
@@ -208,9 +208,10 @@ const RolloutConvert = ( {application, resource} ) => {
              setIsAlreadyRolloutTarget(true)
             }
           
-            if (scaleTargetKind === 'Deployment') {
+            if (scaleTarget?.kind === 'Deployment') {
               // Deployment → Rollout 변환
               const updated = JSON.parse(JSON.stringify(matched));
+              updated.spec.scaleTargetRef.apiVersion = 'argoproj.io/v1alpha1'
               updated.spec.scaleTargetRef.kind = 'Rollout';
               setScaledObjectManifest(updated);
             }
@@ -227,7 +228,9 @@ const RolloutConvert = ( {application, resource} ) => {
             }
           
             if (scaleTarget?.kind === 'Deployment') {
+              // Deployment → Rollout 변환
               const updated = JSON.parse(JSON.stringify(matched));
+              updated.spec.scaleTargetRef.apiVersion = 'argoproj.io/v1alpha1'
               updated.spec.scaleTargetRef.kind = 'Rollout';
               setHpaManifest(updated);
             }
