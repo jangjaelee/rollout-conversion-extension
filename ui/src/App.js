@@ -166,8 +166,8 @@ const RolloutConvert = ( {application, resource} ) => {
                 rollout.spec.strategy.blueGreen.prePromotionAnalysis = {
                   templates: [{ templateName }],
                   args: {
-                    name: 'service-name',
-                    value: 'guestbook-svc.default.svc.cluster.local'
+                    '- name': 'service-name',
+                       value: 'guestbook-svc.default.svc.cluster.local'
                   },                  
                 };
               }
