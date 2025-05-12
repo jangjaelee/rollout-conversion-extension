@@ -247,6 +247,7 @@ const RolloutConvert = ( {application, resource} ) => {
     selectedHttpRoute,
     duplicateCanaryBackend,
     selectedStableService,
+    selectedActiveService,
   ]);
 
   if (loading) return <p>Loading...</p>;
@@ -433,7 +434,7 @@ const RolloutConvert = ( {application, resource} ) => {
                 <select id="activeService" value={selectedActiveService} onChange={(e) => setSelectedActiveService(e.target.value)}>
                   <option value="">Select Service</option>
                   {serviceNames.map((svc) => (
-                    <option key={svc} value={svc}>{svc}ß</option>
+                    <option key={svc} value={svc}>{svc}</option>
                   ))}
                 </select>
               </div>
@@ -447,9 +448,11 @@ const RolloutConvert = ( {application, resource} ) => {
                   onChange={(e) => {
                     const isChecked = e.target.checked;
 
-                    if (isChecked && !selectedStableService) {
-                      alert('⚠️ Please select a Stable Service before enabling AnalysisTemplate.');
-                      return;
+                    if (isChecked) {
+                      if ((conversionStrategy === 'canary' && !selectedStableService) || (conversionStrategy === 'blueGreen' && !selectedActiveService)) {
+                        alert('⚠️ Please select a required Service before enabling AnalysisTemplate.');
+                        return;
+                      }
                     }
 
                     setEnableAnalysisTemplate(isChecked);
@@ -468,7 +471,7 @@ const RolloutConvert = ( {application, resource} ) => {
               <p className="warn-text">⚠️ Unable to convert to Rollout.</p>
             )}
 
-            {enableAnalysisTemplate && analysisTemplateManifest && selectedStableService && (
+            {enableAnalysisTemplate && analysisTemplateManifest && (
               <div className="column">
                 <h4 className="subheading">Generated AnalysisTemplate</h4>
                 <YamlActionButtons yamlObject={analysisTemplateManifest} filenamePrefix="analysistemplate" />
