@@ -66,6 +66,7 @@ const RolloutConvert = ( {application, resource} ) => {
   const [selectedStableService, setSelectedStableService] = useState(''); // for Canary
   const [serviceNames, setServiceNames] = useState([]);
   const [selectedActiveService, setSelectedActiveService] = useState(''); // for Blue/Green
+  const [existingRolloutName, setExistingRolloutName] = useState('');
 
   useEffect(() => {
     // ArgoCD Application Name 가져오기
@@ -109,6 +110,7 @@ const RolloutConvert = ( {application, resource} ) => {
         );
         setDesiredManifest(matched || null);
 
+        // 이미 Rollout으로 변환이 완료된 Deployment는 팝업 메세지 출력
         if (resource.kind === 'Deployment') {
           const existingRolloutUsingWorkloadRef = manifests.find(
             (m) =>
@@ -118,7 +120,9 @@ const RolloutConvert = ( {application, resource} ) => {
           );
 
           if (existingRolloutUsingWorkloadRef) {
-            alert('⚠️ This Deployment is already referenced by an existing Rollout.');
+            const rolloutName = existingRolloutUsingWorkloadRef.metadata?.name || 'unknown';
+            //alert(`⚠️ This Deployment is already referenced by an existing Rollout: "${rolloutName}"`);
+            setExistingRolloutName(rolloutName);
           }
         }
 
@@ -395,6 +399,12 @@ const RolloutConvert = ( {application, resource} ) => {
 
           <div className="column">
             <h4 className="subheading">Converted Rollout</h4>
+
+            {existingRolloutName && (
+              <p className="warn-text">
+                ⚠️ This Deployment is already referenced by an existing Rollout: <strong>{existingRolloutName}</strong>
+              </p>
+            )}
 
             <div className="controls">
               <label htmlFor="strategy">Conversion Strategy:</label>

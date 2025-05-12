@@ -134,3 +134,12 @@ h3 {
 .yaml-line-content {
   flex: 1;
 }
+
+.warn-text {
+  background-color: #fff3cd;
+  color: #856404;
+  padding: 10px;
+  border-left: 4px solid #ffeeba;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+}
