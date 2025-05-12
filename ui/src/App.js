@@ -135,7 +135,13 @@ const RolloutConvert = ( {application, resource} ) => {
         );
         setHttpRoutes(routes);
 
-        const serviceNamesList = manifests.filter((m) => m.kind === 'Service' && m.metadata?.name).map((s) => s.metadata.name);
+        const serviceNamesList = manifests
+          .filter((m) =>
+            m.kind === 'Service' &&
+            m.metadata?.name &&
+            !m.metadata.name.endsWith('-canary')
+          )
+          .map((s) => s.metadata.name);
         setServiceNames(serviceNamesList);
 
         if (matched) {
@@ -407,16 +413,6 @@ const RolloutConvert = ( {application, resource} ) => {
                 </div>
 
                 <div className="controls">
-                  <label htmlFor="httpRoute">HTTPRoute:</label>
-                  <select id="httpRoute" value={selectedHttpRoute} onChange={(e) => setSelectedHttpRoute(e.target.value)}>
-                    <option value="">Select HTTPRoute</option>
-                    {httpRoutes.map((route) => (
-                      <option key={route.metadata.name} value={route.metadata.name}>{route.metadata.name}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="controls">
                   <label htmlFor="stableService">Stable Service:</label>
                   <select id="stableService" value={selectedStableService} onChange={(e) => setSelectedStableService(e.target.value)}>
                     <option value="">Select Service</option>
@@ -424,6 +420,16 @@ const RolloutConvert = ( {application, resource} ) => {
                         <option key={svc} value={svc}>{svc}</option>
                       ))}
                     </select>
+                </div>
+
+                <div className="controls">
+                  <label htmlFor="httpRoute">HTTPRoute:</label>
+                  <select id="httpRoute" value={selectedHttpRoute} onChange={(e) => setSelectedHttpRoute(e.target.value)}>
+                    <option value="">Select HTTPRoute</option>
+                    {httpRoutes.map((route) => (
+                      <option key={route.metadata.name} value={route.metadata.name}>{route.metadata.name}</option>
+                    ))}
+                  </select>
                 </div>
               </>
             )}
