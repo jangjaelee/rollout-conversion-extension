@@ -11,7 +11,7 @@ const createAnalysisField = ({ templateName, serviceName }) => ({
 });
 
 // Rollout API Template
-export const convertDeploymentToRollout = ({ deployment, steps, mode, strategy, httpRoute, namespace, stableServiceName, analysisEnabled, templateName, serviceName, }) => {
+export const convertDeploymentToRollout = ({ deployment, steps, mode, strategy, httpRoute, namespace, stableServiceName, analysisEnabled, templateName, serviceName, activeServiceName }) => {
   //const { deployment, steps } = props;
   if (!deployment) return null;
 
@@ -79,9 +79,12 @@ export const convertDeploymentToRollout = ({ deployment, steps, mode, strategy, 
       canary: canaryStrategy,
     };
   } else if (strategy === 'blueGreen') {
+    const active = activeServiceName || 'stable-service';
+    const preview = `${active}-preview`;
+
     const blueGreenStrategy = {
-      activeService: 'stable-service',
-      previewService: 'bluegreen-service',
+      activeService: active,
+      previewService: preview,
       autoPromotionEnabled: false,
       scaleDownDelaySeconds: 30,
       abortScaleDownDelaySeconds: 30,

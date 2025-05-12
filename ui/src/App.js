@@ -63,8 +63,9 @@ const RolloutConvert = ( {application, resource} ) => {
   const [isAlreadyRolloutTarget, setIsAlreadyRolloutTarget] = useState(false);
   const [hpaManifest, setHpaManifest] = useState(null);
   const [isKedaBasedHPA, setIsKedaBasedHPA] = useState(false);  
-  const [selectedStableService, setSelectedStableService] = useState('');
+  const [selectedStableService, setSelectedStableService] = useState(''); // for Canary
   const [serviceNames, setServiceNames] = useState([]);
+  const [selectedActiveService, setSelectedActiveService] = useState(''); // for Blue/Green
 
   useEffect(() => {
     // ArgoCD Application Name 가져오기
@@ -139,7 +140,8 @@ const RolloutConvert = ( {application, resource} ) => {
           .filter((m) =>
             m.kind === 'Service' &&
             m.metadata?.name &&
-            !m.metadata.name.endsWith('-canary')
+            !m.metadata.name.endsWith('-canary') &&
+            !m.metadata.name.endsWith('-preview')
           )
           .map((s) => s.metadata.name);
         setServiceNames(serviceNamesList);
@@ -165,6 +167,7 @@ const RolloutConvert = ( {application, resource} ) => {
               analysisEnabled: enableAnalysisTemplate,
               templateName: templateName,
               serviceName: inferredServiceName,
+              activeServiceName: selectedActiveService,
             });          
 
             // enableAnalysisTemplate가 true인 경우 rollout에 analysis 추가
@@ -422,6 +425,18 @@ const RolloutConvert = ( {application, resource} ) => {
                   </select>
                 </div>
               </>
+            )}
+
+            {conversionStrategy === 'blueGreen' && (
+              <div className="controls">
+                <label htmlFor="activeService">Active Service:</label>
+                <select id="activeService" value={selectedActiveService} onChange={(e) => setSelectedActiveService(e.target.value)}>
+                  <option value="">Select Service</option>
+                  {serviceNames.map((svc) => (
+                    <option key={svc} value={svc}>{svc}ß</option>
+                  ))}
+                </select>
+              </div>
             )}
 
             <div className="controls">
