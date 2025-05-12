@@ -34,20 +34,14 @@ export const createAnalysisTemplate = ({ name, namespace }) => {
           provider: {
             prometheus: {
               address: '{{args.prometheus-address}}',
-              query: `
-                sum(rate(
-                  istio_requests_total{
-                    reporter="source",
-                    destination_service=~"{{args.service-name}}",
-                    response_code!~"5.*"
-                  }[5m]
-                )) /
-                sum(rate(
-                  istio_requests_total{
-                    reporter="source",
-                    destination_service=~"{{args.service-name}}"
-                  }[5m]
-                ))`,
+              query:  [
+  'sum(rate(',
+  '  istio_requests_total{reporter="source", destination_service=~"{{args.service-name}}", response_code!~"5.*"}[5m]',
+  ')) /',
+  'sum(rate(',
+  '  istio_requests_total{reporter="source", destination_service=~"{{args.service-name}}"}[5m]',
+  '))'
+].join('\n'),
             },
           },
         },
