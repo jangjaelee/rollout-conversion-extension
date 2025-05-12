@@ -1,11 +1,11 @@
 // src/utils/convertDeployment.js
 
-const createAnalysisField = ({ templateName, serviceName }) => ({
+const createAnalysisField = ({ templateName, serviceFQDN }) => ({
   templates: [{ templateName }],
   args: [
     {
       name: 'service-name',
-      value: serviceName,
+      value: serviceFQDN,
     },
   ],
 });
