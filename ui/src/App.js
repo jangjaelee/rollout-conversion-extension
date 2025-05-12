@@ -152,9 +152,14 @@ const RolloutConvert = ( {application, resource} ) => {
             const steps = conversionStrategy === 'canary' ? PRESETS[selectedPreset] : undefined;
 
             const templateName = `${matched.metadata.name}-analysis-template`;
-            const inferredServiceName = selectedStableService
-              ? `${selectedStableService}.${targetNamespace}.svc.cluster.local`
-              : undefined;
+            const inferredServiceName =
+              conversionStrategy === 'canary'
+                ? selectedStableService
+                  ? `${selectedStableService}.${targetNamespace}.svc.cluster.local`
+                  : undefined
+                : selectedActiveService
+                  ? `${selectedActiveService}.${targetNamespace}.svc.cluster.local`
+                  : undefined;
 
             const rollout = convertDeploymentToRollout({
               deployment: matched,
@@ -166,13 +171,15 @@ const RolloutConvert = ( {application, resource} ) => {
               stableServiceName: selectedStableService,
               analysisEnabled: enableAnalysisTemplate,
               templateName: templateName,
-              serviceName: inferredServiceName,
+              serviceFQDN: conversionStrategy === 'canary'
+                ? selectedStableService && `${selectedStableService}.${targetNamespace}.svc.cluster.local`
+                : selectedActiveService && `${selectedActiveService}.${targetNamespace}.svc.cluster.local`,
               activeServiceName: selectedActiveService,
             });          
 
             // enableAnalysisTemplate가 true인 경우 rollout에 analysis 추가
             if (enableAnalysisTemplate) {
-              const templateName = `${matched.metadata.name}-analysis-template`;
+              //const templateName = `${matched.metadata.name}-analysis-template`;
               const analysisTemplate = createAnalysisTemplate({
                 name: matched.metadata.name,
                 namespace: matched.metadata.namespace,
