@@ -444,7 +444,7 @@ const RolloutConvert = ( {application, resource} ) => {
               <p className="warn-text">⚠️ Unable to convert to Rollout.</p>
             )}
 
-            {enableAnalysisTemplate && analysisTemplateManifest && (
+            {enableAnalysisTemplate && analysisTemplateManifest && selectedStableService && (
               <div className="column">
                 <h4 className="subheading">Generated AnalysisTemplate</h4>
                 <YamlActionButtons yamlObject={analysisTemplateManifest} filenamePrefix="analysistemplate" />
