@@ -337,7 +337,7 @@ const RolloutConvert = ( {application, resource} ) => {
         <h3>KEDA ScaledObject YAML</h3>
         <div className="conversion-wrapper">
           <div className="column">
-            <h4 className="subheading">Original ScaledObject</h4>
+            <h4 className="subheading">Desired ScaledObject</h4>
             {desiredManifest ? renderYamlWithLineNumbers(yaml.dump(desiredManifest)) : <p className="warn-text">⚠️ No matching ScaledObject found.</p>}
           </div>
   
@@ -365,7 +365,7 @@ const RolloutConvert = ( {application, resource} ) => {
         <h3>Horizontal Pod Autoscaler (HPA) YAML</h3>
         <div className="conversion-wrapper">
           <div className="column">
-            <h4 className="subheading">Original HPA</h4>
+            <h4 className="subheading">Desired HPA</h4>
             {desiredManifest ? renderYamlWithLineNumbers(yaml.dump(desiredManifest)) : <p className="warn-text">⚠️ No matching HPA found.</p>}
           </div>
   
