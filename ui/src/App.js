@@ -156,6 +156,9 @@ const RolloutConvert = ( {application, resource} ) => {
               httpRoute: selectedHttpRoute,
               namespace: targetNamespace,
               stableServiceName: selectedStableService,
+              analysisEnabled: enableAnalysisTemplate,
+              templateName: templateName,
+              serviceName: 'guestbook-svc.default.svc.cluster.local',
             });          
 
             // enableAnalysisTemplate가 true인 경우 rollout에 analysis 추가

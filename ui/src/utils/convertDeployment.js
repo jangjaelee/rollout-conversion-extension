@@ -1,7 +1,17 @@
 // src/utils/convertDeployment.js
 
+const createAnalysisField = ({ templateName, serviceName }) => ({
+  templates: [{ templateName }],
+  args: [
+    {
+      name: 'service-name',
+      value: serviceName,
+    },
+  ],
+});
+
 // Rollout API Template
-export const convertDeploymentToRollout = ({ deployment, steps, mode, strategy, httpRoute, namespace, stableServiceName }) => {
+export const convertDeploymentToRollout = ({ deployment, steps, mode, strategy, httpRoute, namespace, stableServiceName, analysisEnabled, templateName, serviceName, }) => {
   //const { deployment, steps } = props;
   if (!deployment) return null;
 
@@ -61,6 +71,10 @@ export const convertDeploymentToRollout = ({ deployment, steps, mode, strategy, 
       };
     }
   
+    if (analysisEnabled && templateName && serviceName) {
+      canaryStrategy.analysis = createAnalysisField({ templateName, serviceName });
+    }
+
     rolloutTemplate.spec.strategy = {
       canary: canaryStrategy,
     };
@@ -78,7 +92,11 @@ export const convertDeploymentToRollout = ({ deployment, steps, mode, strategy, 
         labels: { role: 'bluegreen' },
       },
     };
-  
+
+    if (analysisEnabled && templateName && serviceName) {
+      blueGreenStrategy.prePromotionAnalysis = createAnalysisField({ templateName, serviceName });
+    }
+    
     rolloutTemplate.spec.strategy = {
       blueGreen: blueGreenStrategy,
     };
