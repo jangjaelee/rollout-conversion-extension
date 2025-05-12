@@ -44,25 +44,27 @@ const YamlActionButtons = ({ yamlObject, filenamePrefix }) => (
 
 const RolloutConvert = ( {application, resource} ) => {
   //const { resource, application } = props;
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [desiredManifest, setDesiredManifest] = useState(null);
   const [rolloutManifest, setRolloutManifest] = useState(null);
   const [serviceManifest, setServiceManifest] = useState([]);
   const [httprouteManifest, setHttprouteManifest] = useState(null);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [analysisTemplateManifest, setAnalysisTemplateManifest] = useState(null);
+  const [scaledObjectManifest, setScaledObjectManifest] = useState(null);
   const [selectedPreset, setSelectedPreset] = useState('Quick (10%, 30%, 100%)');
   const [conversionMode, setConversionMode] = useState('workloadRef');
   const [conversionStrategy, setConversionStrategy] = useState('canary');
-  const [analysisTemplateManifest, setAnalysisTemplateManifest] = useState(null);
   const [enableAnalysisTemplate, setEnableAnalysisTemplate] = useState(false);
   const isRolloutManaged = useIsRolloutManagedService(resource);
   const [httpRoutes, setHttpRoutes] = useState([]);
   const [selectedHttpRoute, setSelectedHttpRoute] = useState('');
   const [duplicateCanaryBackend, setDuplicateCanaryBackend] = useState(false);
-  const [scaledObjectManifest, setScaledObjectManifest] = useState(null);
   const [isAlreadyRolloutTarget, setIsAlreadyRolloutTarget] = useState(false);
   const [hpaManifest, setHpaManifest] = useState(null);
   const [isKedaBasedHPA, setIsKedaBasedHPA] = useState(false);  
+  const [selectedStableService, setSelectedStableService] = useState('');
+  const [serviceNames, setServiceNames] = useState([]);
 
   useEffect(() => {
     // ArgoCD Application Name 가져오기
@@ -133,6 +135,9 @@ const RolloutConvert = ( {application, resource} ) => {
         );
         setHttpRoutes(routes);
 
+        const serviceNamesList = manifests.filter((m) => m.kind === 'Service' && m.metadata?.name).map((s) => s.metadata.name);
+        setServiceNames(serviceNamesList);
+
         if (matched) {
           // Deployment일 경우에만 Rollout 변환 수행
           if (resource.kind === 'Deployment') {          
@@ -144,6 +149,7 @@ const RolloutConvert = ( {application, resource} ) => {
               strategy: conversionStrategy,
               httpRoute: selectedHttpRoute,
               namespace: targetNamespace,
+              stableServiceName: selectedStableService,
             });          
 
             // enableAnalysisTemplate가 true인 경우 rollout에 analysis 추가
@@ -407,6 +413,16 @@ const RolloutConvert = ( {application, resource} ) => {
                       <option key={route.metadata.name} value={route.metadata.name}>{route.metadata.name}</option>
                     ))}
                   </select>
+                </div>
+
+                <div className="controls">
+                  <label htmlFor="stableService">Stable Service:</label>
+                  <select id="stableService" value={selectedStableService} onChange={(e) => setSelectedStableService(e.target.value)}>
+                    <option value="">Select Service</option>
+                      {serviceNames.map((svc) => (
+                        <option key={svc} value={svc}>{svc}</option>
+                      ))}
+                    </select>
                 </div>
               </>
             )}

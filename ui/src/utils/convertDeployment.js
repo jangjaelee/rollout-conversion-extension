@@ -1,12 +1,15 @@
 // src/utils/convertDeployment.js
 
 // Rollout API Template
-export const convertDeploymentToRollout = ({ deployment, steps, mode, strategy, httpRoute, namespace }) => {
+export const convertDeploymentToRollout = ({ deployment, steps, mode, strategy, httpRoute, namespace, stableServiceName }) => {
   //const { deployment, steps } = props;
   if (!deployment) return null;
 
   // strategy가 canary일 때만 steps 존재 여부를 확인
   if (strategy === 'canary' && !steps) return null;
+
+  const stable = stableServiceName || 'service';
+  const canary = `${stable}-canary`;
 
   const rolloutTemplate = {
     apiVersion: 'argoproj.io/v1alpha1',
@@ -30,8 +33,8 @@ export const convertDeploymentToRollout = ({ deployment, steps, mode, strategy, 
   // strategy 별로 spec.strategy 다르게 구성 (canary or blue/green)
   if (strategy === 'canary') {
     const canaryStrategy = {
-      canaryService: 'canary-service',
-      stableService: 'stable-service',
+      canaryService: canary,
+      stableService: stable,
       canaryMetadata: {
         annotations: { role: 'canary' },
         labels: { role: 'canary' },
