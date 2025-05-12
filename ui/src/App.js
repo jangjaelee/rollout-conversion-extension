@@ -152,6 +152,7 @@ const RolloutConvert = ( {application, resource} ) => {
             const steps = conversionStrategy === 'canary' ? PRESETS[selectedPreset] : undefined;
 
             const templateName = `${matched.metadata.name}-analysis-template`;
+            /*
             const inferredServiceName =
               conversionStrategy === 'canary'
                 ? selectedStableService
@@ -160,6 +161,7 @@ const RolloutConvert = ( {application, resource} ) => {
                 : selectedActiveService
                   ? `${selectedActiveService}.${targetNamespace}.svc.cluster.local`
                   : undefined;
+            */
 
             const rollout = convertDeploymentToRollout({
               deployment: matched,
@@ -172,8 +174,8 @@ const RolloutConvert = ( {application, resource} ) => {
               analysisEnabled: enableAnalysisTemplate,
               templateName: templateName,
               serviceFQDN: conversionStrategy === 'canary'
-                ? selectedStableService && `${selectedStableService}.${targetNamespace}.svc.cluster.local`
-                : selectedActiveService && `${selectedActiveService}.${targetNamespace}.svc.cluster.local`,
+                ? selectedStableService ? `${selectedStableService}.${targetNamespace}.svc.cluster.local` : undefined
+                : selectedActiveService ? `${selectedActiveService}.${targetNamespace}.svc.cluster.local` : undefined,
               activeServiceName: selectedActiveService,
             });          
 
