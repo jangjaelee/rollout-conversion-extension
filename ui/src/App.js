@@ -429,7 +429,16 @@ const RolloutConvert = ( {application, resource} ) => {
                 <input
                   type="checkbox"
                   checked={enableAnalysisTemplate}
-                  onChange={(e) => setEnableAnalysisTemplate(e.target.checked)}
+                  onChange={(e) => {
+                    const isChecked = e.target.checked;
+
+                    if (isChecked && !selectedStableService) {
+                      alert('⚠️ Please select a Stable Service before enabling AnalysisTemplate.');
+                      return;
+                    }
+
+                    setEnableAnalysisTemplate(isChecked);
+                  }}
                 />
                  Use AnalysisTemplate
               </label>
