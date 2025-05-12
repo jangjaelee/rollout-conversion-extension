@@ -148,6 +148,12 @@ const RolloutConvert = ( {application, resource} ) => {
           // Deployment일 경우에만 Rollout 변환 수행
           if (resource.kind === 'Deployment') {          
             const steps = conversionStrategy === 'canary' ? PRESETS[selectedPreset] : undefined;
+
+            const templateName = `${matched.metadata.name}-analysis-template`;
+            const inferredServiceName = selectedStableService
+              ? `${selectedStableService}.${targetNamespace}.svc.cluster.local`
+              : undefined;
+
             const rollout = convertDeploymentToRollout({
               deployment: matched,
               steps,
@@ -158,7 +164,7 @@ const RolloutConvert = ( {application, resource} ) => {
               stableServiceName: selectedStableService,
               analysisEnabled: enableAnalysisTemplate,
               templateName: templateName,
-              serviceName: 'guestbook-svc.default.svc.cluster.local',
+              serviceName: inferredServiceName,
             });          
 
             // enableAnalysisTemplate가 true인 경우 rollout에 analysis 추가
@@ -168,25 +174,6 @@ const RolloutConvert = ( {application, resource} ) => {
                 name: matched.metadata.name,
                 namespace: matched.metadata.namespace,
               });
-
-              if (conversionStrategy === 'canary') {
-                rollout.spec.strategy.canary.analysis = {
-                  templates: [{ templateName }],
-                  args: [{
-                    name: 'service-name',
-                    value: 'guestbook-svc.default.svc.cluster.local'
-                  }],
-                };
-              } else if (conversionStrategy === 'blueGreen') {
-                rollout.spec.strategy.blueGreen.prePromotionAnalysis = {
-                  templates: [{ templateName }],
-                  args: [{
-                    name: 'service-name',
-                    value: 'guestbook-svc.default.svc.cluster.local'
-                  }],                  
-                };
-              }
-
               setAnalysisTemplateManifest(analysisTemplate);
             } else {
               setAnalysisTemplateManifest(null);
