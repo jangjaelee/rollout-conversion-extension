@@ -12,10 +12,6 @@ h3 {
   color: red;
 }
 
-.warn-text {
-  color: #6e6e6e;
-}
-
 .conversion-wrapper {
   display: flex;
   gap: 1rem;
