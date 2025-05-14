@@ -86,6 +86,13 @@ const RolloutConvert = ( {application, resource} ) => {
       return;
     }
 
+    const filtered = serviceNames.filter((svcName) =>
+      conversionStrategy === 'canary'
+         ? svcName.endsWith('-canary')
+        : svcName.endsWith('-preview')
+    );
+    setFilteredRouteServices(filtered);
+
     // Desired Manifest 가져오기
     const fetchDesiredManifest = async () => {
       try {
@@ -165,13 +172,6 @@ const RolloutConvert = ( {application, resource} ) => {
           )
           .map((s) => s.metadata.name);
         setServiceNames(serviceNamesList);
-
-        const filtered = serviceNames.filter((svcName) =>
-          conversionStrategy === 'canary'
-            ? svcName.endsWith('-canary')
-            : svcName.endsWith('-preview')
-        );
-        setFilteredRouteServices(filtered);
 
         if (matched) {
           // Deployment일 경우에만 Rollout 변환 수행
@@ -329,8 +329,12 @@ const RolloutConvert = ( {application, resource} ) => {
           <div className="column">
             <h4 className="subheading">Converted HTTPRoute</h4>
 
+            {duplicateCanaryBackend && (
+              <p className="warn-text">⚠️ The backend already exists in HTTPRoute.</p>
+            )}
+
                 <div className="controls">
-                  <label htmlFor="routeStrategy">Conversion Strategy:</label>
+                  <label htmlFor="routeStrategy">Deployment Strategy:</label>
                   <select id="routeStrategy" value={conversionStrategy} onChange={(e) => setConversionStrategy(e.target.value)}>
                     <option value="canary">Canary</option>
                     <option value="blueGreen">BlueGreen</option>
@@ -345,11 +349,9 @@ const RolloutConvert = ( {application, resource} ) => {
                       <option key={svc} value={svc}>{svc}</option>
                     ))}
                   </select>
-                </div>                
+                </div>
 
-            {duplicateCanaryBackend ? (
-              <p className="warn-text">⚠️ The backend already exists in HTTPRoute.</p>
-            ) : httprouteManifest ? (
+            {httprouteManifest ? (
               <>
                 <YamlActionButtons yamlObject={httprouteManifest} filenamePrefix="httproute" />
                 {renderYamlWithLineNumbers(yaml.dump(httprouteManifest))}
@@ -375,7 +377,7 @@ const RolloutConvert = ( {application, resource} ) => {
   
           <div className="column">
             <h4 className="subheading">Converted ScaledObject</h4>
-            { isAlreadyRolloutTarget ? (
+            {isAlreadyRolloutTarget ? (
                 <p className="warn-text">⚠️ This ScaledObject is already targeting a Rollout.</p>            
             ) : scaledObjectManifest ? (
               <>
@@ -439,7 +441,7 @@ const RolloutConvert = ( {application, resource} ) => {
             )}
 
             <div className="controls">
-              <label htmlFor="strategy">Conversion Strategy:</label>
+              <label htmlFor="strategy">Deployment Strategy:</label>
               <select id="strategy" value={conversionStrategy} onChange={(e) => setConversionStrategy(e.target.value)}>
                 <option value="canary">Canary</option>
                 <option value="blueGreen">BlueGreen</option>
