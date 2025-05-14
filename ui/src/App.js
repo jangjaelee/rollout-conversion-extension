@@ -280,6 +280,7 @@ const RolloutConvert = ( {application, resource} ) => {
     selectedStableService,
     selectedActiveService,
     serviceNames,
+    selectedRouteService,
   ]);
 
   if (loading) return <p>Loading...</p>;
