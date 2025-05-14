@@ -244,6 +244,7 @@ const RolloutConvert = ( {application, resource} ) => {
             // 서비스 이름이 비어 있으면 변환 생략
             if (!selectedHttpRouteService) {
               setHttprouteManifest(null);
+              setDuplicateCanaryBackend(false);
               return;
             }
 
