@@ -164,13 +164,6 @@ const RolloutConvert = ( {application, resource} ) => {
           .map((s) => s.metadata.name);
         setServiceNames(serviceNamesList);
 
-        const routeServices = serviceNames.filter((svc) =>
-          conversionStrategy === 'canary'
-          ? svc.endsWith('-canary')
-          : svc.endsWith('-preview')
-        );
-        setFilteredRouteServices(routeServices);
-
         if (matched) {
           // Deployment일 경우에만 Rollout 변환 수행
           if (resource.kind === 'Deployment') {          
