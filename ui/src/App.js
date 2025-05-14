@@ -68,6 +68,7 @@ const RolloutConvert = ( {application, resource} ) => {
   const [selectedActiveService, setSelectedActiveService] = useState(''); // for Blue/Green
   const [selectedHttpRouteService, setSelectedHttpRouteService] = useState('');  
   const [existingRolloutName, setExistingRolloutName] = useState('');
+  const [filteredRouteServices, setFilteredRouteServices] = useState([]);
 
 
   useEffect(() => {
@@ -165,11 +166,12 @@ const RolloutConvert = ( {application, resource} ) => {
           .map((s) => s.metadata.name);
         setServiceNames(serviceNamesList);
 
-        const filteredRouteServices = serviceNames.filter((svcName) =>
+        const filtered = serviceNames.filter((svcName) =>
           conversionStrategy === 'canary'
             ? svcName.endsWith('-canary')
             : svcName.endsWith('-preview')
         );
+        setFilteredRouteServices(filtered);
 
         if (matched) {
           // Deployment일 경우에만 Rollout 변환 수행
@@ -279,6 +281,7 @@ const RolloutConvert = ( {application, resource} ) => {
     selectedActiveService,
     selectedHttpRouteService,
     serviceNames,
+    filteredRouteServices,
   ]);
 
   if (loading) return <p>Loading...</p>;
