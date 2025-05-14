@@ -241,6 +241,12 @@ const RolloutConvert = ( {application, resource} ) => {
 
           // HTTPRoute일 경우에만 canary를 위한 rules[].backendRefs 추가 수행
           if (resource.kind === 'HTTPRoute') {
+            // 서비스 이름이 비어 있으면 변환 생략
+            if (!selectedHttpRouteService) {
+              setHttprouteManifest(null);
+              return;
+            }
+                        
             const { updatedRoute, duplicate } = addBackendToHTTPRoute(matched, selectedHttpRouteService);
             setHttprouteManifest(updatedRoute);
             setDuplicateCanaryBackend(duplicate);
