@@ -70,18 +70,36 @@ const RolloutConvert = ( {application, resource} ) => {
   const [existingRolloutName, setExistingRolloutName] = useState('');
   const [filteredRouteServices, setFilteredRouteServices] = useState([]);
 
+
+  // conversionStrategy가 canary ↔ blueGreen으로 변경될 때, 이전에 선택한 selectedHttpRouteService를 초기화하여 올바르지 않은 backendRefs 삽입을 방지
   useEffect(() => {
     setSelectedHttpRouteService('');
   }, [conversionStrategy]);
 
+  
   useEffect(() => {
+    // HTTPRoute 내에서 selectedhttpRouteService 목록을 '-canary', '-preview' suffix 로만 필터링 하기 위함
     const filtered = serviceNames.filter((svcName) =>
       conversionStrategy === 'canary'
         ? svcName.endsWith('-canary')
         : svcName.endsWith('-preview')
     );
     setFilteredRouteServices(filtered);
-  }, [conversionStrategy, serviceNames]);
+
+    if (resource.kind !== 'HTTPRoute') return;
+    if (!desiredManifest) return;
+  
+    if (!selectedHttpRouteService) {
+      setHttprouteManifest(null);
+      setDuplicateCanaryBackend(false);
+      return;
+    }
+  
+    const { updatedRoute, duplicate } = addBackendToHTTPRoute(desiredManifest, selectedHttpRouteService);
+    setHttprouteManifest(updatedRoute);
+    setDuplicateCanaryBackend(duplicate);
+  }, [resource.kind, desiredManifest, selectedHttpRouteService, conversionStrategy, serviceNames]);  
+
 
   useEffect(() => {
     // ArgoCD Application Name 가져오기
