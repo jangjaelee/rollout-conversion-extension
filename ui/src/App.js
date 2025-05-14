@@ -346,22 +346,6 @@ const RolloutConvert = ( {application, resource} ) => {
                   </select>
                 </div>
 
-                <div className="controls">
-                  <label htmlFor="routeService">
-                    {conversionStrategy === 'canary' ? 'Canary Service' : 'Preview Service'}:
-                  </label>
-                  <select
-                    id="routeService"
-                    value={selectedRouteService}
-                    onChange={(e) => setSelectedRouteService(e.target.value)}
-                  >
-                    <option value="">Select Service</option>
-                    {filteredRouteServices.map((svc) => (
-                      <option key={svc} value={svc}>{svc}</option>
-                    ))}
-                  </select>
-                </div>
-
                 <YamlActionButtons yamlObject={httprouteManifest} filenamePrefix="httproute" />
                 {renderYamlWithLineNumbers(yaml.dump(httprouteManifest))}
               </>
