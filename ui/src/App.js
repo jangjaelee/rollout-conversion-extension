@@ -66,8 +66,6 @@ const RolloutConvert = ( {application, resource} ) => {
   const [serviceNames, setServiceNames] = useState([]);
   const [selectedStableService, setSelectedStableService] = useState(''); // for Canary
   const [selectedActiveService, setSelectedActiveService] = useState(''); // for Blue/Green
-  const [selectedRouteService, setSelectedRouteService] = useState('');
-  const [filteredRouteServices, setFilteredRouteServices] = useState([]);
   const [existingRolloutName, setExistingRolloutName] = useState('');
 
 
@@ -233,7 +231,7 @@ const RolloutConvert = ( {application, resource} ) => {
 
           // HTTPRoute일 경우에만 canary를 위한 rules[].backendRefs 추가 수행
           if (resource.kind === 'HTTPRoute') {
-            const { updatedRoute, duplicate } = addBackendToHTTPRoute(matched, selectedRouteService);
+            const { updatedRoute, duplicate } = addBackendToHTTPRoute(matched);
             setHttprouteManifest(updatedRoute);
             setDuplicateCanaryBackend(duplicate);
           }
@@ -280,7 +278,6 @@ const RolloutConvert = ( {application, resource} ) => {
     selectedStableService,
     selectedActiveService,
     serviceNames,
-    selectedRouteService,
   ]);
 
   if (loading) return <p>Loading...</p>;
@@ -331,22 +328,6 @@ const RolloutConvert = ( {application, resource} ) => {
               <p className="warn-text">⚠️ The Canary backend already exists in HTTPRoute.</p>
             ) : httprouteManifest ? (
               <>
-                <div className="controls">
-                  <label htmlFor="routeService">
-                    {conversionStrategy === 'canary' ? 'Canary Service' : 'Preview Service'}:
-                  </label>
-                  <select
-                    id="routeService"
-                    value={selectedRouteService}
-                    onChange={(e) => setSelectedRouteService(e.target.value)}
-                  >
-                    <option value="">Select Service</option>
-                    {filteredRouteServices.map((svc) => (
-                      <option key={svc} value={svc}>{svc}</option>
-                    ))}
-                  </select>
-                </div>
-
                 <YamlActionButtons yamlObject={httprouteManifest} filenamePrefix="httproute" />
                 {renderYamlWithLineNumbers(yaml.dump(httprouteManifest))}
               </>

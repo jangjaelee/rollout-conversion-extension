@@ -1,6 +1,6 @@
 // src/utils/addCanaryToHttpRoute.js
 
-export const addBackendToHTTPRoute = (httpRoute, serviceName) => {
+export const addBackendToHTTPRoute = (httpRoute) => {
     let duplicate = false;
 
     if (!httpRoute || httpRoute.kind !== 'HTTPRoute') {
@@ -20,7 +20,7 @@ export const addBackendToHTTPRoute = (httpRoute, serviceName) => {
     // rules가 없으면 그냥 반환
     if (!Array.isArray(updatedRoute.spec?.rules)) {
       console.error('HTTPRoute has no rules.');
-      return { updatedRoute: null, duplicate: false };
+      return { updatedRoute, duplicate };
     }
 
     updatedRoute.spec.rules.forEach((rule) => {
@@ -28,22 +28,24 @@ export const addBackendToHTTPRoute = (httpRoute, serviceName) => {
         rule.backendRefs = [];
       }
   
-      // 이미 preview 또는 canary backend가 있는지 체크 (중복 방지)
-      const alreadyExists = rule.backendRefs.some((ref) => ref.name === serviceName);
-      if (alreadyExists) {
+      // 이미 canary backend가 있는지 체크 (중복 방지)
+      const hasCanary = rule.backendRefs.some(ref => ref.name.endsWith('-canary'));
+      if (hasCanary) {
         duplicate = true;
         return;
       }
 
-      //if (!alreadyExists) {
-        // 기존 포트 기준으로 새 서비스 추가
-        const basePort = rule.backendRefs[0]?.port || { number: 80 };
-        rule.backendRefs.push({
-          kind: 'Service',
-          name: serviceName,
-          port: basePort,
-        });
-      //}
+      if (!hasCanary) {
+        // 첫 번째 backend를 기준으로 port 복사
+        const baseBackend = rule.backendRefs[0];
+        if (baseBackend) {
+          rule.backendRefs.push({
+            kind: 'Service',
+            name: `${baseBackend.name}-canary`,
+            port: baseBackend.port,
+          });
+        }
+      }
     });
 
   return { updatedRoute, duplicate };
