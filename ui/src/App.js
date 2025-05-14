@@ -66,6 +66,7 @@ const RolloutConvert = ( {application, resource} ) => {
   const [serviceNames, setServiceNames] = useState([]);
   const [selectedStableService, setSelectedStableService] = useState(''); // for Canary
   const [selectedActiveService, setSelectedActiveService] = useState(''); // for Blue/Green
+  const [selectedHttpRouteService, setSelectedHttpRouteService] = useState('');  
   const [existingRolloutName, setExistingRolloutName] = useState('');
 
 
@@ -164,6 +165,12 @@ const RolloutConvert = ( {application, resource} ) => {
           .map((s) => s.metadata.name);
         setServiceNames(serviceNamesList);
 
+        const filteredRouteServices = serviceNames.filter((svcName) =>
+          conversionStrategy === 'canary'
+            ? svcName.endsWith('-canary')
+            : svcName.endsWith('-preview')
+        );
+
         if (matched) {
           // Deployment일 경우에만 Rollout 변환 수행
           if (resource.kind === 'Deployment') {          
@@ -224,7 +231,7 @@ const RolloutConvert = ( {application, resource} ) => {
 
           // HTTPRoute일 경우에만 canary를 위한 rules[].backendRefs 추가 수행
           if (resource.kind === 'HTTPRoute') {
-            const { updatedRoute, duplicate } = addBackendToHTTPRoute(matched);
+            const { updatedRoute, duplicate } = addBackendToHTTPRoute(matched, selectedHttpRouteService);
             setHttprouteManifest(updatedRoute);
             setDuplicateCanaryBackend(duplicate);
           }
@@ -270,6 +277,7 @@ const RolloutConvert = ( {application, resource} ) => {
     duplicateCanaryBackend,
     selectedStableService,
     selectedActiveService,
+    selectedHttpRouteService,
     serviceNames,
   ]);
 
@@ -317,8 +325,27 @@ const RolloutConvert = ( {application, resource} ) => {
 
           <div className="column">
             <h4 className="subheading">Converted HTTPRoute</h4>
+
+                <div className="controls">
+                  <label htmlFor="routeStrategy">Conversion Strategy:</label>
+                  <select id="routeStrategy" value={conversionStrategy} onChange={(e) => setConversionStrategy(e.target.value)}>
+                    <option value="canary">Canary</option>
+                    <option value="blueGreen">BlueGreen</option>
+                  </select>
+                </div>
+
+                <div className="controls">
+                  <label htmlFor="routeService">HTTPRoute Target Service:</label>
+                  <select id="routeService" value={selectedHttpRouteService} onChange={(e) => setSelectedHttpRouteService(e.target.value)}>
+                    <option value="">Select Service</option>
+                    {filteredRouteServices.map((svc) => (
+                      <option key={svc} value={svc}>{svc}</option>
+                    ))}
+                  </select>
+                </div>                
+
             {duplicateCanaryBackend ? (
-              <p className="warn-text">⚠️ The Canary backend already exists in HTTPRoute.</p>
+              <p className="warn-text">⚠️ The backend already exists in HTTPRoute.</p>
             ) : httprouteManifest ? (
               <>
                 <YamlActionButtons yamlObject={httprouteManifest} filenamePrefix="httproute" />

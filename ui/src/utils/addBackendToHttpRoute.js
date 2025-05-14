@@ -1,6 +1,6 @@
 // src/utils/addCanaryToHttpRoute.js
 
-export const addBackendToHTTPRoute = (httpRoute) => {
+export const addBackendToHTTPRoute = (httpRoute, selectedServiceName) => {
     let duplicate = false;
 
     if (!httpRoute || httpRoute.kind !== 'HTTPRoute') {
@@ -28,21 +28,21 @@ export const addBackendToHTTPRoute = (httpRoute) => {
         rule.backendRefs = [];
       }
   
-      // 이미 canary backend가 있는지 체크 (중복 방지)
-      const hasCanary = rule.backendRefs.some(ref => ref.name.endsWith('-canary'));
-      if (hasCanary) {
+      // 이미 canary 또는 preview service의 backend가 있는지 체크 (중복 방지)
+      const hasSelected = rule.backendRefs.some(ref => ref.name === selectedServiceName);
+      if (hasSelected) {
         duplicate = true;
         return;
       }
 
-      if (!hasCanary) {
+      if (!hasSelected) {
         // 첫 번째 backend를 기준으로 port 복사
         const baseBackend = rule.backendRefs[0];
         if (baseBackend) {
           rule.backendRefs.push({
             kind: 'Service',
-            name: `${baseBackend.name}-canary`,
-            port: baseBackend.port,
+            name: selectedServiceName,
+            port: baseBackend?.port,
           });
         }
       }
