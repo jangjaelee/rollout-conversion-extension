@@ -246,7 +246,7 @@ const RolloutConvert = ( {application, resource} ) => {
               setHttprouteManifest(null);
               return;
             }
-                        
+
             const { updatedRoute, duplicate } = addBackendToHTTPRoute(matched, selectedHttpRouteService);
             setHttprouteManifest(updatedRoute);
             setDuplicateCanaryBackend(duplicate);
@@ -347,25 +347,28 @@ const RolloutConvert = ( {application, resource} ) => {
               <p className="warn-text">⚠️ The backend already exists in HTTPRoute.</p>
             )}
 
-                <div className="controls">
-                  <label htmlFor="routeStrategy">Deployment Strategy:</label>
-                  <select id="routeStrategy" value={conversionStrategy} onChange={(e) => setConversionStrategy(e.target.value)}>
-                    <option value="canary">Canary</option>
-                    <option value="blueGreen">BlueGreen</option>
-                  </select>
-                </div>
+            <div className="controls">
+              <label htmlFor="routeStrategy">Deployment Strategy:</label>
+              <select id="routeStrategy" value={conversionStrategy} onChange={(e) => setConversionStrategy(e.target.value)}>
+                <option value="canary">Canary</option>
+                <option value="blueGreen">BlueGreen</option>
+              </select>
+            </div>
 
-                <div className="controls">
-                  <label htmlFor="routeService">HTTPRoute Target Service:</label>
-                  <select id="routeService" value={selectedHttpRouteService} onChange={(e) => setSelectedHttpRouteService(e.target.value)}>
-                    <option value="">Select Service</option>
-                    {filteredRouteServices.map((svc) => (
-                      <option key={svc} value={svc}>{svc}</option>
-                    ))}
-                  </select>
-                </div>
+            <div className="controls">
+              <label htmlFor="routeService">HTTPRoute Target Service:</label>
+              <select id="routeService" value={selectedHttpRouteService} onChange={(e) => setSelectedHttpRouteService(e.target.value)}>                  <option value="">Select Service</option>
+                {filteredRouteServices.map((svc) => (
+                   <option key={svc} value={svc}>{svc}</option>
+                ))}
+              </select>
+            </div>
 
-            {httprouteManifest ? (
+            {!selectedHttpRouteService ? (
+              <p className="warn-text">
+                ⚠️ Please select a service to insert backend into HTTPRoute.
+              </p>
+            ) : httprouteManifest ? (
               <>
                 <YamlActionButtons yamlObject={httprouteManifest} filenamePrefix="httproute" />
                 {renderYamlWithLineNumbers(yaml.dump(httprouteManifest))}
