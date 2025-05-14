@@ -70,6 +70,18 @@ const RolloutConvert = ( {application, resource} ) => {
   const [existingRolloutName, setExistingRolloutName] = useState('');
   const [filteredRouteServices, setFilteredRouteServices] = useState([]);
 
+  useEffect(() => {
+    setSelectedHttpRouteService('');
+  }, [conversionStrategy]);
+
+  useEffect(() => {
+    const filtered = serviceNames.filter((svcName) =>
+      conversionStrategy === 'canary'
+        ? svcName.endsWith('-canary')
+        : svcName.endsWith('-preview')
+    );
+    setFilteredRouteServices(filtered);
+  }, [conversionStrategy, serviceNames]);
 
   useEffect(() => {
     // ArgoCD Application Name 가져오기
@@ -85,13 +97,6 @@ const RolloutConvert = ( {application, resource} ) => {
       setLoading(false);
       return;
     }
-
-    const filtered = serviceNames.filter((svcName) =>
-      conversionStrategy === 'canary'
-         ? svcName.endsWith('-canary')
-        : svcName.endsWith('-preview')
-    );
-    setFilteredRouteServices(filtered);
 
     // Desired Manifest 가져오기
     const fetchDesiredManifest = async () => {
