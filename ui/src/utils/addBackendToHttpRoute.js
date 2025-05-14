@@ -46,5 +46,5 @@ export const addBackendToHTTPRoute = (httpRoute, serviceName) => {
       //}
     });
 
-  return { updatedRoute:updated, duplicate };
+  return { updatedRoute, duplicate };
 };
