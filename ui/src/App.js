@@ -5,7 +5,7 @@ import './index.css';
 import { PRESETS } from './utils/presets';
 import { convertDeploymentToRollout } from './utils/convertDeployment';
 import { duplicateServiceForCanary, useIsRolloutManagedService } from './utils/serviceDuplicate';
-import { addCanaryBackendToHTTPRoute } from './utils/addCanaryToHttpRoute';
+import { addBackendToHTTPRoute } from './utils/addBackendToHttpRoute';
 import { createAnalysisTemplate } from './utils/createAnalysisTemplate';
 import { copyToClipboard, downloadYaml } from './utils/downloadCopy';
 import { convertScaledObject, convertHPA } from './utils/convertAutoscalers';
@@ -63,10 +63,13 @@ const RolloutConvert = ( {application, resource} ) => {
   const [isAlreadyRolloutTarget, setIsAlreadyRolloutTarget] = useState(false);
   const [hpaManifest, setHpaManifest] = useState(null);
   const [isKedaBasedHPA, setIsKedaBasedHPA] = useState(false);  
-  const [selectedStableService, setSelectedStableService] = useState(''); // for Canary
   const [serviceNames, setServiceNames] = useState([]);
+  const [selectedStableService, setSelectedStableService] = useState(''); // for Canary
   const [selectedActiveService, setSelectedActiveService] = useState(''); // for Blue/Green
+  const [selectedRouteService, setSelectedRouteService] = useState('');
+  const [filteredRouteServices, setFilteredRouteServices] = useState([]);
   const [existingRolloutName, setExistingRolloutName] = useState('');
+
 
   useEffect(() => {
     // ArgoCD Application Name 가져오기
@@ -163,6 +166,13 @@ const RolloutConvert = ( {application, resource} ) => {
           .map((s) => s.metadata.name);
         setServiceNames(serviceNamesList);
 
+        const routeServices = serviceNames.filter((svc) =>
+          conversionStrategy === 'canary'
+          ? svc.endsWith('-canary')
+          : svc.endsWith('-preview')
+        );
+        setFilteredRouteServices(routeServices);
+
         if (matched) {
           // Deployment일 경우에만 Rollout 변환 수행
           if (resource.kind === 'Deployment') {          
@@ -223,7 +233,7 @@ const RolloutConvert = ( {application, resource} ) => {
 
           // HTTPRoute일 경우에만 canary를 위한 rules[].backendRefs 추가 수행
           if (resource.kind === 'HTTPRoute') {
-            const { updatedRoute, duplicate } = addCanaryBackendToHTTPRoute(matched);
+            const { updatedRoute, duplicate } = addBackendToHTTPRoute(matched, selectedRouteService);
             setHttprouteManifest(updatedRoute);
             setDuplicateCanaryBackend(duplicate);
           }
@@ -269,6 +279,7 @@ const RolloutConvert = ( {application, resource} ) => {
     duplicateCanaryBackend,
     selectedStableService,
     selectedActiveService,
+    serviceNames,
   ]);
 
   if (loading) return <p>Loading...</p>;
@@ -319,6 +330,38 @@ const RolloutConvert = ( {application, resource} ) => {
               <p className="warn-text">⚠️ The Canary backend already exists in HTTPRoute.</p>
             ) : httprouteManifest ? (
               <>
+                <div className="controls">
+                  <label htmlFor="routeService">
+                    {conversionStrategy === 'canary' ? 'Canary Service' : 'Preview Service'}:
+                  </label>
+                  <select
+                    id="routeService"
+                    value={selectedRouteService}
+                    onChange={(e) => setSelectedRouteService(e.target.value)}
+                  >
+                    <option value="">Select Service</option>
+                    {filteredRouteServices.map((svc) => (
+                      <option key={svc} value={svc}>{svc}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="controls">
+                  <label htmlFor="routeService">
+                    {conversionStrategy === 'canary' ? 'Canary Service' : 'Preview Service'}:
+                  </label>
+                  <select
+                    id="routeService"
+                    value={selectedRouteService}
+                    onChange={(e) => setSelectedRouteService(e.target.value)}
+                  >
+                    <option value="">Select Service</option>
+                    {filteredRouteServices.map((svc) => (
+                      <option key={svc} value={svc}>{svc}</option>
+                    ))}
+                  </select>
+                </div>
+
                 <YamlActionButtons yamlObject={httprouteManifest} filenamePrefix="httproute" />
                 {renderYamlWithLineNumbers(yaml.dump(httprouteManifest))}
               </>
