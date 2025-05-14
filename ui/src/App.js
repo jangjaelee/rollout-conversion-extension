@@ -172,8 +172,11 @@ const RolloutConvert = ( {application, resource} ) => {
           .filter((m) =>
             m.kind === 'Service' &&
             m.metadata?.name &&
-            !m.metadata.name.endsWith('-canary') &&
-            !m.metadata.name.endsWith('-preview')
+            (
+              resource.kind === 'HTTPRoute' // HTTPRoute일 때는 모든 서비스 포함
+                ? true
+                : (!m.metadata.name.endsWith('-canary') && !m.metadata.name.endsWith('-preview'))
+            )
           )
           .map((s) => s.metadata.name);
         setServiceNames(serviceNamesList);
