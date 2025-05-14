@@ -10,6 +10,7 @@ import { createAnalysisTemplate } from './utils/createAnalysisTemplate';
 import { copyToClipboard, downloadYaml } from './utils/downloadCopy';
 import { convertScaledObject, convertHPA } from './utils/convertAutoscalers';
 
+
 // YAML + 라인 번호 출력 함수 (flex 기반)
 const renderYamlWithLineNumbers = (props) => {
   const yamlString = props;
@@ -41,6 +42,7 @@ const YamlActionButtons = ({ yamlObject, filenamePrefix }) => (
     </button>
   </div>
 );
+
 
 const RolloutConvert = ( {application, resource} ) => {
   //const { resource, application } = props;
@@ -76,7 +78,7 @@ const RolloutConvert = ( {application, resource} ) => {
     setSelectedHttpRouteService('');
   }, [conversionStrategy]);
 
-  
+
   useEffect(() => {
     // HTTPRoute 내에서 selectedhttpRouteService 목록을 '-canary', '-preview' suffix 로만 필터링 하기 위함
     const filtered = serviceNames.filter((svcName) =>
@@ -317,6 +319,7 @@ const RolloutConvert = ( {application, resource} ) => {
     //filteredRouteServices,
   ]);
 
+  
   if (loading) return <p>Loading...</p>;
   if (error) return <p className="error-text">❌ {error}</p>;
 
