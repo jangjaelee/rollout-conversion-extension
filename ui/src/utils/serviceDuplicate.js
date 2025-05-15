@@ -4,18 +4,18 @@ export const duplicateServiceWithSuffix = (service, suffix) => {
     if (!service || !suffix) return { original: null, duplicated: null };
 
     const original = JSON.parse(JSON.stringify(service));
-    const convert = JSON.parse(JSON.stringify(service));
+    const duplicated = JSON.parse(JSON.stringify(service));
     const originalName = original.metadata.name;
 
-    convert.metadata.name = originalName.endsWith(suffix) ? originalName : `${originalName}${suffix}`;
+    duplicated.metadata.name = originalName.endsWith(suffix) ? originalName : `${originalName}${suffix}`;
 
     // rollout-conversion-extension으로 변환되었다는 표시 추가
-    convert.metadata.labels = {
-      ...(convert.metadata.labels || {}),
+    duplicated.metadata.labels = {
+      ...(duplicated.metadata.labels || {}),
       'converted-by': 'rollout-conversion-extension',
     };
 
-    return { original, convert };
+    return { original, duplicated };
 
     /*const stable = JSON.parse(JSON.stringify(service));
     const canary = JSON.parse(JSON.stringify(service));
