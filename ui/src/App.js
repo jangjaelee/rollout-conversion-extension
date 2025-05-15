@@ -595,4 +595,4 @@ const RolloutConvert = ( {application, resource} ) => {
   }
 };
 
-export default RolloutConvert; 
+export default RolloutConvert;
