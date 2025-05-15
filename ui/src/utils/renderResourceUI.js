@@ -1,8 +1,39 @@
 // src/utils/renderResourceUI.js
 
-
-export const renderResourceUI = () => {
-
+export const renderResourceUI = ({
+  resource,
+  desiredManifest,
+  conversionStrategy,
+  conversionMode,
+  selectedPreset,
+  selectedStableService,
+  selectedActiveService,
+  selectedHttpRoute,
+  selectedHttpRouteService,
+  enableAnalysisTemplate,
+  isRolloutManaged,
+  existingRolloutName,
+  serviceManifest,
+  rolloutManifest,
+  analysisTemplateManifest,
+  httprouteManifest,
+  duplicateCanaryBackend,
+  httpRoutes,
+  serviceNames,
+  filteredRouteServices,
+  isAlreadyRolloutTarget,
+  scaledObjectManifest,
+  hpaManifest,
+  isKedaBasedHPA,
+  setConversionStrategy,
+  setConversionMode,
+  setSelectedPreset,
+  setSelectedStableService,
+  setSelectedActiveService,
+  setSelectedHttpRoute,
+  setSelectedHttpRouteService,
+  setEnableAnalysisTemplate,  
+}) => {
   if (resource.kind === 'Service') {
     return (
       <div className="section">

@@ -324,7 +324,40 @@ const RolloutConvert = ( {application, resource} ) => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p className="error-text">❌ {error}</p>;
 
-  return renderResourceUI();
+  return renderResourceUI({
+    resource,
+    desiredManifest,
+    conversionStrategy,
+    conversionMode,
+    selectedPreset,
+    selectedStableService,
+    selectedActiveService,
+    selectedHttpRoute,
+    selectedHttpRouteService,
+    enableAnalysisTemplate,
+    isRolloutManaged,
+    existingRolloutName,
+    serviceManifest,
+    rolloutManifest,
+    analysisTemplateManifest,
+    httprouteManifest,
+    duplicateCanaryBackend,
+    httpRoutes,
+    serviceNames,
+    filteredRouteServices,
+    isAlreadyRolloutTarget,
+    scaledObjectManifest,
+    hpaManifest,
+    isKedaBasedHPA,
+    setConversionStrategy,
+    setConversionMode,
+    setSelectedPreset,
+    setSelectedStableService,
+    setSelectedActiveService,
+    setSelectedHttpRoute,
+    setSelectedHttpRouteService,
+    setEnableAnalysisTemplate,    
+  });
 };
 
 export default RolloutConvert;
