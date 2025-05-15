@@ -1,9 +1,23 @@
 // src/utils/serviceDuplicate.js
 
-export const duplicateServiceForCanary = (service) => {
-    if (!service) return { stable: null, canary: null };
-  
-    const stable = JSON.parse(JSON.stringify(service));
+export const duplicateServiceWithSuffix = (service, suffix) => {
+    if (!service || !suffix) return { original: null, duplicated: null };
+
+    const original = JSON.parse(JSON.stringify(service));
+    const convert = JSON.parse(JSON.stringify(service));
+    const originalName = original.metadata.name;
+
+    convert.metadata.name = originalName.endsWith(suffix) ? originalName : `${originalName}${suffix}`;
+
+    // rollout-conversion-extension으로 변환되었다는 표시 추가
+    convert.metadata.labels = {
+      ...(convert.metadata.labels || {}),
+      'converted-by': 'rollout-conversion-extension',
+    };
+
+    return { original, convert };
+
+    /*const stable = JSON.parse(JSON.stringify(service));
     const canary = JSON.parse(JSON.stringify(service));
     const originalName = service.metadata.name;
 
@@ -21,7 +35,7 @@ export const duplicateServiceForCanary = (service) => {
       'converted-by': 'rollout-conversion-extension', // 변환 표시 추가
     };
 
-    return { stable, canary };
+    return { stable, canary };*/
 };
 
 export const useIsRolloutManagedService = (resource) => {

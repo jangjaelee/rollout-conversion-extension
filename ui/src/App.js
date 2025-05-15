@@ -4,7 +4,7 @@ import yaml from 'js-yaml';
 import './index.css';
 import { PRESETS } from './utils/presets';
 import { convertDeploymentToRollout } from './utils/convertDeployment';
-import { duplicateServiceForCanary, useIsRolloutManagedService } from './utils/serviceDuplicate';
+import { duplicateServiceWithSuffix, useIsRolloutManagedService } from './utils/serviceDuplicate';
 import { addBackendToHTTPRoute } from './utils/addBackendToHttpRoute';
 import { createAnalysisTemplate } from './utils/createAnalysisTemplate';
 import { copyToClipboard, downloadYaml } from './utils/downloadCopy';
@@ -244,7 +244,7 @@ const RolloutConvert = ( {application, resource} ) => {
             setRolloutManifest(rollout);
           }
 
-          // Service일 경우에만 canary를 위한 Service 변환 수행
+          // Service일 경우에만 배포 전략에 따라 Service 변환 수행
           if (resource.kind === 'Service') {
             // rollouts-pod-template-hash는 Argo Rollouts가 관리하는 Deployment가 생성한 ReplicaSet이 가진 라벨이며, Service가 selector로 가지고 있으며 ResourceTab에 표시하지 않음
             const hasRolloutSelector = matched?.spec?.selector && Object.prototype.hasOwnProperty.call(matched.spec.selector, 'rollouts-pod-template-hash');
@@ -255,8 +255,11 @@ const RolloutConvert = ( {application, resource} ) => {
               return;
             }
 
-            const { stable, canary } = duplicateServiceForCanary(matched);
-            setServiceManifest([canary]);
+            // 배포 전략에 따라 suffix 결정
+            const suffix = conversionStrategy === 'canary' ? '-canary' : '-preview';
+            const { duplicated } = duplicateServiceWithSuffix(matched, suffix);
+
+            setServiceManifest(duplicated ? [duplicated] : []);
           }
 
           // HTTPRoute일 경우에만 canary를 위한 rules[].backendRefs 추가 수행
@@ -330,11 +333,20 @@ const RolloutConvert = ( {application, resource} ) => {
         <div className="conversion-wrapper">
           <div className="column">
             <h4 className="subheading">Desired Service</h4>
-            {desiredManifest ? renderYamlWithLineNumbers(yaml.dump(desiredManifest)) : <p className="warn-text">⚠️ No matching Service found.</p>}
+            {desiredManifest ?
+              renderYamlWithLineNumbers(yaml.dump(desiredManifest)) : <p className="warn-text">⚠️ No matching Service found.</p>
+            }
           </div>
 
           <div className="column">
             <h4 className="subheading">Converted Service</h4>
+            <div className="controls">
+              <label htmlFor="strategy">Deployment Strategy:</label>
+              <select id="strategy" value={conversionStrategy} onChange={(e) => setConversionStrategy(e.target.value)}>
+                <option value="canary">Canary</option>
+                <option value="blueGreen">BlueGreen</option>
+              </select>
+            </div>
 
             {isRolloutManaged ? (
               <p className="warn-text">⚠️ This Service is already managed by Argo Rollouts (has rollouts-pod-template-hash selector).</p>
