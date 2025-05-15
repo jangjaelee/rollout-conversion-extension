@@ -1,6 +1,7 @@
 // src/utils/renderResourceUI.js
 import * as React from 'react';
 import yaml from 'js-yaml';
+import { copyToClipboard, downloadYaml } from './downloadCopy';
 import '../index.css';
 
 // YAML + 라인 번호 출력 함수 (flex 기반)

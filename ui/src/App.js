@@ -7,7 +7,6 @@ import { convertDeploymentToRollout } from './utils/convertDeployment';
 import { duplicateServiceWithSuffix, useIsRolloutManagedService } from './utils/serviceDuplicate';
 import { addBackendToHTTPRoute } from './utils/addBackendToHttpRoute';
 import { createAnalysisTemplate } from './utils/createAnalysisTemplate';
-import { copyToClipboard, downloadYaml } from './utils/downloadCopy';
 import { convertScaledObject, convertHPA } from './utils/convertAutoscalers';
 import { renderResourceUI } from './utils/renderResourceUI';
 
