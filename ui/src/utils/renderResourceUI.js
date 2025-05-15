@@ -1,4 +1,40 @@
 // src/utils/renderResourceUI.js
+import * as React from 'react';
+import yaml from 'js-yaml';
+import '../index.css';
+
+// YAML + 라인 번호 출력 함수 (flex 기반)
+const renderYamlWithLineNumbers = (props) => {
+  const yamlString = props;
+  const lines = yamlString.split('\n');
+
+  return (
+    <div className="yaml-container">
+
+      {/* YAML with line numbers */}
+      {lines.map((line, idx) => (
+        <div key={idx} className="yaml-line">
+        <span className="yaml-line-number">{idx + 1}</span>
+        <span className="yaml-line-content">{line}</span>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+
+// YAML copy to clipboard and download buttons 
+const YamlActionButtons = ({ yamlObject, filenamePrefix }) => (
+  <div className="button-group">
+    <button className="copy-btn" onClick={() => copyToClipboard(yamlObject)}>
+      Copy
+    </button>
+    <button className="download-btn" onClick={() => downloadYaml(yamlObject, filenamePrefix)}>
+      Download
+    </button>
+  </div>
+);
+
 
 export const renderResourceUI = ({
   resource,
