@@ -45,7 +45,6 @@ const YamlActionButtons = ({ yamlObject, filenamePrefix }) => (
 
 
 const RolloutConvert = ( {application, resource} ) => {
-  //const { resource, application } = props;
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [desiredManifest, setDesiredManifest] = useState(null);
