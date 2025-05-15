@@ -294,6 +294,7 @@ const RolloutConvert = ( {application, resource} ) => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p className="error-text">❌ {error}</p>;
 
+  
   return renderResourceUI({
     resource,
     desiredManifest,
