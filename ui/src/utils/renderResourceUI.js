@@ -1,4 +1,5 @@
 // src/utils/renderResourceUI.js
+
 import * as React from 'react';
 import yaml from 'js-yaml';
 import { copyToClipboard, downloadYaml } from './downloadCopy';
@@ -25,16 +26,19 @@ const renderYamlWithLineNumbers = (props) => {
 
 
 // YAML copy to clipboard and download buttons 
-const YamlActionButtons = ({ yamlObject, filenamePrefix }) => (
-  <div className="button-group">
-    <button className="copy-btn" onClick={() => copyToClipboard(yamlObject)}>
-      Copy
-    </button>
-    <button className="download-btn" onClick={() => downloadYaml(yamlObject, filenamePrefix)}>
-      Download
-    </button>
-  </div>
-);
+const YamlActionButtons = ({ yamlObject, filenamePrefix }) => {
+  if (!yamlObject) return null;
+  return (  
+    <div className="button-group">
+      <button className="copy-btn" onClick={() => copyToClipboard(yamlObject)}>
+        Copy
+      </button>
+      <button className="download-btn" onClick={() => downloadYaml(yamlObject, filenamePrefix)}>
+        Download
+      </button>
+    </div>
+  );
+};
 
 
 export const renderResourceUI = ({

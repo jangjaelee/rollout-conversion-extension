@@ -1,7 +1,5 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import yaml from 'js-yaml';
-import './index.css';
 import { PRESETS } from './utils/presets';
 import { convertDeploymentToRollout } from './utils/convertDeployment';
 import { duplicateServiceWithSuffix, useIsRolloutManagedService } from './utils/serviceDuplicate';
@@ -197,7 +195,7 @@ const RolloutConvert = ( {application, resource} ) => {
             });          
 
             // enableAnalysisTemplate가 true인 경우 rollout에 analysis 추가
-            if (enableAnalysisTemplate) {
+            if (enableAnalysisTemplate && (selectedStableService || selectedActiveService)) {
               const analysisTemplate = createAnalysisTemplate({
                 name: matched.metadata.name,
                 namespace: matched.metadata.namespace,
