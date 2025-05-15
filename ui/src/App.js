@@ -168,7 +168,13 @@ const RolloutConvert = ( {application, resource} ) => {
         if (matched) {
           // Deployment일 경우에만 Rollout 변환 수행
           if (resource.kind === 'Deployment') {          
-            const steps = conversionStrategy === 'canary' ? PRESETS[selectedPreset] : undefined;
+            const selectedSteps = conversionStrategy === 'canary' ? PRESETS[selectedPreset] : undefined;
+
+            if (conversionStrategy === 'canary' && !selectedSteps) {
+              setError(`Invalid Canary Preset: "${selectedPreset}" is not defined`);
+              setLoading(false);
+              return;
+            }
 
             const templateName = `${matched.metadata.name}-analysis-template`;
             const serviceFQDN =
@@ -182,7 +188,7 @@ const RolloutConvert = ( {application, resource} ) => {
 
             const rollout = convertDeploymentToRollout({
               deployment: matched,
-              steps,
+              steps: selectedSteps,
               mode: conversionMode,
               strategy: conversionStrategy,
               httpRoute: selectedHttpRoute,
