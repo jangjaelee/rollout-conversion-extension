@@ -4,6 +4,7 @@ import * as React from 'react';
 import yaml from 'js-yaml';
 import { copyToClipboard, downloadYaml } from './downloadCopy';
 import { PRESETS } from './presets';
+import { ToggleSwitch } from './ToggleSwitch';
 import '../index.css';
 
 // YAML + 라인 번호 출력 함수 (flex 기반)
@@ -81,12 +82,19 @@ export const RenderResourceUI = ({
       <div className="section">
         <h3>Kubernetes Service YAML</h3>
         <div className="button-row">
+        <ToggleSwitch
+          isChecked={showDesiredYaml}
+          onToggle={() => setShowDesiredYaml((prev) => !prev)}
+          label={showDesiredYaml ? 'Hide Desired' : 'Show Desired'}
+        />
+         {/*
           <button onClick={() => setShowDesiredYaml((prev) => !prev)}>
             {showDesiredYaml ? 'Hide Desired' : 'Show Desired'}
           </button>
-          {/*<button onClick={() => setShowConvertedYaml((prev) => !prev)}>
+          <button onClick={() => setShowConvertedYaml((prev) => !prev)}>
             {showConvertedYaml ? 'Hide Converted' : 'Show Converted'}
-          </button>*/}
+          </button>
+          */}
         </div>
           
         <div className="conversion-wrapper">
