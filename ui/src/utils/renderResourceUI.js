@@ -25,7 +25,7 @@ const renderYamlWithLineNumbers = (props) => {
 };
 */
 
-export const renderYamlWithLineNumbers = ({ yamlString, defaultExpanded = true }) => {
+const YamlViewer = ({ yamlString, defaultExpanded = true }) => {
   const [expanded, setExpanded] = useState(defaultExpanded);
 
   if (!yamlString || typeof yamlString !== 'string') {
@@ -49,9 +49,10 @@ export const renderYamlWithLineNumbers = ({ yamlString, defaultExpanded = true }
   );
 };
 
+export const renderYamlWithLineNumbers = YamlViewer;
 
 // YAML copy to clipboard and download buttons 
-export const YamlActionButtons = ({ yamlObject, filenamePrefix }) => {
+const YamlActionButtons = ({ yamlObject, filenamePrefix }) => {
   if (!yamlObject) return null;
   return (  
     <div className="button-group">
