@@ -205,11 +205,12 @@ export const RenderResourceUI = ({
             onToggle={() => setShowDesiredYaml((prev) => !prev)}
             label={showDesiredYaml ? 'Hide Desired' : 'Show Desired'}
           />
-        </div>        
+        </div>
+
         <div className="conversion-wrapper">
           <div className={`column ${showDesiredYaml ? 'visible' : 'hidden'}`}>
             <h4 className="subheading">Desired ScaledObject</h4>
-            {showDesiredYaml (desiredManifest ?
+            {showDesiredYaml && (desiredManifest ?
               renderYamlWithLineNumbers(yaml.dump(desiredManifest))
               : <p className="warn-text">⚠️ No matching ScaledObject found.</p>
             )}
@@ -243,11 +244,12 @@ export const RenderResourceUI = ({
             onToggle={() => setShowDesiredYaml((prev) => !prev)}
             label={showDesiredYaml ? 'Hide Desired' : 'Show Desired'}
           />
-        </div>        
+        </div>
+
         <div className="conversion-wrapper">
           <div className={`column ${showDesiredYaml ? 'visible' : 'hidden'}`}>
             <h4 className="subheading">Desired HPA</h4>
-            {showDesiredYaml (desiredManifest ?
+            {showDesiredYaml && (desiredManifest ?
               renderYamlWithLineNumbers(yaml.dump(desiredManifest))
               : <p className="warn-text">⚠️ No matching HPA found.</p>
             )}
@@ -281,11 +283,12 @@ export const RenderResourceUI = ({
             onToggle={() => setShowDesiredYaml((prev) => !prev)}
             label={showDesiredYaml ? 'Hide Desired' : 'Show Desired'}
           />
-        </div>        
+        </div>
+
         <div className="conversion-wrapper">
           <div className={`column ${showDesiredYaml ? 'visible' : 'hidden'}`}>
             <h4 className="subheading">Desired Deployment</h4>
-            {showDesiredYaml (desiredManifest ?
+            {showDesiredYaml && (desiredManifest ?
               renderYamlWithLineNumbers(yaml.dump(desiredManifest))
               : <p className="warn-text">⚠️ No matching Deployment found.</p>
             )}
