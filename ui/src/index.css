@@ -137,3 +137,16 @@ h3 {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
+
+.column.hidden {
+  display: none;
+}
+.column.visible {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.conversion-wrapper {
+  display: flex;
+  gap: 16px;
+}

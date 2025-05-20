@@ -81,12 +81,18 @@ export const RenderResourceUI = ({
     return (
       <div className="section">
         <h3>Kubernetes Service YAML</h3>
+        <div className="button-row">
+          <button onClick={() => setShowDesiredYaml((prev) => !prev)}>
+            {showDesiredYaml ? 'Hide Desired' : 'Show Desired'}
+          </button>
+          {/*<button onClick={() => setShowConvertedYaml((prev) => !prev)}>
+            {showConvertedYaml ? 'Hide Converted' : 'Show Converted'}
+          </button>*/}
+        </div>
+          
         <div className="conversion-wrapper">
-          <div className="column">
+          <div className={`column ${showDesiredYaml ? 'visible' : 'hidden'}`}>
             <h4 className="subheading">Desired Service</h4>
-          <button onClick={() => setShowDesiredYaml((prev) => !prev)} className="toggle-visibility-btn">
-            {showDesiredYaml ? 'Hide Desired YAML' : 'Show Desired YAML'}
-          </button>            
             <button onClick={() => setIsDesiredWide(prev => !prev)} className="toggle-width-btn">
               {isDesiredWide ? 'Collapse View' : 'Expand View'}
             </button>            
