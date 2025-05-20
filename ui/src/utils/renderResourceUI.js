@@ -7,7 +7,7 @@ import { PRESETS } from './presets';
 import '../index.css';
 
 // YAML + 라인 번호 출력 함수 (flex 기반)
-const renderYamlWithLineNumbers = ({ yamlString, isWide = false }) => {
+const renderYamlWithLineNumbers = (yamlString, isWide = false) => {
   //const yamlString = props;
   const lines = yamlString.split('\n');
 
@@ -97,7 +97,7 @@ export const RenderResourceUI = ({
               {isDesiredWide ? 'Collapse View' : 'Expand View'}
             </button>            
             {showDesiredYaml && (desiredManifest ?
-              renderYamlWithLineNumbers(yaml.dump(desiredManifest), isWide={isDesiredWide}) : <p className="warn-text">⚠️ No matching Service found.</p>
+              renderYamlWithLineNumbers(yaml.dump(desiredManifest), isDesiredWide) : <p className="warn-text">⚠️ No matching Service found.</p>
             )}
           </div>
 
