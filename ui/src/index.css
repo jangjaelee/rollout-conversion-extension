@@ -83,9 +83,9 @@ h3 {
   border-radius: 8px;
   font-family: monospace;
   font-size: 14px;
-  white-space: pre;
-  word-break: break-word;
-  overflow-x: auto;
+  white-space: pre-wrap;     /* ← 자동 줄바꿈 허용 */
+  word-wrap: break-word;     /* ← 오래된 브라우저 호환용 */
+  overflow-x: auto;          /* ← 수평 스크롤 자동 */
   max-width: 100%;  
   position: relative;
   color: #ddd;
@@ -99,18 +99,18 @@ h3 {
 
 .yaml-line-number {
   display: inline-block;
-  width: 50px; /* 줄이 밀리지 않도록 충분한 고정 너비 */
+  width: 50px;
   text-align: right;
   margin-right: 10px;
   color: #FFFF00;
-  flex-shrink: 0;  /* 🔧 줄이 아무리 길어져도 줄 번호는 밀리지 않게 고정 */
+  flex-shrink: 0;
   user-select: none;  
 }
 
 .yaml-line-content {
-  white-space: inherit;
-  word-break: break-word; /* 긴 문자열도 영역 안에서 줄바꿈 */
-  flex: 1; /* 남은 공간 모두 사용 */
+  white-space: pre-wrap;
+  word-break: break-word;
+  flex: 1;
 }
 
 .toggle-width-btn {
