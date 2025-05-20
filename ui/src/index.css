@@ -85,7 +85,7 @@ h3 {
   font-size: 14px;
   white-space: pre-wrap;     /* ← 자동 줄바꿈 허용 */
   word-wrap: break-word;     /* ← 오래된 브라우저 호환용 */
-  overflow-x: auto;          /* ← 수평 스크롤 자동 */
+  overflow-x: hidden;        /* ← 수평 스크롤 자동 */
   max-width: 100%;  
   position: relative;
   color: #ddd;
@@ -93,8 +93,8 @@ h3 {
 
 .yaml-line {
   display: flex;
-  align-items: flex-start; /* 🔧 줄바꿈 시 위쪽 정렬 유지 */
-  white-space: pre; /* 줄바꿈 없이 그대로 보여주기 위해 필요 */
+  align-items: flex-start;
+  white-space: inherit;
 }
 
 .yaml-line-number {
@@ -108,7 +108,7 @@ h3 {
 }
 
 .yaml-line-content {
-  white-space: pre-wrap;
+  white-space: inherit;
   word-break: break-word;
   flex: 1;
 }
