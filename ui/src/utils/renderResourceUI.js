@@ -101,7 +101,8 @@ export const RenderResourceUI = ({
           <div className={`column ${showDesiredYaml ? 'visible' : 'hidden'}`}>
             <h4 className="subheading">Desired Service</h4>        
             {showDesiredYaml && (desiredManifest ?
-              renderYamlWithLineNumbers(yaml.dump(desiredManifest)) : <p className="warn-text">⚠️ No matching Service found.</p>
+              renderYamlWithLineNumbers(yaml.dump(desiredManifest))
+               : <p className="warn-text">⚠️ No matching Service found.</p>
             )}
           </div>
 
@@ -142,10 +143,14 @@ export const RenderResourceUI = ({
             label={showDesiredYaml ? 'Hide Desired' : 'Show Desired'}
           />
         </div>
+
         <div className="conversion-wrapper">
-          <div className="column">
+          <div className={`column ${showDesiredYaml ? 'visible' : 'hidden'}`}>
             <h4 className="subheading">Desired HTTPRoute</h4>
-            {desiredManifest ? renderYamlWithLineNumbers(yaml.dump(desiredManifest)) : <p className="warn-text">⚠️ No matching HTTPRoute found.</p>}
+            {showDesiredYaml && (desiredManifest ?
+              renderYamlWithLineNumbers(yaml.dump(desiredManifest))
+              : <p className="warn-text">⚠️ No matching HTTPRoute found.</p>
+            )}
           </div>
 
           <div className="column">
@@ -202,9 +207,12 @@ export const RenderResourceUI = ({
           />
         </div>        
         <div className="conversion-wrapper">
-          <div className="column">
+          <div className={`column ${showDesiredYaml ? 'visible' : 'hidden'}`}>
             <h4 className="subheading">Desired ScaledObject</h4>
-            {desiredManifest ? renderYamlWithLineNumbers(yaml.dump(desiredManifest)) : <p className="warn-text">⚠️ No matching ScaledObject found.</p>}
+            {showDesiredYaml (desiredManifest ?
+              renderYamlWithLineNumbers(yaml.dump(desiredManifest))
+              : <p className="warn-text">⚠️ No matching ScaledObject found.</p>
+            )}
           </div>
   
           <div className="column">
@@ -237,9 +245,12 @@ export const RenderResourceUI = ({
           />
         </div>        
         <div className="conversion-wrapper">
-          <div className="column">
+          <div className={`column ${showDesiredYaml ? 'visible' : 'hidden'}`}>
             <h4 className="subheading">Desired HPA</h4>
-            {desiredManifest ? renderYamlWithLineNumbers(yaml.dump(desiredManifest)) : <p className="warn-text">⚠️ No matching HPA found.</p>}
+            {showDesiredYaml (desiredManifest ?
+              renderYamlWithLineNumbers(yaml.dump(desiredManifest))
+              : <p className="warn-text">⚠️ No matching HPA found.</p>
+            )}
           </div>
   
           <div className="column">
@@ -272,9 +283,12 @@ export const RenderResourceUI = ({
           />
         </div>        
         <div className="conversion-wrapper">
-          <div className="column">
+          <div className={`column ${showDesiredYaml ? 'visible' : 'hidden'}`}>
             <h4 className="subheading">Desired Deployment</h4>
-            {desiredManifest ? renderYamlWithLineNumbers(yaml.dump(desiredManifest)) : <p className="warn-text">⚠️ No matching Deployment found.</p>}
+            {showDesiredYaml (desiredManifest ?
+              renderYamlWithLineNumbers(yaml.dump(desiredManifest))
+              : <p className="warn-text">⚠️ No matching Deployment found.</p>
+            )}
           </div>
 
           <div className="column">
