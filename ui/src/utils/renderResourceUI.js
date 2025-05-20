@@ -40,7 +40,7 @@ const YamlActionButtons = ({ yamlObject, filenamePrefix }) => {
 };
 
 
-export const renderResourceUI = ({
+export const RenderResourceUI = ({
   resource,
   desiredManifest,
   conversionStrategy,

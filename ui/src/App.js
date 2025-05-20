@@ -6,7 +6,7 @@ import { duplicateServiceWithSuffix, useIsRolloutManagedService } from './utils/
 import { addBackendToHTTPRoute } from './utils/addBackendToHttpRoute';
 import { createAnalysisTemplate } from './utils/createAnalysisTemplate';
 import { convertScaledObject, convertHPA } from './utils/convertAutoscalers';
-import { renderResourceUI } from './utils/renderResourceUI';
+import { RenderResourceUI } from './utils/renderResourceUI';
 
 
 const RolloutConvert = ( {application, resource} ) => {
@@ -295,7 +295,7 @@ const RolloutConvert = ( {application, resource} ) => {
   if (error) return <p className="error-text">❌ {error}</p>;
 
   
-  return renderResourceUI({
+  return RenderResourceUI({
     resource,
     desiredManifest,
     conversionStrategy,
