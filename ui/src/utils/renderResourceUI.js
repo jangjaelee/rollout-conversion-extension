@@ -25,8 +25,8 @@ const renderYamlWithLineNumbers = (props) => {
 };
 */
 
-const renderYamlWithLineNumbers = ({ yamlString, defaultExpanded = true }) => {
-  const [expanded, setExpanded] = React.useState(defaultExpanded);
+export const renderYamlWithLineNumbers = ({ yamlString, defaultExpanded = true }) => {
+  const [expanded, setExpanded] = useState(defaultExpanded);
 
   if (!yamlString || typeof yamlString !== 'string') {
     return <p className="warn-text">⚠️ Invalid YAML data</p>;
@@ -51,7 +51,7 @@ const renderYamlWithLineNumbers = ({ yamlString, defaultExpanded = true }) => {
 
 
 // YAML copy to clipboard and download buttons 
-const YamlActionButtons = ({ yamlObject, filenamePrefix }) => {
+export const YamlActionButtons = ({ yamlObject, filenamePrefix }) => {
   if (!yamlObject) return null;
   return (  
     <div className="button-group">
