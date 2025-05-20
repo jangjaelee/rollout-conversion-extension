@@ -75,6 +75,7 @@ export const RenderResourceUI = ({
   setEnableAnalysisTemplate,
 }) => {
   const [isDesiredWide, setIsDesiredWide] = React.useState(false);
+  const [showDesiredYaml, setShowDesiredYaml] = React.useState(true);  
 
   if (resource.kind === 'Service') {
     return (
@@ -83,12 +84,15 @@ export const RenderResourceUI = ({
         <div className="conversion-wrapper">
           <div className="column">
             <h4 className="subheading">Desired Service</h4>
+          <button onClick={() => setShowDesiredYaml((prev) => !prev)} className="toggle-visibility-btn">
+            {showDesiredYaml ? 'Hide Desired YAML' : 'Show Desired YAML'}
+          </button>            
             <button onClick={() => setIsDesiredWide(prev => !prev)} className="toggle-width-btn">
               {isDesiredWide ? 'Collapse View' : 'Expand View'}
             </button>            
-            {desiredManifest ?
+            {showDesiredYaml && (desiredManifest ?
               renderYamlWithLineNumbers(yaml.dump(desiredManifest), isDesiredWide) : <p className="warn-text">⚠️ No matching Service found.</p>
-            }
+            )}
           </div>
 
           <div className="column">

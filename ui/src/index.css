@@ -127,3 +127,13 @@ h3 {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
+
+.toggle-visibility-btn {
+  margin: 6px 0;
+  padding: 4px 8px;
+  font-size: 12px;
+  cursor: pointer;
+  background: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
