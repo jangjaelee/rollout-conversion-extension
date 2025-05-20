@@ -87,7 +87,6 @@ export const RenderResourceUI = ({
             onToggle={() => setShowDesiredYaml((prev) => !prev)}
             label={showDesiredYaml ? 'Hide Desired' : 'Show Desired'}
           />
-          <p>&nbsp;</p>
          {/*
           <button onClick={() => setShowDesiredYaml((prev) => !prev)}>
             {showDesiredYaml ? 'Hide Desired' : 'Show Desired'}
