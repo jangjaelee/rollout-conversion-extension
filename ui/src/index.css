@@ -113,26 +113,6 @@ h3 {
   flex: 1;
 }
 
-.toggle-width-btn {
-  margin-bottom: 8px;
-  padding: 4px 8px;
-  font-size: 12px;
-  cursor: pointer;
-  background: #eee;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.toggle-visibility-btn {
-  margin: 6px 0;
-  padding: 4px 8px;
-  font-size: 12px;
-  cursor: pointer;
-  background: #f0f0f0;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
 .column.hidden {
   display: none;
 }
@@ -141,11 +121,6 @@ h3 {
   display: flex;
   flex-direction: column;
   flex: 1;
-}
-
-.conversion-wrapper {
-  display: flex;
-  gap: 16px;
 }
 
 .button-row button {
@@ -158,4 +133,3 @@ h3 {
 .button-row button:hover {
   opacity: 0.7;
 }
-
