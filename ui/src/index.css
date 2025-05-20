@@ -98,8 +98,9 @@ h3 {
 }
 
 .yaml-line-number {
+  font-family: monospace;
   display: inline-block;
-  width: 1.5rem;
+  width: 1.2rem;
   text-align: right;
   margin-right: 0.3rem;
   color: #FFFF00;
