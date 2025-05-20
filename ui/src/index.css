@@ -102,6 +102,13 @@ h3 {
   flex: 1;
 }
 
+.yaml-toggle {
+  cursor: pointer;
+  color: #007acc;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
 .yaml-container {
   background: #1e1e1e;
   padding: 1rem;
@@ -117,6 +124,7 @@ h3 {
 
 .yaml-line {
   display: flex;
+  font-family: monospace;  
 }
 
 .yaml-line-number {
@@ -128,6 +136,7 @@ h3 {
 }
 
 .yaml-line-content {
+  white-space: pre-wrap;
   flex: 1;
 }
 
