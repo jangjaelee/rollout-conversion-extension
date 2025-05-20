@@ -7,7 +7,7 @@ import { PRESETS } from './presets';
 import '../index.css';
 
 // YAML + 라인 번호 출력 함수 (flex 기반)
-const renderYamlWithLineNumbers = (yamlString, isWide = false) => {
+const renderYamlWithLineNumbers = (yamlString, isWide) => {
   //const yamlString = props;
   const lines = yamlString.split('\n');
 
@@ -74,7 +74,7 @@ export const RenderResourceUI = ({
   setSelectedHttpRouteService,
   setEnableAnalysisTemplate,
 }) => {
-  const [isDesiredWide, setIsDesiredWide] = React.useState(false);
+  const [isDesiredWide, setIsDesiredWide] = React.useState(true);
   const [showDesiredYaml, setShowDesiredYaml] = React.useState(true);  
 
   if (resource.kind === 'Service') {
