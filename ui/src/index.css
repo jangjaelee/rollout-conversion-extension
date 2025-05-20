@@ -12,6 +12,10 @@ h3 {
   color: red;
 }
 
+.warn-text {
+  color: #6e6e6e;
+}
+
 .conversion-wrapper {
   display: flex;
   gap: 1rem;
@@ -102,13 +106,6 @@ h3 {
   flex: 1;
 }
 
-.yaml-toggle {
-  cursor: pointer;
-  color: #007acc;
-  font-weight: bold;
-  margin-bottom: 8px;
-}
-
 .yaml-container {
   background: #1e1e1e;
   padding: 1rem;
@@ -124,7 +121,6 @@ h3 {
 
 .yaml-line {
   display: flex;
-  font-family: monospace;  
 }
 
 .yaml-line-number {
@@ -136,15 +132,5 @@ h3 {
 }
 
 .yaml-line-content {
-  white-space: pre-wrap;
   flex: 1;
-}
-
-.warn-text {
-  background-color: #fff3cd;
-  color: #856404;
-  padding: 10px;
-  border-left: 4px solid #ffeeba;
-  margin-bottom: 1rem;
-  border-radius: 4px;
 }

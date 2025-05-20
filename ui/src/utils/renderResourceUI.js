@@ -7,7 +7,6 @@ import { PRESETS } from './presets';
 import '../index.css';
 
 // YAML + 라인 번호 출력 함수 (flex 기반)
-/*
 const renderYamlWithLineNumbers = (props) => {
   const yamlString = props;
   const lines = yamlString.split('\n');
@@ -23,33 +22,7 @@ const renderYamlWithLineNumbers = (props) => {
     </div>
   );
 };
-*/
 
-const YamlViewer = ({ yamlString, defaultExpanded = true }) => {
-  const [expanded, setExpanded] = useState(defaultExpanded);
-
-  if (!yamlString || typeof yamlString !== 'string') {
-    return <p className="warn-text">⚠️ Invalid YAML data</p>;
-  }
-
-  const lines = yamlString.split('\n');
-
-  return (
-    <div className="yaml-container">
-      <div className="yaml-toggle" onClick={() => setExpanded(!expanded)}>
-        {expanded ? '▼ Hide YAML' : '▶ Show YAML'}
-      </div>
-      {expanded && lines.map((line, idx) => (
-        <div key={idx} className="yaml-line">
-          <span className="yaml-line-number">{idx + 1}</span>
-          <span className="yaml-line-content">{line}</span>
-        </div>
-      ))}
-    </div>
-  );
-};
-
-export const renderYamlWithLineNumbers = YamlViewer;
 
 // YAML copy to clipboard and download buttons 
 const YamlActionButtons = ({ yamlObject, filenamePrefix }) => {
@@ -108,13 +81,8 @@ export const renderResourceUI = ({
         <div className="conversion-wrapper">
           <div className="column">
             <h4 className="subheading">Desired Service</h4>
-            {
-            /*desiredManifest ?
+            {desiredManifest ?
               renderYamlWithLineNumbers(yaml.dump(desiredManifest), true) : <p className="warn-text">⚠️ No matching Service found.</p>
-            */
-              desiredManifest && typeof desiredManifest === 'object'
-                ? renderYamlWithLineNumbers(yaml.dump(desiredManifest))
-                : <p className="warn-text">⚠️ No matching Service found.</p>
             }
           </div>
 
