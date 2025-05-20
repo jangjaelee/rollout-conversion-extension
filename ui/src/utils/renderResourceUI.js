@@ -1,6 +1,7 @@
 // src/utils/renderResourceUI.js
 
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 import yaml from 'js-yaml';
 import { copyToClipboard, downloadYaml } from './downloadCopy';
 import { PRESETS } from './presets';
@@ -25,8 +26,8 @@ const renderYamlWithLineNumbers = (props) => {
 };
 */
 
-const renderYamlWithLineNumbers = (yamlString, defaultExpanded = true) => {
-  const [expanded, setExpanded] = React.useState(defaultExpanded);
+const renderYamlWithLineNumbers = ({ yamlString, defaultExpanded = true }) => {
+  const [expanded, setExpanded] = useState(defaultExpanded);
 
   if (!yamlString || typeof yamlString !== 'string') {
     return <p className="warn-text">⚠️ Invalid YAML data</p>;
