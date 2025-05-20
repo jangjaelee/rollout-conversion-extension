@@ -78,35 +78,37 @@ h3 {
 
 /* YAML View */
 .yaml-container {
+  background: #1e1e1e;
+  padding: 1rem;
+  border-radius: 8px;
   font-family: monospace;
+  font-size: 14px;
   white-space: pre-wrap;
-  background-color: #f6f8fa;
-  border: 1px solid #ddd;
+  word-break: break-word;
   overflow-x: auto;
-  padding: 10px;
-  max-width: 100%;
-}
-
-.yaml-container.wide {
-  width: 100%;
-  overflow-x: scroll;
-  white-space: pre;
+  position: relative;
+  color: #ddd;
 }
 
 .yaml-line {
   display: flex;
 }
 
-.yaml-line-number {
-  display: inline-block;
-  width: 40px;
+.line-number {
+  width: 3em;
   text-align: right;
-  margin-right: 10px;
-  color: #888;
+  padding-right: 1em;
+  color: #ffff00;
   user-select: none;
 }
 
 .yaml-line-content {
+  flex: 1;
+}
+
+.yaml-container.wide {
+  width: 100%;
+  overflow-x: scroll;
   white-space: pre;
 }
 
