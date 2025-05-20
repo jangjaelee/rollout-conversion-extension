@@ -86,8 +86,15 @@ h3 {
   white-space: pre-wrap;
   word-break: break-word;
   overflow-x: auto;
+  max-width: 100%;  
   position: relative;
   color: #ddd;
+}
+
+.yaml-container.wide {
+  width: 100%;
+  overflow-x: scroll;
+  white-space: pre;
 }
 
 .yaml-line {
@@ -110,12 +117,6 @@ h3 {
   white-space: pre-wrap; /* ⚠️ 줄 내림 토글 시에도 적용되도록 wrap 지원 */
   word-break: break-word; /* 긴 문자열도 영역 안에서 줄바꿈 */
   flex: 1; /* 남은 공간 모두 사용 */
-}
-
-.yaml-container.wide {
-  width: 100%;
-  overflow-x: scroll;
-  white-space: pre;
 }
 
 .toggle-width-btn {
@@ -159,6 +160,8 @@ h3 {
   border: none;
   cursor: pointer;
 }
+
 .button-row button:hover {
   opacity: 0.7;
 }
+
