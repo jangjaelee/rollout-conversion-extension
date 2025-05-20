@@ -95,6 +95,7 @@ h3 {
   display: flex;
   align-items: flex-start;
   white-space: inherit;
+  gap: 0.5rem;  
 }
 
 .yaml-line-number {
