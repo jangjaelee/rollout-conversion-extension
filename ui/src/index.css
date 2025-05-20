@@ -115,7 +115,7 @@ h3 {
 }
 
 .yaml-line-content {
-  white-space: pre-wrap; /* ⚠️ 줄 내림 토글 시에도 적용되도록 wrap 지원 */
+  white-space: inherit;
   word-break: break-word; /* 긴 문자열도 영역 안에서 줄바꿈 */
   flex: 1; /* 남은 공간 모두 사용 */
 }
