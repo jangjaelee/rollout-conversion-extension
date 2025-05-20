@@ -27,6 +27,11 @@ const renderYamlWithLineNumbers = (props) => {
 
 const renderYamlWithLineNumbers = (yamlString, defaultExpanded = true) => {
   const [expanded, setExpanded] = React.useState(defaultExpanded);
+
+  if (!yamlString || typeof yamlString !== 'string') {
+    return <p className="warn-text">⚠️ Invalid YAML data</p>;
+  }
+
   const lines = yamlString.split('\n');
 
   return (
@@ -34,7 +39,6 @@ const renderYamlWithLineNumbers = (yamlString, defaultExpanded = true) => {
       <div className="yaml-toggle" onClick={() => setExpanded(!expanded)}>
         {expanded ? '▼ Hide YAML' : '▶ Show YAML'}
       </div>
-
       {expanded && lines.map((line, idx) => (
         <div key={idx} className="yaml-line">
           <span className="yaml-line-number">{idx + 1}</span>
@@ -103,8 +107,13 @@ export const renderResourceUI = ({
         <div className="conversion-wrapper">
           <div className="column">
             <h4 className="subheading">Desired Service</h4>
-            {desiredManifest ?
+            {
+            /*desiredManifest ?
               renderYamlWithLineNumbers(yaml.dump(desiredManifest), true) : <p className="warn-text">⚠️ No matching Service found.</p>
+            */
+              desiredManifest && typeof desiredManifest === 'object'
+                ? renderYamlWithLineNumbers(yaml.dump(desiredManifest))
+                : <p className="warn-text">⚠️ No matching Service found.</p>
             }
           </div>
 
