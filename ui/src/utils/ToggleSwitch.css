@@ -6,22 +6,22 @@
     gap: 0.5rem;
     cursor: pointer;
     user-select: none;
-  }
+}
   
-  .toggle-switch input {
+.toggle-switch input {
     display: none;
-  }
+}
   
-  .slider {
+.slider {
     width: 40px;
     height: 20px;
     background-color: #ccc;
     border-radius: 20px;
     position: relative;
     transition: background-color 0.2s ease;
-  }
+}
   
-  .slider::before {
+.slider::before {
     content: '';
     position: absolute;
     height: 16px;
@@ -31,17 +31,17 @@
     top: 2px;
     left: 2px;
     transition: transform 0.2s ease;
-  }
+}
   
-  input:checked + .slider {
+input:checked + .slider {
     background-color: #4caf50;
-  }
+}
   
-  input:checked + .slider::before {
+input:checked + .slider::before {
     transform: translateX(20px);
-  }
+}
   
-  .switch-label {
+.switch-label {
     font-size: 14px;
     color: #333;
-  }
+}

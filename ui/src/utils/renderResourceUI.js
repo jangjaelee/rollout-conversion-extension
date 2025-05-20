@@ -82,11 +82,11 @@ export const RenderResourceUI = ({
       <div className="section">
         <h3>Kubernetes Service YAML</h3>
         <div className="button-row">
-        <ToggleSwitch
-          isChecked={showDesiredYaml}
-          onToggle={() => setShowDesiredYaml((prev) => !prev)}
-          label={showDesiredYaml ? 'Hide Desired' : 'Show Desired'}
-        />
+          <ToggleSwitch
+            isChecked={showDesiredYaml}
+            onToggle={() => setShowDesiredYaml((prev) => !prev)}
+            label={showDesiredYaml ? 'Hide Desired' : 'Show Desired'}
+          />
          {/*
           <button onClick={() => setShowDesiredYaml((prev) => !prev)}>
             {showDesiredYaml ? 'Hide Desired' : 'Show Desired'}
