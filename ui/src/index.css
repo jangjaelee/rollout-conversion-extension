@@ -91,13 +91,6 @@ h3 {
   color: #ddd;
 }
 
-.yaml-container.wide {
-  width: 100%;
-  overflow-x: scroll;
-  white-space: pre-wrap;
-  word-break: break-word;  
-}
-
 .yaml-line {
   display: flex;
   align-items: flex-start; /* 🔧 줄바꿈 시 위쪽 정렬 유지 */

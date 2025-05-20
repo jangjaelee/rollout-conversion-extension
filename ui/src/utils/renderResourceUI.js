@@ -7,12 +7,12 @@ import { PRESETS } from './presets';
 import '../index.css';
 
 // YAML + 라인 번호 출력 함수 (flex 기반)
-const renderYamlWithLineNumbers = (yamlString, isWide = false) => {
+const renderYamlWithLineNumbers = (yamlString) => {
   //const yamlString = props;
   const lines = yamlString.split('\n');
 
   return (
-    <div className={`yaml-container ${isWide ? 'wide' : ''}`}>
+    <div className="yaml-container">
       {lines.map((line, idx) => (
         <div key={idx} className="yaml-line">
         <span className="yaml-line-number">{idx + 1}</span>
@@ -74,7 +74,6 @@ export const RenderResourceUI = ({
   setSelectedHttpRouteService,
   setEnableAnalysisTemplate,
 }) => {
-  const [isDesiredWide, setIsDesiredWide] = React.useState(false);
   const [showDesiredYaml, setShowDesiredYaml] = React.useState(true);  
 
   if (resource.kind === 'Service') {
@@ -92,12 +91,9 @@ export const RenderResourceUI = ({
           
         <div className="conversion-wrapper">
           <div className={`column ${showDesiredYaml ? 'visible' : 'hidden'}`}>
-            <h4 className="subheading">Desired Service</h4>
-            <button onClick={() => setIsDesiredWide(prev => !prev)} className="toggle-width-btn">
-              {isDesiredWide ? 'Collapse View' : 'Expand View'}
-            </button>            
+            <h4 className="subheading">Desired Service</h4>        
             {showDesiredYaml && (desiredManifest ?
-              renderYamlWithLineNumbers(yaml.dump(desiredManifest), isDesiredWide) : <p className="warn-text">⚠️ No matching Service found.</p>
+              renderYamlWithLineNumbers(yaml.dump(desiredManifest)) : <p className="warn-text">⚠️ No matching Service found.</p>
             )}
           </div>
 
