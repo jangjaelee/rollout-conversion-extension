@@ -135,6 +135,13 @@ export const RenderResourceUI = ({
     return (
       <div className="section">
         <h3>Kubernetes Gateway API HTTPRoute YAML</h3>
+        <div className="button-row">
+          <ToggleSwitch
+            isChecked={showDesiredYaml}
+            onToggle={() => setShowDesiredYaml((prev) => !prev)}
+            label={showDesiredYaml ? 'Hide Desired' : 'Show Desired'}
+          />
+        </div>
         <div className="conversion-wrapper">
           <div className="column">
             <h4 className="subheading">Desired HTTPRoute</h4>
@@ -187,6 +194,13 @@ export const RenderResourceUI = ({
     return (
       <div className="section">
         <h3>KEDA ScaledObject YAML</h3>
+        <div className="button-row">
+          <ToggleSwitch
+            isChecked={showDesiredYaml}
+            onToggle={() => setShowDesiredYaml((prev) => !prev)}
+            label={showDesiredYaml ? 'Hide Desired' : 'Show Desired'}
+          />
+        </div>        
         <div className="conversion-wrapper">
           <div className="column">
             <h4 className="subheading">Desired ScaledObject</h4>
@@ -215,6 +229,13 @@ export const RenderResourceUI = ({
     return (
       <div className="section">
         <h3>Horizontal Pod Autoscaler (HPA) YAML</h3>
+        <div className="button-row">
+          <ToggleSwitch
+            isChecked={showDesiredYaml}
+            onToggle={() => setShowDesiredYaml((prev) => !prev)}
+            label={showDesiredYaml ? 'Hide Desired' : 'Show Desired'}
+          />
+        </div>        
         <div className="conversion-wrapper">
           <div className="column">
             <h4 className="subheading">Desired HPA</h4>
@@ -243,6 +264,13 @@ export const RenderResourceUI = ({
     return (
       <div className="section">
         <h3>Kubernetes Deployment to Argo Rollout Conversion</h3>
+        <div className="button-row">
+          <ToggleSwitch
+            isChecked={showDesiredYaml}
+            onToggle={() => setShowDesiredYaml((prev) => !prev)}
+            label={showDesiredYaml ? 'Hide Desired' : 'Show Desired'}
+          />
+        </div>        
         <div className="conversion-wrapper">
           <div className="column">
             <h4 className="subheading">Desired Deployment</h4>
