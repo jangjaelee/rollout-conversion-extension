@@ -78,45 +78,19 @@ h3 {
 
 /* YAML View */
 .yaml-container {
-  background: #1e1e1e;
-  padding: 1rem;
-  border-radius: 8px;
   font-family: monospace;
-  font-size: 14px;
   white-space: pre-wrap;
-  word-break: break-word;
+  background-color: #f6f8fa;
+  border: 1px solid #ddd;
   overflow-x: auto;
-  position: relative;
-  color: #ddd;
+  padding: 10px;
+  max-width: 100%;
 }
 
-.yaml-line {
-  display: flex;
-}
-
-.line-number {
-  width: 3em;
-  text-align: right;
-  padding-right: 1em;
-  color: #ffff00;
-  user-select: none;
-}
-
-.line-content {
-  flex: 1;
-}
-
-.yaml-container {
-  background: #1e1e1e;
-  padding: 1rem;
-  border-radius: 8px;
-  font-family: monospace;
-  font-size: 14px;
-  white-space: pre-wrap;
-  word-break: break-word;
-  overflow-x: auto;
-  position: relative;
-  color: #ddd;
+.yaml-container.wide {
+  width: 100%;
+  overflow-x: scroll;
+  white-space: pre;
 }
 
 .yaml-line {
@@ -124,13 +98,24 @@ h3 {
 }
 
 .yaml-line-number {
-  width: 3em;
+  display: inline-block;
+  width: 40px;
   text-align: right;
-  padding-right: 1em;
-  color: #FFFF00;
+  margin-right: 10px;
+  color: #888;
   user-select: none;
 }
 
 .yaml-line-content {
-  flex: 1;
+  white-space: pre;
+}
+
+.toggle-width-btn {
+  margin-bottom: 8px;
+  padding: 4px 8px;
+  font-size: 12px;
+  cursor: pointer;
+  background: #eee;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
