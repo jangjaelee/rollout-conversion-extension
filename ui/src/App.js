@@ -295,40 +295,42 @@ const RolloutConvert = ( {application, resource} ) => {
   if (error) return <p className="error-text">❌ {error}</p>;
 
   
-  return RenderResourceUI({
-    resource,
-    desiredManifest,
-    conversionStrategy,
-    conversionMode,
-    selectedPreset,
-    selectedStableService,
-    selectedActiveService,
-    selectedHttpRoute,
-    selectedHttpRouteService,
-    enableAnalysisTemplate,
-    isRolloutManaged,
-    existingRolloutName,
-    serviceManifest,
-    rolloutManifest,
-    analysisTemplateManifest,
-    httprouteManifest,
-    duplicateCanaryBackend,
-    httpRoutes,
-    serviceNames,
-    filteredRouteServices,
-    isAlreadyRolloutTarget,
-    scaledObjectManifest,
-    hpaManifest,
-    isKedaBasedHPA,
-    setConversionStrategy,
-    setConversionMode,
-    setSelectedPreset,
-    setSelectedStableService,
-    setSelectedActiveService,
-    setSelectedHttpRoute,
-    setSelectedHttpRouteService,
-    setEnableAnalysisTemplate,    
-  });
+  return (
+    <RenderResourceUI
+      resource={resource}
+      desiredManifest={desiredManifest}
+      conversionStrategy={conversionStrategy}
+      conversionMode={conversionMode}
+      selectedPreset={selectedPreset}
+      selectedStableService={selectedStableService}
+      selectedActiveService={selectedActiveService}
+      selectedHttpRoute={selectedHttpRoute}
+      selectedHttpRouteService={selectedHttpRouteService}
+      enableAnalysisTemplate={enableAnalysisTemplate}
+      isRolloutManaged={isRolloutManaged}
+      existingRolloutName={existingRolloutName}
+      serviceManifest={serviceManifest}
+      rolloutManifest={rolloutManifest}
+      analysisTemplateManifest={analysisTemplateManifest}
+      httprouteManifest={httprouteManifest}
+      duplicateCanaryBackend={duplicateCanaryBackend}
+      httpRoutes={httpRoutes}
+      serviceNames={serviceNames}
+      filteredRouteServices={filteredRouteServices}
+      isAlreadyRolloutTarget={isAlreadyRolloutTarget}
+      scaledObjectManifest={scaledObjectManifest}
+      hpaManifest={hpaManifest}
+      isKedaBasedHPA={isKedaBasedHPA}
+      setConversionStrategy={setConversionStrategy}
+      setConversionMode={setConversionMode}
+      setSelectedPreset={setSelectedPreset}
+      setSelectedStableService={setSelectedStableService}
+      setSelectedActiveService={setSelectedActiveService}
+      setSelectedHttpRoute={setSelectedHttpRoute}
+      setSelectedHttpRouteService={setSelectedHttpRouteService}
+      setEnableAnalysisTemplate={setEnableAnalysisTemplate}
+    />
+  );
 };
 
 export default RolloutConvert;
