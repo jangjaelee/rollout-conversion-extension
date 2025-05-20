@@ -92,18 +92,24 @@ h3 {
 
 .yaml-line {
   display: flex;
+  align-items: flex-start; /* 🔧 줄바꿈 시 위쪽 정렬 유지 */
+  white-space: pre; /* 줄바꿈 없이 그대로 보여주기 위해 필요 */
 }
 
 .yaml-line-number {
-  width: 3em;
+  display: inline-block;
+  width: 50px; /* 줄이 밀리지 않도록 충분한 고정 너비 */
   text-align: right;
-  padding-right: 1em;
+  margin-right: 10px;
   color: #FFFF00;
-  user-select: none;
+  flex-shrink: 0;  /* 🔧 줄이 아무리 길어져도 줄 번호는 밀리지 않게 고정 */
+  user-select: none;  
 }
 
 .yaml-line-content {
-  flex: 1;
+  white-space: pre-wrap; /* ⚠️ 줄 내림 토글 시에도 적용되도록 wrap 지원 */
+  word-break: break-word; /* 긴 문자열도 영역 안에서 줄바꿈 */
+  flex: 1; /* 남은 공간 모두 사용 */
 }
 
 .yaml-container.wide {
