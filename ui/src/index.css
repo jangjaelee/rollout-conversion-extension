@@ -99,9 +99,9 @@ h3 {
 
 .yaml-line-number {
   display: inline-block;
-  width: 50px;
+  width: 1.5rem;
   text-align: right;
-  margin-right: 10px;
+  margin-right: 0.3rem;
   color: #FFFF00;
   flex-shrink: 0;
   user-select: none;  
