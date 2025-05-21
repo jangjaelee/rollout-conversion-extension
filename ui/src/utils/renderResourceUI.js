@@ -366,23 +366,21 @@ export const RenderResourceUI = ({
 
             <div className="controls">
               <label>
-                <input
-                  type="checkbox"
+                <input type="checkbox"
                   checked={enableAnalysisTemplate}
                   onChange={(e) => {
                     const isChecked = e.target.checked;
-
                     if (isChecked) {
-                      if ((conversionStrategy === 'canary' && !selectedStableService) || (conversionStrategy === 'blueGreen' && !selectedActiveService)) {
+                      if ((conversionStrategy === 'canary' && !selectedStableService) ||
+                      (conversionStrategy === 'blueGreen' && !selectedActiveService)) {
                         alert('⚠️ Please select a required Service before enabling AnalysisTemplate.');
                         return;
                       }
                     }
-
                     setEnableAnalysisTemplate(isChecked);
                   }}
                 />
-                 Use AnalysisTemplate
+                &nbsp;Use AnalysisTemplate
               </label>
             </div>
 
