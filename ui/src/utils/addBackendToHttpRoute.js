@@ -27,19 +27,24 @@ export const addBackendToHTTPRoute = (httpRoute, selectedServiceName) => {
       if (!Array.isArray(rule.backendRefs)) {
         rule.backendRefs = [];
       }
-  
+
+      // 기존 backend의 weight를 100으로 고정
+      rule.backendRefs = rule.backendRefs.map(ref => {
+        if (ref.name !== selectedServiceName && ref.weight !== 100) {
+          return {
+            ...ref,
+            weight: 100,
+          };
+        }
+        return ref;
+      });
+
       // 이미 canary 또는 preview service의 backend가 있는지 체크 (중복 방지)
       const hasSelected = rule.backendRefs.some(ref => ref.name === selectedServiceName);
       if (hasSelected) {
         duplicate = true;
         return;
-      }
-
-      // 기존 backend의 weight를 100으로 고정
-      rule.backendRefs = rule.backendRefs.map(ref => ({
-        ...ref,
-        weight: 100,
-      }));      
+      } 
 
       if (!hasSelected) {
         // 첫 번째 backend를 기준으로 port 복사
