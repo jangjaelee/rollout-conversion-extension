@@ -396,7 +396,7 @@ export const RenderResourceUI = ({
             )}
 
             {enableAnalysisTemplate && analysisTemplateManifest && (
-              <div style={{ marginTop: '2rem' }}>
+              <div className="yaml-block">
                 <h4 className="subheading">Generated AnalysisTemplate</h4>
                 <YamlActionButtons yamlObject={analysisTemplateManifest} filenamePrefix="analysistemplate" />
                 {renderYamlWithLineNumbers(yaml.dump(analysisTemplateManifest))}

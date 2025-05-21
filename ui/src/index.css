@@ -47,6 +47,11 @@ h3 {
   font-size: 14px;
 }
 
+.yaml-block {
+  position: relative;
+  margin-top: 2rem;
+}
+
 .button-group {
   position: absolute;
   top: 0;
