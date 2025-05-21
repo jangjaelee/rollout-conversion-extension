@@ -35,6 +35,12 @@ export const addBackendToHTTPRoute = (httpRoute, selectedServiceName) => {
         return;
       }
 
+      // 기존 backend의 weight를 100으로 고정
+      rule.backendRefs = rule.backendRefs.map(ref => ({
+        ...ref,
+        weight: 100,
+      }));      
+
       if (!hasSelected) {
         // 첫 번째 backend를 기준으로 port 복사
         const baseBackend = rule.backendRefs[0];
@@ -43,6 +49,7 @@ export const addBackendToHTTPRoute = (httpRoute, selectedServiceName) => {
             kind: 'Service',
             name: selectedServiceName,
             port: baseBackend?.port,
+            // weight 생략: rollout controller가 동적으로 주입
           });
         }
       }
