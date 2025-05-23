@@ -3,14 +3,14 @@
 export const PRESETS = {
     'Quick (10%, 30%, 100%)': [
       { setWeight: 10 },
-      { pause: { duration: '30s' } },
+      { pause: { duration: '1m' } },
       { setWeight: 30 },
       { pause: { duration: '1m' } },
       { setWeight: 100 },
     ],
     'Balanced (10%, 30%, 60%, 100%)': [
       { setWeight: 10 },
-      { pause: { duration: '1m' } },
+      { pause: {} },
       { setWeight: 30 },
       { pause: { duration: '2m' } },
       { setWeight: 60 },
@@ -19,7 +19,7 @@ export const PRESETS = {
     ],
     'SRE Recommend (10%, 25%, 50%, 75%, 100%)': [
       { setWeight: 10 },
-      { pause: { duration: '1m' } },
+      { pause: {} },
       { setWeight: 25 },
       { pause: { duration: '2m' } },
       { setWeight: 50 },
@@ -30,7 +30,7 @@ export const PRESETS = {
     ],
     'Progressive Safe (5%, 10%, 25%, 50%, 100%)': [
       { setWeight: 5 },
-      { pause: { duration: '2m' } },
+      { pause: {} },
       { setWeight: 10 },
       { pause: { duration: '2m' } },
       { setWeight: 25 },
