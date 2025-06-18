@@ -17,7 +17,7 @@ This project is an Argo CD UI extension tool that automatically converts Kuberne
 | Traffic Manager     | Status     | Description                                                                 |
 |---------------------|------------|-----------------------------------------------------------------------------|
 | Gateway API         | ✅ Done    | Automatically injects plugin field using selected `HTTPRoute` and `Namespace` |
-| NGINX Ingress       | 🛠 In Progress | UI for selecting `HTTPRoute` and `Namespace` is under development        |
+| NGINX Ingress       | 🛠 Planned | UI for selecting `HTTPRoute` and `Namespace` is under development        |
 | ALB (AWS)           | 🛠 Planned  | Annotation-based traffic mapping to be supported                          |
 
 &nbsp;
@@ -45,6 +45,7 @@ This project is an Argo CD UI extension tool that automatically converts Kuberne
 - Applies suffix (`-canary` / `-preview`) based on selected strategy
 - Disables generation if Service already managed by a Rollout (`rollouts-pod-template-hash` selector exists)
 
+&nbsp;
 
 #### 4. Automatic Generation of Analysis Fields and `AnalysisTemplate`
 
