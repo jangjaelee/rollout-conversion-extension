@@ -148,7 +148,7 @@ spec:
 
 &nbsp;
 
-### Use Cases
+## Use Cases
 
 - Migrating existing applications to **Argo Rollouts** with minimal manual changes
 - Introducing **canary deployments** or **blue-green strategies** visually
