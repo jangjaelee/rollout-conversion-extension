@@ -6,13 +6,9 @@
 
 &nbsp;
 
----
-
 ## Overview
 
 This Argo CD UI extension provides an intuitive way to convert standard Kubernetes `Deployment` resources into `Rollout` resources compatible with [Argo Rollouts](https://argo-rollouts.readthedocs.io/). Designed for teams adopting progressive delivery strategies like canary or blue-green, this tool enables visual transformation of your workloads without leaving the Argo CD interface.
-
----
 
 ## Key Features
 
