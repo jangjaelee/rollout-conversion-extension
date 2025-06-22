@@ -10,7 +10,9 @@
 
 This Argo CD UI extension provides an intuitive way to convert standard Kubernetes `Deployment` resources into `Rollout` resources compatible with [Argo Rollouts](https://argo-rollouts.readthedocs.io/). Designed for teams adopting progressive delivery strategies like canary or blue-green, this tool enables visual transformation of your workloads without leaving the Argo CD interface.
 
-## Key Features
+&nbsp;
+
+## Features
 
 #### 1. Automatic `trafficRouting` Mapping Based on Traffic Management Type
 
@@ -106,8 +108,7 @@ This Argo CD UI extension provides an intuitive way to convert standard Kubernet
 
 - Disables YAML generation when a Rollout references the Deployment using `workloadRef`
 
----
-
+&nbsp;
   
 ## Install UI extension
 
