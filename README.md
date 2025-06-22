@@ -1,6 +1,6 @@
-# Rollout Conversion Extension for Argo CD UI
+# Kubernetes Deployment to Argo Rollout YAML Converter for Argo CD UI
 
-This project is an Argo CD UI extension tool that automatically converts Kubernetes Deployments into Argo Rollout YAML manifests.
+> This project is an Argo CD UI extension that automatically converts Kubernetes Deployments into Argo Rollouts YAML manifests. It allows users to easily transform their deployment manifests into the Argo Rollouts format directly within the Argo CD web UI.
 
 ![image](https://raw.githubusercontent.com/jangjaelee/rollout-conversion-extension/refs/heads/main/ui/images/Rollout-Conversion-Extension.png)
 
