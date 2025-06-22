@@ -145,3 +145,15 @@ spec:
         - name: extensions
           emptyDir: {}
 ```
+
+&nbsp;
+
+### Use Cases
+
+- Migrating existing applications to **Argo Rollouts** with minimal manual changes
+- Introducing **canary deployments** or **blue-green strategies** visually
+- Empowering developers and operators with **declarative progressive delivery**
+
+---
+
+> 📌 This project is tailored for users of Argo CD who want a low-friction way to adopt Argo Rollouts without leaving the GitOps ecosystem.
