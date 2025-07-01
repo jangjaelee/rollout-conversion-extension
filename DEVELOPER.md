@@ -4,7 +4,7 @@ Rollout Conversion Extension은 Kubernetes Deployment를 Argo Rollout YAML 매�
 
 이 확장 프로그램은 Canary나 Blue-Green과 같은 점진적 배포 전략을 채택하는 팀을 위해 설계되었으며, Argo CD 인터페이스를 벗어나지 않고도 워크로드를 시각적으로 변환할 수 있는 도구를 제공합니다.
 
----
+&nbsp;
 
 # Project Structure
 
@@ -40,7 +40,7 @@ rollout-conversion-extension/
 - presets.js: Canary 및 Blue-Green 배포 전략 프리셋 관리
 - renderResourceUI.js: 사용자 인터페이스 렌더링 로직
 
----
+&nbsp;
 
 # **Development Setup**
 
@@ -51,7 +51,7 @@ rollout-conversion-extension/
 - React ^9.
 - Webpack ^5.x
 
----
+&nbsp;
 
 # **Build & Deploy**
 
@@ -153,7 +153,9 @@ type: Opaque
 stringData:
   EXTENSION_GIT_TOKEN: ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
----
+
+&nbsp;
+
 # Resources
 
 - [Argo CD Extensions Documentation](https://argo-cd.readthedocs.io/en/stable/developer-guide/extensions/)
