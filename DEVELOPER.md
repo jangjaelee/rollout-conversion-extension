@@ -26,7 +26,6 @@ rollout-conversion-extension/
 │   ├── App.js                           # 메인 리액트 앱 컴포넌트
 │   ├── index.css                        # 전역 스타일 정의
 │   └── index.js                         # 앱 진입점
-├── .env                                 # 환경 변수 설정 파일
 ├── DEVELOPER.md                         # 개발자 가이드
 ├── README.md                            # 사용자 및 설치 가이드
 ├── package.json                         # 의존성 및 스크립트 정의
