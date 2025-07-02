@@ -88,8 +88,8 @@ spec:
         - name: rollout-conversion-extension
           image: quay.io/argoprojlabs/argocd-extension-installer:v0.0.8
           env:
-          - name: EXTENSION_URL
-            value: https://raw.githubusercontent.com/jangjaelee/rollout-conversion-extension/main/ui/dist/extension.tar
+            - name: EXTENSION_URL
+              value: https://raw.githubusercontent.com/jangjaelee/rollout-conversion-extension/main/ui/dist/extension.tar
           volumeMounts:
             - name: extensions
               mountPath: /tmp/extensions/
@@ -122,13 +122,13 @@ spec:
         - name: rollout-conversion-extension
           image: cine0831/argocd-extension-installer:v0.0.9
           env:
-          - name: EXTENSION_URL
-            value: https://raw.githubusercontent.com/jangjaelee/rollout-conversion-extension/main/ui/dist/extension.tar
-          - name: EXTENSION_GIT_TOKEN
-            valueFrom:
-              secretKeyRef:
-                name: github-token-secret
-                key: EXTENSION_GIT_TOKEN             
+            - name: EXTENSION_URL
+              value: https://raw.githubusercontent.com/jangjaelee/rollout-conversion-extension/main/ui/dist/extension.tar
+            - name: EXTENSION_GIT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: github-token-secret
+                  key: EXTENSION_GIT_TOKEN             
           volumeMounts:
             - name: extensions
               mountPath: /tmp/extensions/
